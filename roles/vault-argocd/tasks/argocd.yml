@@ -1,0 +1,12 @@
+
+- set_fact:
+    vault_application: "{{ lookup('template', 'application.yaml.jinja2')  }}"
+
+- name: show templating results
+  debug:
+    msg: "{{ vault_application }}"
+    verbosity: 2
+
+- name: create application
+  kubernetes.core.k8s: 
+    template: application.yaml.jinja2

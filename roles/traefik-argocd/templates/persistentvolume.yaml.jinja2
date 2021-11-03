@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+
+  name: traefik-pv
+
+  labels:
+    name:        traefik-pv
+    volume-type: nfs-static
+
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 128Mi
+  claimRef:
+    kind:      PersistentVolumeClaim
+    namespace: {{ traefik_namespace }}
+    name:      traefik
+  nfs:
+    path:   {{ traefik_nfs_static_path }}
+    server: {{ traefik_nfs_static_server }}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName:              nfs-static
+  volumeMode:                    Filesystem

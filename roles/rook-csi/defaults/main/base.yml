@@ -1,0 +1,13 @@
+
+rook_csi_releases_url:      "https://api.github.com/repos/kubernetes-csi/external-snapshotter/releases"
+rook_csi_releases_jmespath: "[].tag_name"
+
+#rook_csi_release:           "~^"
+rook_csi_release:           "v4.2.1"
+rook_csi_system_namespace:  csi-system
+
+rook_csi_release_tag: "master"
+#rook_csi_tmp_dir: ""
+rook_csi_tmp_dir: "{{ playbook_dir }}/files/crds"
+#rook_csi_tmp_dir: "/tmp/crds"
+

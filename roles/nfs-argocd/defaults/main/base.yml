@@ -1,0 +1,24 @@
+#############################################################################
+# Helm Chart
+nfs_subdir_external_provisioner_chart_url:      https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+nfs_subdir_external_provisioner_chart_name:     nfs-subdir-external-provisioner
+nfs_subdir_external_provisioner_chart_jmespath: entries."nfs-subdir-external-provisioner"[].version
+nfs_subdir_external_provisioner_chart_version:  ""
+#nfs_subdir_external_provisioner_chart_version:  "~^4"
+#nfs_subdir_external_provisioner_chart_version:  "4.0.14"
+
+# Github 
+nfs_subdir_external_provisioner_releases_url:      https://api.github.com/repos/kubernetes-sigs/nfs-subdir-external-provisioner/releases
+nfs_subdir_external_provisioner_releases_jmespath: "[].tag_name" 
+#nfs_subdir_external_provisioner_release:  "~^.*" # pick first match of regular expression
+
+#############################################################################
+
+nfs_subdir_external_provisioner_namespace: nfs-storage
+nfs_subdir_external_provisioner_server:    nfs.example.com
+nfs_subdir_external_provisioner_path:      /export/data
+
+#nfs_subdir_external_provisioner_mount_options: []
+#nfs_subdir_external_provisioner_storage_class_name:         "nfs-client"
+#nfs_subdir_external_provisioner_storage_class_name:         "nfs-static-provisioner"
+#nfs_subdir_external_provisioner_storage_class_path_pattern: "${.PVC.namespace}-${.PVC.name}"

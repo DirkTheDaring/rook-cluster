@@ -1,0 +1,42 @@
+# DNS
+rook_domain:       "example.com"
+rook_subdomain:    ""
+rook_hostname:     "rook"
+
+# Kubernetes
+rook_namespace: "rook-ceph"
+
+# Helm Chart
+rook_chart_url:      https://charts.rook.io/release
+rook_chart_name:     rook-ceph
+rook_chart_jmespath: entries."rook-ceph"[].version
+
+# argocd
+rook_argocd_namespace: argocd
+
+#rook_chart_version: ""
+#rook_chart_version: "~^v1\\.7\\."
+#rook_chart_version: "v1.7.5"
+
+# Github API
+rook_releases_url:      "https://api.github.com/repos/rook/rook/releases"
+rook_releases_jmespath: "[].tag_name"
+#rook_release:           "~^v1\\.7\\."
+#rook_release:           "v1.7.6"
+
+#rook_default_storage_class: ""
+rook_default_storage_class: "rook-cephfs-delete"
+
+# CSI
+rook_csi_enabled: true
+
+# rook server or rook client (== to another rook server, or "external")
+rook_ceph_server: true
+
+# server settings
+rook_build_dir: "{{ playbook_dir }}/build"
+rook_ceph_mon_max_pg_per_osd: 568
+rook_ceph_quirk: false
+
+rook_root_credentials_dir:         "{{ playbook_dir }}/credentials"
+rook_storage_root_credentials_dir: "{{ playbook_dir }}/credentials"

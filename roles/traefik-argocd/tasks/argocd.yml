@@ -1,0 +1,50 @@
+- block: 
+  - set_fact:
+      traefik_application:  "{{ lookup('template', 'application.yaml.jinja2') }}"
+      traefik_ingressroute: "{{ lookup('template', 'ingressroute.yaml.jinja2') }}"
+      rook_ingressroute:    "{{ lookup('template', 'rook-ingressroute.yaml.jinja2') }}"
+
+  - copy:
+      content: "{{ traefik_application }}"
+      dest: "/tmp/x"
+  
+  - copy:
+      content: "{{ rook_ingressroute }}"
+      dest: "/tmp/y"
+  
+  - copy:
+      content: "{{ traefik_ingressroute }}"
+      dest: "/tmp/traefik.yaml"
+  
+  - name: show templating results
+    debug:
+      msg: "{{ rook_ingressroute }}"
+  
+  #- name: show templating results
+  #  debug:
+  #    msg: "{{ traefik_application }}"
+  
+  #- fail:
+  #   msg: "intended"
+  when: false
+
+
+- name: create persistent volume for nfs-static
+  kubernetes.core.k8s:
+    template: persistentvolume.yaml.jinja2
+  when: traefik_persistence_storage_class == "nfs-static"
+
+- name: create application
+  kubernetes.core.k8s:
+    template: application.yaml.jinja2
+
+- name: wait until application status turns to synced in argocd
+  ansible.builtin.command: 
+    argv:
+    - bash 
+    - -c
+    - "while [[ \"$(kubectl -n {{ argocd_namespace }} get application traefik -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done"
+
+- name: create ingressroute
+  kubernetes.core.k8s:
+    template: ingressroute.yaml.jinja2

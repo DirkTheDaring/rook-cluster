@@ -1,0 +1,12 @@
+# Kubernetes
+vault_unseal_namespace: vault-unseal
+
+# Kubernetes Storage
+vault_unseal_nfs_enabled:     false
+vault_unseal_nfs_server:      nfs.example.com
+vault_unseal_nfs_server_path: /exports/data
+#vault_unseal_storage_class:   nfs-static
+vault_unseal_storage_class: rook-cephfs-retain
+
+# Ansible
+vault_unseal_root_credentials_dir: "{{ playbook_dir }}/credentials"

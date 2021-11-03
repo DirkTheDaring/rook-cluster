@@ -1,0 +1,36 @@
+- name: get available releases
+  block:
+  - uri:
+      url:            "{{ argo_workflows_releases_url }}"
+      return_content: no
+    register: argo_workflows_releases
+
+  - name: extract releases
+    set_fact:
+      argo_workflows_releases: "{{ argo_workflows_releases.json | to_json | from_json | json_query(argo_workflows_releases_jmespath) }}"
+
+  - name: show available releases 
+    debug:
+      msg:       "argo_workflows_releases: {{ argo_workflows_releases }}"
+      verbosity: 2
+
+  - name: filter releases if a regex was specified
+    set_fact:
+      argo_workflows_releases: "{{ argo_workflows_releases | select('match', argo_workflows_release[1:] ) |list }}"
+    when: argo_workflows_release.startswith("~")
+
+  - name: fail when there are no releases to pick available
+    fail:
+     msg: "no release found: argo_workflows_release={{ argo_workflows_release }}"
+    when: argo_workflows_releases|length == 0
+      
+  - name: pick first item as release
+    set_fact:
+      argo_workflows_release: "{{ argo_workflows_releases[0] }}"
+
+  when: argo_workflows_release is defined and argo_workflows_release.startswith("~")
+
+- debug:
+    msg:       "argo_workflows_release: {{ argo_workflows_release | default('< not enforced >') }}"
+    verbosity: 2
+

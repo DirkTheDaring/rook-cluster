@@ -1,0 +1,36 @@
+- name: get available releases
+  block:
+  - uri:
+      url:            "{{ rook_releases_url }}"
+      return_content: no
+    register: rook_releases
+
+  - name: extract releases
+    set_fact:
+      rook_releases: "{{ rook_releases.json | to_json | from_json | json_query(rook_releases_jmespath) }}"
+
+  - name: show available releases 
+    debug:
+      msg:       "rook_releases: {{ rook_releases }}"
+      verbosity: 2
+
+  - name: filter releases if a regex was specified
+    set_fact:
+      rook_releases: "{{ rook_releases | select('match', rook_release[1:] ) |list }}"
+    when: rook_release.startswith("~")
+
+  - name: fail when there are no releases to pick available
+    fail:
+     msg: "no release found: rook_release={{ rook_release }}"
+    when: rook_releases|length == 0
+      
+  - name: pick first item as release
+    set_fact:
+      rook_release: "{{ rook_releases[0] }}"
+
+  when: rook_release is defined and rook_release.startswith("~")
+
+- debug:
+    msg:       "rook_release: {{ rook_release | default('< not enforced >') }}"
+    verbosity: 2
+

@@ -1,0 +1,48 @@
+# DNS
+vault_domain:       "example.com"
+vault_subdomain:    ""
+vault_hostname:     "vault"
+
+# Kubernetes
+vault_namespace: "vault-system"
+
+# Argocd
+vault_argocd_namespace:             "argocd"
+vault_argocd_destination_server:    "https://kubernetes.default.svc"
+
+vault_chart_url:      https://helm.releases.hashicorp.com
+vault_chart_name:     vault
+vault_chart_jmespath: entries."vault"[].version
+vault_chart_version:  ""
+#vault_chart_version:  "~^0.17"
+#vault_chart_version: "0.17.0"
+
+vault_releases_url:      "https://api.github.com/repos/hashicorp/vault/releases"
+vault_releases_jmespath: "[].tag_name" 
+#vault_release: "~^v1\\.8\\." # pick first match of regular expression
+#vault_release: "v1.8.4"
+#
+
+vault_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+
+vault_ldap_binddn:       "cn=binduser,dc=dot,dc=com"
+vault_ldap_bindpass:     ""
+vault_ldap_insecure_tls: "false"
+
+vault_ldap_url: ldap://ldap.server.com
+
+vault_ldap_userdn:   cn=User
+vault_ldap_userattr: sAMAccountName
+
+vault_ldap_groupdn:     cn=Users
+# due to jinja .UserDN had to be escaped here
+vault_ldap_groupfilter: "(&(objectClass=group)(member={{ '{{.UserDN}}' }}))"
+vault_ldap_groupattr:   cn
+
+vault_dataStorage_storage_class:  rook-cephfs-retain
+vault_auditStorage_storage_class: rook-cephfs-retain
+
+vault_nfs_enabled: true
+vault_nfs_server: 127.0.0.1
+vault_nfs_path:   /volume1/container/static/vault

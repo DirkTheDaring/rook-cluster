@@ -1,0 +1,5 @@
+
+minio_gui_fqdn: "{{ minio_gui_hostname }}{{ '' if minio_subdomain == '' else '.' + minio_subdomain }}.{{ minio_domain }}"
+minio_api_fqdn: "{{ minio_api_hostname }}{{ '' if minio_subdomain == '' else '.' + minio_subdomain }}.{{ minio_domain }}"
+
+minio_credentials_dir: "{{ minio_root_credentials_dir }}/minio"

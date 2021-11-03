@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ argocd_namespace }}
+  name:      argo-workflows
+spec:
+  destination:
+    server:    {{ argo_workflows_argocd_destination_server }}
+    namespace: {{ argo_workflows_namespace }}
+  project: default
+  source:
+    repoURL:        {{ argo_workflows_chart_url  }}
+    chart:          {{ argo_workflows_chart_name }}
+    targetRevision: {{ argo_workflows_chart_version }}
+    helm:
+      parameters:
+      - name:  server.ingress.enabled
+        value: "true"
+        forceString: true
+      - name:  server.ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.entrypoints
+        value: "websecure"
+      - name:  server.ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls
+        value: "true"
+        forceString: true
+      - name:  server.ingress.hosts[0]
+        value: "{{ argo_workflows_fqdn }}"
+      - name: server.sso.issuer
+        value: "https://argocd.{{ argo_workflows_domain }}/api/dex"
+      - name: server.sso.clientId.name
+        value: "argocd-repo-creds-argo-workflows-sso"
+      - name: server.sso.clientId.key
+        value: "client-id"
+      - name: server.sso.clientSecret.name
+        value: "argocd-repo-creds-argo-workflows-sso"
+      - name: server.sso.clientSecret.key
+        value: "client-secret"
+      - name: server.sso.redirectUrl
+        value: "https://{{ argo_workflows_fqdn }}/oauth2/callback"
+      - name: server.extraArgs[0]
+        value: "--auth-mode=sso"
+{% if argo_workflows_nodeSelector_hostname is defined and argo_workflows_nodeSelector_hostname != "" %}
+      - name: controller.nodeSelector.kubernetes\.io\/hostname
+        value: {{ argo_workflows_nodeSelector_hostname }}
+      - name: server.nodeSelector.kubernetes\.io\/hostname
+        value: {{ argo_workflows_nodeSelector_hostname }}
+{% endif %} 
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

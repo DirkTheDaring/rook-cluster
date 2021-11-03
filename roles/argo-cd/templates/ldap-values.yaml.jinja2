@@ -1,0 +1,144 @@
+{% if  argocd_release is defined and argocd_release|length != 0 %}
+global:
+  image:
+    tag: "{{ argocd_release }}"
+{% endif %}
+
+{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
+controller:
+  nodeSelector:
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+{% endif %}
+
+server:
+{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
+  nodeSelector:
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+{% endif %}
+  ingress:
+    enabled: true
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure #, jnlp needs an IngressRouteTCP object!
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    hosts:
+    - "{{ argocd_fqdn }}"
+
+  extraArgs:
+  - --insecure
+  rbacConfig:
+    policy.default: role:none
+    scopes: '[groups, email]'
+    policy.csv: |
+      p, role:none, *, *, */*, deny
+{% for item in argocd_policy_users %}
+      g, {{ item.name }}, {{ item.role }}
+{% endfor %}
+{% for item in argocd_policy_groups %}
+      g, {{ item.name }}, {{ item.role }}
+{% endfor %}
+
+  config:
+    url: https://{{ argocd_fqdn }}
+    dex.config: |-
+      connectors:
+{% if argocd_ldap_profile == "ldap"  %}
+      - type: ldap
+        name: "SSO"
+        id: ad
+        config:
+          host: {{ argocd_ldap_server }}:{{argocd_ldap_port }}
+          insecureNoSSL: false
+          insecureSkipVerify: {{ argocd_ldap_insecure_tls }}
+          # ldap bindDN in argocd-secret
+          bindDN: "$dex.ldap.bindDN"
+          # ldap bind password in argocd-secret
+          bindPW: "$dex.ldap.bindPW"
+          usernamePrompt: Username
+          userSearch:
+            baseDN: "{{ argocd_ldap_user_basedn }}"
+            filter: "(objectClass=user)"
+            username: sAMAccountName
+            idAttr: distinguishedName
+            emailAttr: mail
+            nameAttr: displayName
+          groupSearch:
+            baseDN: "{{ argocd_ldap_group_basedn }}"
+            filter: "(objectClass=group)"
+            userAttr: distinguishedName
+            groupAttr: member
+            nameAttr: name
+{% elif argocd_ldap_profile == "activedirectory" %}
+      - type: ldap
+        name: "SSO"
+        id: ad
+        config:
+          host: {{ argocd_ldap_server }}:{{argocd_ldap_port }}
+          insecureNoSSL:  {{ argocd_ldap_insecure_no_ssl }}
+          insecureSkipVerify: {{ argocd_ldap_insecure_tls }}
+          # ldap bindDN in argocd-secret
+          bindDN: "$dex.ldap.bindDN"
+          # ldap bind password in argocd-secret
+          bindPW: "$dex.ldap.bindPW"
+          usernamePrompt: Username
+          userSearch:
+            baseDN: "{{ argocd_ldap_user_basedn }}"
+            filter: "(objectClass=person)"
+            username: userPrincipalName
+            idAttr: DN
+            emailAttr: userPrincipalName
+            nameAttr: cn
+          groupSearch:
+            baseDN: "{{ argocd_ldap_group_basedn }}"
+            filter: "(objectClass=group)"
+            userMatchers:
+            - userAttr: DN
+              groupAttr: "member:1.2.840.113556.1.4.1941:"
+            nameAttr: cn
+{% endif %}
+      staticClients:
+{% for item in argocd_sso_list %}
+      - name: {{ item.name }}
+        id:   argocd-repo-creds-{{ item.id }}
+        redirectURIs:
+{% for url in item.redirectURIs %}
+        - {{ url }}
+{% endfor %}
+        secretEnv: {{ item.secretEnv }}
+{% endfor %}
+
+dex:
+{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
+  nodeSelector:
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+{% endif %}
+  env:
+{% for item in argocd_sso_list %}
+  - name: {{ item.secretEnv }}
+    valueFrom:
+      secretKeyRef:
+        name: argocd-repo-creds-{{ item.id }}
+        key:  client-secret
+{% endfor %}
+
+configs:
+  secret:
+    extra:
+      dex.ldap.bindDN: "{{ argocd_ldap_bind_dn }}"
+      dex.ldap.bindPW: "{{ argocd_ldap_bind_password }}"
+  credentialTemplates:
+{% for item in argocd_sso_list %}
+    {{ item.id }}:
+      client-id:     argocd-repo-creds-{{ item.id }}
+      client-secret: {{ item.uid }}
+{% endfor %}
+
+{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
+redis:
+  nodeSelector:
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+{% endif %}
+{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
+repoServer:
+  nodeSelector:
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+{% endif %}

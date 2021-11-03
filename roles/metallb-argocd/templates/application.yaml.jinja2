@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ metallb_argocd_namespace }}
+  name:      metallb
+spec:
+  destination:
+    server:    {{ metallb_argocd_destination_server }}
+    namespace: {{ metallb_namespace }}
+  project: default
+  source:
+    repoURL:        {{ metallb_chart_url  }}
+    chart:          {{ metallb_chart_name }}
+    targetRevision: {{ metallb_chart_version }}
+    helm:
+      parameters:
+      - name: configInline.address-pools[0].name
+        value: loadbalanced
+      - name: configInline.address-pools[0].protocol
+        value: layer2
+      - name: configInline.address-pools[0].addresses[0]
+        value: {{ metallb_pool_address }}
+{% if metallb_release is defined %}
+      #
+{% endif %}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

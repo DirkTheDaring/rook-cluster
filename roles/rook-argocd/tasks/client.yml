@@ -1,0 +1,114 @@
+- name: create tmpdir 
+  block:
+  - name: Create temporary build directory
+    ansible.builtin.tempfile:
+      state: directory
+      suffix: build
+    register: tmpdir
+  - set_fact:
+      rook_build_dir: "{{ tmpdir.path }}"
+  when: rook_build_dir is not defined
+
+- block:
+  - name: build dir 
+    debug:
+      msg: "rook_build_dir: {{ rook_build_dir }}"
+  
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path:  "{{ rook_build_dir }}"
+      state: directory
+      mode: '0755'
+  
+    # dangerous heuristic, but fore now no better source
+  - name: extract major.minor version 
+    set_fact:
+      rook_basic_version: "{{ rook_chart_version[1:].split('.')[0] }}.{{ rook_chart_version[1:].split('.')[1] }}"
+    when: rook_basic_version is not defined
+  
+  - debug:
+      msg: "rook_basic_version: {{ rook_basic_version }}"
+  
+  - debug:
+      msg: "rook_build_dir: {{ rook_build_dir }}"
+  
+  - set_fact:
+      url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/import-external-cluster.sh"
+      url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/cluster-external-management.yaml"
+  
+  - set_fact:
+      #rook_export_variables: "{{ lookup('file', rook_credentials_dir + '/server-config.sh' ) }}"
+      rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config.json' ) }}"
+      url_list:
+      - "{{ url1 }}"
+      - "{{ url2 }}"
+  
+  - name: Download config files
+    get_url:
+      url:  "{{ item }}"
+      dest: "{{ rook_build_dir }}/{{ item | basename }}"
+      mode: '0644'
+    loop: "{{ url_list }}"
+  
+  - name: create script
+    ansible.builtin.template:
+      src:  "client-cluster-create.sh.jinja2"
+      dest: "{{ rook_build_dir }}/client-cluster-create.sh"
+      mode: '0755'
+
+  - name: test if secret already exists
+    ansible.builtin.command: 
+      argv:
+      - bash 
+      - -c
+      - "kubectl get --namespace {{ rook_namespace }} secret rook-ceph-mon -o custom-columns=name:metadata.name --no-headers 2>/dev/null || echo"
+    register: rook_ceph_secret 
+ 
+  - name: run script if secret does not exist
+    ansible.builtin.command: 
+      argv:
+      -  bash 
+      - -c 
+      - "{{ rook_build_dir }}/client-cluster-create.sh"
+    when: rook_ceph_secret.stdout == ""
+
+    # otherwise any subsquent kubectl -n <namespace> will get a 404 from kubernetes
+  - name: wait until namespace appears 
+    ansible.builtin.command: 
+      argv:
+      -  bash 
+      - -c 
+      - "while true; do kubectl get namespace {{ rook_namespace }} && break; sleep 3; done"
+  
+  - name: wait until rook-ceph-operator appears
+    ansible.builtin.command: 
+      argv:
+      -  bash 
+      - -c 
+      - >
+        while [ -z "$(kubectl -n {{ rook_namespace }} get pods -l app=rook-ceph-operator --output=jsonpath='{.items[*].metadata.name}')" ]; do 
+          echo rook-ceph-operator not found
+          sleep 10
+        done
+  
+  - name: wait until rook-ceph-operator becomes ready
+    ansible.builtin.command: 
+      argv:
+      - kubectl
+      - wait
+      - -n 
+      - "{{ rook_namespace }}"
+      - --timeout=600s
+      - --for=condition=Ready
+      - pod
+      - -l
+      - app=rook-ceph-operator
+  
+  - name: Recursively remove directory
+    ansible.builtin.file:
+      path:  "{{ tmpdir.path }}"
+      state: absent
+    when: tmpdir is defined and 'path' in tmpdir
+
+  when: not rook_ceph_server
+

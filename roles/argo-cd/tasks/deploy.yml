@@ -1,0 +1,36 @@
+- name: wait until namespace appears
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - "while true; do kubectl get namespace {{ argocd_namespace }} && break; sleep 3; done"
+
+- set_fact:
+    argocd_label_list:
+    - app.kubernetes.io/name=argocd-application-controller
+    - app.kubernetes.io/name=argocd-dex-server
+    - app.kubernetes.io/name=argocd-redis
+    - app.kubernetes.io/name=argocd-repo-server
+    - app.kubernetes.io/name=argocd-server
+
+- name: wait until pods are visible
+  ansible.builtin.command: 
+    argv: 
+    - bash
+    - -c
+    - 'while [ -z "$(kubectl -n {{ argocd_namespace }} get pod -l {{ item }} --no-headers -o custom-columns=NAME:metadata.name)" ]; do sleep 3; done'
+  loop: "{{ argocd_label_list }}"
+
+- name: wait until all argocd pods are ready
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - wait
+    - -n 
+    - "{{ argocd_namespace }}"
+    - --timeout=600s
+    - --for=condition=Ready
+    - pod
+    - -l
+    - "{{ item }}"
+  loop: "{{ argocd_label_list }}"

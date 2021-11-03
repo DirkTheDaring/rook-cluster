@@ -1,0 +1,16 @@
+- set_fact:
+    vault_unseal_file_list:
+    - namespace.yaml.jinja2
+    - deployment.yaml.jinja2
+    - persistentvolumeclaim.yaml.jinja2
+    vault_unseal_file_list2:
+    - persistentvolume.yaml.jinja2
+
+- set_fact:
+    vault_unseal_file_list: "{{ vault_unseal_file_list + vault_unseal_file_list2 }}"
+  when: vault_unseal_nfs_enabled
+
+- name: apply operator
+  kubernetes.core.k8s:
+    template: "{{ item }}"
+  loop: "{{ vault_unseal_file_list }}"

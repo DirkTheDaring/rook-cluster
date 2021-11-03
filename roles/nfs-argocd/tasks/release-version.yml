@@ -1,0 +1,36 @@
+- name: get available releases
+  block:
+  - uri:
+      url:            "{{ nfs_subdir_external_provisioner_releases_url }}"
+      return_content: no
+    register: nfs_subdir_external_provisioner_releases
+
+  - name: extract releases
+    set_fact:
+      nfs_subdir_external_provisioner_releases: "{{ nfs_subdir_external_provisioner_releases.json | to_json | from_json | json_query(nfs_subdir_external_provisioner_releases_jmespath) }}"
+
+  - name: show available releases 
+    debug:
+      msg:       "nfs_subdir_external_provisioner_releases: {{ nfs_subdir_external_provisioner_releases }}"
+      verbosity: 2
+
+  - name: filter releases if a regex was specified
+    set_fact:
+      nfs_subdir_external_provisioner_releases: "{{ nfs_subdir_external_provisioner_releases | select('match', nfs_subdir_external_provisioner_release[1:] ) |list }}"
+    when: nfs_subdir_external_provisioner_release.startswith("~")
+
+  - name: fail when there are no releases to pick available
+    fail:
+     msg: "no release found: nfs_subdir_external_provisioner_release={{ nfs_subdir_external_provisioner_release }}"
+    when: nfs_subdir_external_provisioner_releases|length == 0
+      
+  - name: pick first item as release
+    set_fact:
+      nfs_subdir_external_provisioner_release: "{{ nfs_subdir_external_provisioner_releases[0] }}"
+
+  when: nfs_subdir_external_provisioner_release is defined and nfs_subdir_external_provisioner_release.startswith("~")
+
+- debug:
+    msg:       "nfs_subdir_external_provisioner_release: {{ nfs_subdir_external_provisioner_release | default('< not enforced >') }}"
+    verbosity: 2
+

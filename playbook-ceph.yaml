@@ -1,0 +1,10 @@
+- name: everybody
+  hosts:
+  - localhost
+  connection: local   # without ssh
+  gather_facts: False
+  roles:
+  - argo-cd
+  - rook-argocd
+  - metallb-argocd
+  - traefik-argocd

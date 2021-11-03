@@ -1,0 +1,44 @@
+# DNS
+traefik_domain:       "example.com"
+traefik_subdomain:    ""
+traefik_hostname:     "traefik"
+# Kubernetes
+traefik_namespace:    "ingress"
+
+# Helm Chart
+traefik_chart_url:      "https://helm.traefik.io/traefik"
+traefik_chart_name:     "traefik"
+traefik_chart_jmespath: entries."traefik"[].version
+traefik_chart_version:  ""
+#traefik_chart_version:  "~^10\\.4\\."
+#traefik_chart_version:  "10.6.0"
+
+# Argocd
+traefik_argocd_namespace:          argocd
+traefik_argocd_destination_server: "https://kubernetes.default.svc"
+
+traefik_releases_url:      "https://api.github.com/repos/traefik/traefik/releases"
+traefik_releases_jmespath: "[].tag_name" 
+#traefik_release:           "~^.*"
+#traefik_release:           "v1.7.33"
+
+traefik_loadbalancer_ip: "127.0.0.1"
+
+#traefik_persistence_storage_class: ceph-filesystem
+#traefik_persistence_storage_class: nfs-static
+
+traefik_nfs_static_enable: false
+#traefik_nfs_static_server: mynfs.server.com
+#traefik_nfs_static_path:   /shared
+
+#traefik_image_name: "mycustomizedtraefik"
+#traefik_image_tag:  "2.5.1"
+
+traefik_ports: []
+#- name: quassel-core
+#  value: "4242"
+#- name: jnlp
+#  value: "50000"
+
+traefik_additional_parameters: []
+

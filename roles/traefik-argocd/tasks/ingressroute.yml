@@ -1,0 +1,24 @@
+- name: wait until namespace appears
+  ansible.builtin.command: 
+    argv:
+    - bash 
+    - -c 
+    - "while true; do kubectl get namespace {{ traefik_namespace }} && break; sleep 3; done"
+
+- name: test if ingressroute already exists
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - --namespace
+    - "{{ traefik_namespace }}"
+    - get
+    - ingressroute
+    - --no-headers
+    - -o 
+    - custom-columns=NAME:metadata.name
+  register: traefik_ingressroute
+
+- name: create ingressroute if it does not exist
+  kubernetes.core.k8s:
+    template: ingressroute.yaml.jinja2
+  when: traefik_ingressroute.stdout == ""

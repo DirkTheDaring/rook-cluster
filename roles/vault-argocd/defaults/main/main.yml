@@ -1,0 +1,2 @@
+vault_fqdn:            "{{ vault_hostname }}{{ '' if vault_subdomain == '' else '.' + vault_subdomain }}.{{ vault_domain }}"
+vault_credentials_dir: "{{ vault_root_credentials_dir }}/vault"

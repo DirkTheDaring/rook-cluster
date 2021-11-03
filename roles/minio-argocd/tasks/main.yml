@@ -1,0 +1,6 @@
+- import_tasks: chart-version.yml
+- import_tasks: release-version.yml
+- import_tasks: persistentvolume.yml
+- import_tasks: argocd.yml
+- import_tasks: bucket.yml
+- import_tasks: credentials.yml

@@ -1,0 +1,34 @@
+
+- set_fact:
+    velero_application: "{{ lookup('template', 'application.yaml.jinja2')  }}"
+- name: show templating results
+  debug:
+    msg: "{{ velero_application }}"
+    verbosity: 2
+
+- name: create application
+  kubernetes.core.k8s: 
+    template: application.yaml.jinja2
+
+- name: wait until namespace appears 
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - "while true; do kubectl get namespace {{ velero_namespace }} && break; sleep 3; done"
+
+# FIXME kubectl get secret --namespace minio minio -o jsonpath="{.data.access-key}" | base64 --decode
+# FIXME kubectl get secret --namespace minio minio -o jsonpath="{.data.secret-key}" | base64 --decode
+
+- name: create secret
+  kubernetes.core.k8s: 
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        namespace: "{{ velero_namespace }}"
+        name:      cloud-credentials
+      type: Opaque
+      data:
+        cloud: "{{ lookup('template', 'cloud-credentials.ini.jinja2') | b64encode }}"
+

@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: "{{ vault_unseal_namespace }}"
+  name:      vault-unseal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vault-unseal
+      app.kubernetes.io/name:     vault-unseal
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: vault-unseal
+        app.kubernetes.io/name:     vault-unseal
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: vault-unseal
+                  app.kubernetes.io/name: vault-unseal
+              namespaces:
+              - "{{ vault_unseal_namespace }}"
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - name: minio
+        image: lrstanley/vault-unseal:0.0.8
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1001
+        volumeMounts:
+        - mountPath: /etc/vault-unseal
+          name: vault-unseal
+        command:
+        - sh
+        - -c
+        - "while [ ! -f /etc/vault-unseal/vault-unseal.yaml ]; do sleep 10; done; chmod 0600 /etc/vault-unseal/vault-unseal.yaml && exec vault-unseal -c /etc/vault-unseal/vault-unseal.yaml"
+      restartPolicy: Always
+      volumes:
+      - name: vault-unseal
+        persistentVolumeClaim:
+          claimName: vault-unseal
+

@@ -1,0 +1,27 @@
+# DNS
+metallb_domain:       "example.com"
+metallb_subdomain:    ""
+metallb_hostname:     "metallb"
+
+# Kubernetes
+metallb_namespace: metallb-system
+
+# Helm Chart
+metallb_chart_url:      https://metallb.github.io/metallb
+metallb_chart_name:     metallb
+metallb_chart_jmespath: entries."metallb"[].version
+metallb_chart_version:  ""
+#metallb_chart_version: "~^0.10"
+#metallb_chart_version: "0.10.3"
+
+# argocd
+metallb_argocd_namespace:             "argocd"
+metallb_argocd_destination_server:    "https://kubernetes.default.svc"
+
+# Github API
+metallb_releases_url:      "https://api.github.com/repos/metallb/metallb/releases"
+metallb_releases_jmespath: "[].tag_name" 
+#metallb_release: "~^v0.10" # pick first match of regular expression
+
+metallb_pool_address:  "192.168.0.0/16"
+

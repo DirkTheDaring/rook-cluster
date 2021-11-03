@@ -1,0 +1,7 @@
+
+
+- set_fact:
+    minio_credentials: "{{ lookup('file', velero_minio_credentials_dir + '/config.json' ) | from_json }}"
+- debug:
+    msg: "{{ minio_credentials }}"
+

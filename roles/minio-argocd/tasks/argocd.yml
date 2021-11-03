@@ -1,0 +1,15 @@
+- ansible.builtin.template:
+    src:  "application.yaml.jinja2"
+    dest: "/tmp/application.yaml"
+  when: false
+
+- name: create application
+  kubernetes.core.k8s:
+    template: application.yaml.jinja2
+
+- name: wait until application status turns to synced in argocd
+  ansible.builtin.command: 
+    argv:
+    - bash 
+    - -c
+    - "while [[ \"$(kubectl -n {{ minio_argocd_namespace }} get application {{ minio_name }} -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done"

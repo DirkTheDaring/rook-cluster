@@ -1,0 +1,36 @@
+- name: get available releases
+  block:
+  - uri:
+      url:            "{{ harbor_releases_url }}"
+      return_content: no
+    register: harbor_releases
+
+  - name: extract releases
+    set_fact:
+      harbor_releases: "{{ harbor_releases.json | to_json | from_json | json_query(harbor_releases_jmespath) }}"
+
+  - name: show available releases 
+    debug:
+      msg:       "harbor_releases: {{ harbor_releases }}"
+      verbosity: 2
+
+  - name: filter releases if a regex was specified
+    set_fact:
+      harbor_releases: "{{ harbor_releases | select('match', harbor_release[1:] ) |list }}"
+    when: harbor_release.startswith("~")
+
+  - name: fail when there are no releases to pick available
+    fail:
+     msg: "no release found: harbor_release={{ harbor_release }}"
+    when: harbor_releases|length == 0
+      
+  - name: pick first item as release
+    set_fact:
+      harbor_release: "{{ harbor_releases[0] }}"
+
+  when: harbor_release is defined and harbor_release.startswith("~")
+
+- debug:
+    msg:       "harbor_release: {{ harbor_release | default('< not enforced >') }}"
+    verbosity: 2
+

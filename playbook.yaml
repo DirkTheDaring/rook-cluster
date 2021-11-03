@@ -1,0 +1,20 @@
+- name: everybody
+  hosts:
+  - localhost
+  #- prod1-master1
+  connection: local   # without ssh
+  gather_facts: False
+  #any_errors_fatal: True
+  roles:
+  - argo-cd
+  - argo-workflows
+  - metallb-argocd
+  - rook-argocd
+  - traefik-argocd
+  - rook-csi
+  - nfs-argocd
+  - vault-argocd
+  - vault-unseal
+  - minio-argocd
+  - velero-argocd
+##  - harbor-argocd

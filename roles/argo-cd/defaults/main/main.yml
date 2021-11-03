@@ -1,0 +1,21 @@
+# fqdn fully qualified domain name
+argocd_fqdn: "{{ argocd_hostname }}{{ '' if argocd_subdomain == '' else '.' + argocd_subdomain }}.{{ argocd_domain }}"
+
+argocd_credentials_dir: "{{ argocd_root_credentials_dir }}/argocd"
+
+
+# Helm Chart
+#argocd_chart_version:  ""    # "" means get latest version
+#argocd_chart_version: "~^3"  # "" means get select first element of patteer
+#argocd_release:           "~^."
+
+#  server:
+#    ingress:
+#      enabled: true
+#      annotations:
+#        traefik.ingress.kubernetes.io/router.entrypoints: websecure #, jnlp needs an IngressRouteTCP object!
+#        traefik.ingress.kubernetes.io/router.tls: "true"
+#      hosts:
+#      - "{{ argocd_hostname }}"
+#
+#argocd_github_name: "argoproj/argo-cd"

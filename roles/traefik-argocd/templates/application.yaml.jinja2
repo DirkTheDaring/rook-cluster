@@ -1,0 +1,75 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ traefik_argocd_namespace }}
+  name:      traefik
+spec:
+  destination:
+    server:    {{ traefik_argocd_destination_server }}
+    namespace: {{ traefik_namespace }}
+  project: default
+  source:
+    repoURL:        {{ traefik_chart_url     }}
+    chart:          {{ traefik_chart_name    }}
+    targetRevision: {{ traefik_chart_version }}
+    helm:
+      parameters:
+        - name: 'deployment.initContainers[0].name'
+          value: set-volume-permissions
+        - name: 'deployment.initContainers[0].image'
+          value: 'busybox:1.31.1'
+        - name: 'deployment.initContainers[0].command[0]'
+          value: sh
+        - name: 'deployment.initContainers[0].command[1]'
+          value: '-c'
+        - name: 'deployment.initContainers[0].command[2]'
+          value: chmod 700 /data;chown 65532.65532 /data
+        - name: 'deployment.initContainers[0].volumeMounts[0].name'
+          value: data
+        - name: 'deployment.initContainers[0].volumeMounts[0].mountPath'
+          value: /data
+        - name: ingressRoute.dashboard.enabled
+          value: 'false'
+        - name: logs.general.level
+          value: INFO
+        - name: ports.web.redirectTo
+          value: websecure
+{% for port in traefik_ports %}
+        - name: ports.{{ port.name }}.port
+          value: "{{ port.value }}"
+        - name: ports.{{ port.name }}.expose
+          value: 'true'
+        - name: ports.{{ port.name }}.exposedPort
+          value: "{{ port.value }}"
+        - name: ports.{{ port.name }}.protocol
+          value: TCP
+{% endfor %}
+        - name: service.spec.loadBalancerIP
+          value: {{ traefik_loadbalancer_ip }}
+        - name: service.annotations.metallb\.universe\.tf/address-pool
+          value: loadbalanced
+        - name: ingressClass.enabled
+          value: 'false'
+
+        - name: persistence.enabled
+          value: 'true'
+        - name: persistence.accessMode
+          value: ReadWriteOnce
+        - name: persistence.size
+          value: 128Mi
+        - name: persistence.storageClass
+          value: {{ traefik_persistence_storage_class }}
+{% if traefik_image_name is defined %}
+        - name: image.name
+          value: "{{ traefik_image_name }}"
+{% endif %}
+{% if traefik_image_tag is defined %}
+        - name: image.tag
+          value: "{{ traefik_image_tag }}"
+{% endif %}
+        {{ traefik_additional_parameters | to_nice_yaml(indent=2,default_style='"') | indent(8) }}
+
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

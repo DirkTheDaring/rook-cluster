@@ -1,0 +1,66 @@
+#
+# https://artifacthub.io/packages/helm/bitnami/minio?modal=security-report
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ minio_argocd_namespace }}
+  name:      {{ minio_name }}
+spec:
+  destination:
+    namespace: {{ minio_namespace }}
+    server:    {{ minio_argocd_destination_server }}
+  project:     default
+  source:
+    repoURL:        {{ minio_chart_url  }}
+    chart:          {{ minio_chart_name }}
+    targetRevision: {{ minio_chart_version }}
+    helm:
+      parameters:
+      # ingress
+      - name:  'ingress.enabled'
+        value: 'true'
+      - name:  'ingress.hostname'
+        value: '{{ minio_gui_fqdn }}'
+      - name:  'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.entrypoints'
+        value: 'websecure'
+      - name:  'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+        value: 'true'
+        forceString: true
+      #  apiIngress
+      - name:  'apiIngress.enabled'
+        value: 'true'
+      - name:  'apiIngress.hostname'
+        value: '{{ minio_api_fqdn }}'
+      - name:  'apiIngress.annotations.traefik\.ingress\.kubernetes\.io\/router\.entrypoints'
+        value: 'websecure'
+      - name:  'apiIngress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+        value: 'true'
+        forceString: true
+      - name: 'persistence.storageClass'
+        value: "{{ minio_persistence_storage_class }}"
+{% if false %}
+      - name: 'podSecurityContext.enabled'
+        value: 'false'
+      - name: 'containerSecurityContext.enabled'
+        value: 'false'
+{% endif %}
+      - name: 'extraEnv[0].name'
+        value: "MINIO_DOMAIN"
+      - name: 'extraEnv[0].value'
+        value: "{{ minio_api_fqdn }}"
+      - name: 'apiIngress.extraHosts[0].name'
+        value: "*.{{ minio_api_fqdn }}"
+      - name: 'apIingress.extraHosts[0].path'
+        value: "/"
+
+
+
+#{% if minio_additional_parameters is defined %}
+#        {{ minio_additional_parameters | to_nice_yaml(indent=2,default_style='"') | indent(8) }}
+#{% endif %}
+
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

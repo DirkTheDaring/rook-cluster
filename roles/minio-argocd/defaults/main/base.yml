@@ -1,0 +1,47 @@
+# Kubernetes
+minio_namespace:     minio
+minio_name:          minio
+
+# DNS
+minio_domain:        "example.com"
+minio_subdomain:     ""
+minio_gui_hostname:  "minio"
+minio_api_hostname:  "s3"
+
+# Argocd
+minio_argocd_namespace:          "argocd"
+minio_argocd_project:            "default"
+minio_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+minio_chart_url:      "https://charts.bitnami.com/bitnami"
+minio_chart_name:     "minio"
+minio_chart_jmespath: "entries.\"{{ minio_chart_name }}\"[].version"
+
+minio_chart_version: ""      # pick latest version
+#minio_chart_version: "~^8.1" # pick first version matching regex (~ indicates regex)
+#minio_chart_version: "8.1.9" # lock to version
+
+minio_releases_url:      "https://api.github.com/repos/minio/minio/releases"
+minio_releases_jmespath: "[].tag_name"
+#minio_release: "~^RELEASE.2021-07" # pick first match of regular expression
+#minio_release: "RELEASE.2021-05"  # lock to release
+
+
+# only if nfs-static
+
+minio_nfs_enabled:        false
+#minio_nfs_server:         nfs.example.com
+#minio_nfs_path:           /nfs/share
+minio_persistence_storage_class: nfs-static
+
+#minio_additional_parameters: 
+
+minio_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+# 
+minio_nfs_mount_options: []
+#- nfsvers=3
+#- noac
+
+minio_bucket_name: "default"

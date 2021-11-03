@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ vault_argocd_namespace }}
+  name:      vault
+spec:
+  destination:
+    server:    {{ vault_argocd_destination_server }}
+    namespace: {{ vault_namespace }}
+  project: default
+  source:
+    repoURL:        {{ vault_chart_url  }}
+    chart:          {{ vault_chart_name }}
+    targetRevision: {{ vault_chart_version }}
+    helm:
+      parameters:
+      - name: injector.image.repository
+        value: "hashicorp/vault-k8s"
+      - name: injector.image.tag
+        value: "0.13.1"
+      - name: server.ingress.annotations.traefik.ingress.kubernetes.io/router.entrypoints
+        value: "websecure"
+      - name: server.ingress.annotations.traefik.ingress.kubernetes.io/router.tls
+        value: "true"
+      - name: server.ingress.hosts[0].host
+        value: "{{ vault_fqdn }}"
+      - name: server.service.enabled
+        value: "true"
+      - name: server.ha.enabled
+        value: "true"
+      - name: server.ha.replicas
+        value: "3"
+      - name: server.ha.raft.enabled
+        value: "true"
+      - name: server.ha.raft.config
+        value: "ui = true\n\nlistener \"tcp\" {\n  tls_disable = 1\n  address = \"[::]:8200\"\n  cluster_address = \"[::]:8201\"\n}\n\nstorage \"raft\" {\n  path = \"/vault/data\"\n}\n\nservice_registration \"kubernetes\" {}\n"
+      - name: server.dataStorage.storageClass
+        value: "{{ vault_dataStorage_storage_class }}"
+      - name: server.auditStorage.enabled
+        value: "true"
+      - name: server.auditStorage.storageClass
+        value: "{{ vault_auditStorage_storage_class }}"
+      - name: ui.enabled
+        value: "true"
+      - name: ui.serviceType
+        value: "LoadBalancer"
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

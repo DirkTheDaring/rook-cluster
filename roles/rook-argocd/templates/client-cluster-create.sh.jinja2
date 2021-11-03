@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+set -ex
+DIRNAME=$(dirname "$0")
+cd "$DIRNAME"
+
+export NAMESPACE={{ rook_namespace }}
+
+export ROOK_EXTERNAL_FSID={{            rook_export_variables.rook_external_fsid }}
+export ROOK_EXTERNAL_ADMIN_SECRET={{    rook_export_variables.rook_external_admin_secret }}
+export RGW_ADMIN_OPS_USER_ACCESS_KEY={{ rook_export_variables.rgw_admin_ops_user_access_key }}
+export RGW_ADMIN_OPS_USER_SECRET_KEY={{ rook_export_variables.rgw_admin_ops_user_secret_key }}
+export ROOK_EXTERNAL_CEPH_MON_DATA={{   rook_export_variables.rook_external_ceph_mon_data }}
+
+bash -x "{{ url1 | basename }}"
+
+kubectl -n {{ rook_namespace }} patch secret rook-ceph-mon --type=json -p='[{"op": "remove", "path": "/data/ceph-secret"}]'
+kubectl -n {{ rook_namespace }} patch secret rook-ceph-mon --type=json -p='[{"op": "remove", "path": "/data/ceph-username"}]'
+
+sed -i 's/rook-ceph-external/{{ rook_namespace }}/g' "{{ url2 | basename }}"
+kubectl -n {{ rook_namespace }} apply -f "{{ url2 | basename }}"

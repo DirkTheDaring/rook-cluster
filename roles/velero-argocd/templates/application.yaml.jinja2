@@ -1,0 +1,96 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ velero_argocd_namespace }}
+  name:      velero
+spec:
+  destination:
+    server:    {{ velero_argocd_destination_server }}
+    namespace: {{ velero_namespace }}
+  project: default
+  source:
+    repoURL:        {{ velero_chart_url  }}
+    chart:          {{ velero_chart_name }}
+    targetRevision: {{ velero_chart_version }}
+    helm:
+      parameters:
+      - name: image.pullPolicy
+        value: "IfNotPresent"
+      - name: image.repository
+        value: "velero/velero"
+{% if true %}
+      - name: image.tag
+        value: "{{ velero_release }}"
+{% endif %}
+      - name: initContainers[0].name
+        value: "velero-plugin-for-aws"
+{% if true %}
+      - name: initContainers[0].image
+        value: "velero/velero-plugin-for-aws:v1.3.0"
+{% endif %}
+      - name: initContainers[0].imagePullPolicy
+        value: "IfNotPresent"
+      - name: initContainers[0].volumeMounts[0].mountPath
+        value: "/target"
+      - name: initContainers[0].volumeMounts[0].name
+        value: "plugins"
+      - name: initContainers[1].name
+        value: "velero-plugin-for-csi"
+{% if true %}
+      - name: initContainers[1].image
+        value: "velero/velero-plugin-for-csi:v0.2.0"
+{% endif %}
+      - name: initContainers[1].imagePullPolicy
+        value: "IfNotPresent"
+      - name: initContainers[1].volumeMounts[0].mountPath
+        value: "/target"
+      - name: initContainers[1].volumeMounts[0].name
+        value: "plugins"
+      - name: configuration.provider
+        value: "aws"
+      - name: configuration.backupStorageLocation.bucket
+        value: "{{ minio_credentials.bucket }}"
+      - name: configuration.backupStorageLocation.config.region
+        value: "minio"
+      - name: configuration.backupStorageLocation.config.s3ForcePathStyle
+        value: "true"
+        forceString: true
+      - name: configuration.backupStorageLocation.config.s3Url
+        value: "{{ minio_credentials.url }}"
+      - name: configuration.backupStorageLocation.config.publicUrl
+        value: "{{ minio_credentials.url }}"
+      - name: configuration.loglevel
+        value: "debug"
+      - name: configuration.resticTimeout
+        value: "12h"
+      - name: configuration.feature
+        value: "EnableCSI"
+      - name: credentials.existingSecret
+        value: "cloud-credentials"
+      - name: credentials.useSecret
+        value: "true"
+        forceString: true
+      - name: snapshotsEnabled
+        value: "true"
+        forceString: true
+      - name: configMaps.restic-restore-action-config.labels.velero.io/plugin-config
+        value: ""
+      - name: configMaps.restic-restore-action-config.labels.velero.io/restic
+        value: "RestoreItemAction"
+{% if true %}
+      - name: configMaps.restic-restore-action-config.data.image
+        value: "gcr.io/heptio-images/velero-restic-restore-helper:v1.7.0"
+{% endif %}
+      - name: deployRestic
+        value: "true"
+        forceString: true
+{% if true %}
+      - name: kubectl.image.tag
+        value: "1.22"
+        forceString: true
+{% endif %}
+
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

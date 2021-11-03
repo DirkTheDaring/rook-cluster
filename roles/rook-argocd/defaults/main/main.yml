@@ -1,0 +1,8 @@
+---
+# fqdn  fully qualified domain name
+
+rook_fqdn: "{{ rook_hostname }}{{ '' if rook_subdomain == '' else '.' + rook_subdomain }}.{{ rook_domain }}"
+#rook_chart_version: ""
+
+rook_credentials_dir:         "{{ rook_root_credentials_dir }}/rook"
+rook_storage_credentials_dir: "{{ rook_storage_root_credentials_dir }}/rook"

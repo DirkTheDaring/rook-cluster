@@ -1,0 +1,2 @@
+velero_credentials_dir:       "{{ velero_root_credentials_dir }}/velero"
+velero_minio_credentials_dir: "{{ velero_root_credentials_dir }}/minio"

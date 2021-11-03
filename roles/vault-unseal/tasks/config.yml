@@ -1,0 +1,60 @@
+- set_fact:
+    vault_unseal_credentials: "{{ lookup('file', vault_unseal_vault_credentials_dir + '/config.json' ) | from_json }}"
+
+- set_fact:
+    rendered_template: "{{ lookup('template', 'vault-unseal.yaml.jinja2') }}"
+
+- debug:
+    msg: "{{ rendered_template }}"
+
+- set_fact:
+    rendered_template_b64: "{{ rendered_template | b64encode }}"
+
+- name: wait until namespace appears 
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - "while true; do kubectl get namespace {{ vault_unseal_namespace }} && break; sleep 3; done"
+
+- name: wait until pod appears
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - "while true; do [ -n \"$(kubectl -n {{ vault_unseal_namespace }} get pod -o custom-columns=name:metadata.name --no-headers)\" ] && break; sleep 5; done"
+
+- name: get pod name
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - --namespace
+    - "{{ vault_unseal_namespace }}"
+    - get 
+    - pods
+    - -o
+    - custom-columns=name:metadata.name
+    - --no-headers 
+  register: vault_unseal_pod_name
+
+
+- name: wait until pod becomes ready
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - wait
+    - -n 
+    - "{{ vault_unseal_namespace }}"
+    - --timeout=600s
+    - --for=condition=Ready
+    - pod
+    - "{{ vault_unseal_pod_name.stdout }}"
+
+ 
+- name: copy configuration file to pod
+  ansible.builtin.command: 
+    argv:
+    - bash
+    - -c 
+    - "echo {{ rendered_template_b64 }} | kubectl --namespace {{ vault_unseal_namespace }} exec -i {{ vault_unseal_pod_name.stdout }} -- sh -c 'cat -|base64 -d >/etc/vault-unseal/vault-unseal.yaml; chmod 0600 /etc/vault-unseal/vault-unseal.yaml'"
+ 

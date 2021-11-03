@@ -1,0 +1,10 @@
+- import_tasks: chart-version.yml
+- import_tasks: release-version.yml
+- import_tasks: argocd-debug.yml
+- import_tasks: argocd.yml
+- import_tasks: cluster-argocd.yml  # only runs on server
+- import_tasks: export.yml          # only runs on server
+- import_tasks: client.yml          # only runs on client
+- import_tasks: credentials.yml
+- import_tasks: storageclass.yml
+

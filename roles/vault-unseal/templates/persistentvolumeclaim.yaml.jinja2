@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: "{{ vault_unseal_namespace }}"
+  name:      vault-unseal
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: {{ vault_unseal_storage_class }}
+  resources:
+    requests:
+      storage: 1Gi

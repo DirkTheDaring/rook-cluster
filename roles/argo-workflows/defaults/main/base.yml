@@ -1,0 +1,38 @@
+# DNS
+argo_workflows_domain:       "example.com"
+argo_workflows_subdomain:    ""
+argo_workflows_hostname:     "argo-workflows"
+
+# Kubernetes
+argo_workflows_namespace:    "argo-workflows"
+
+# Helm Chart
+argo_workflows_chart_url:          https://argoproj.github.io/argo-helm
+argo_workflows_chart_name:         argo-workflows
+argo_workflows_chart_jmespath:     entries."argo-workflows"[].version
+argo_workflows_chart_release_name: argo-workflows
+argo_workflows_chart_version: ""
+
+#argo_workflows_chart_version: 0.8.0
+#argo_workflows_chart_version:  ""    # "" means get latest version
+#argo_workflows_chart_version: "~^3"  # "" means get select first element of patteer
+
+# Github API
+argo_workflows_releases_url:      "https://api.github.com/repos/argoproj/argo-workflows/releases"
+argo_workflows_releases_jmespath: "[].tag_name"
+#argo_workflows_release:           "~^."
+
+
+# Argocd
+argo_workflows_argocd_namespace:             "argocd"
+argo_workflows_argocd_destination_server:    "https://kubernetes.default.svc"
+
+
+argo_workflows_values: {}
+
+# Credentials
+argo_workflows_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+argo_workflows_sso_client_secret: "none"
+
+#argo_workflows_nodeSelector_hostname: prod1-node-mn35

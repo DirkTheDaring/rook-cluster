@@ -1,0 +1,3 @@
+hnc_releases_url:      "https://api.github.com/repos/kubernetes-sigs/multi-tenancy/releases"
+hnc_releases_jmespath: "[].tag_name" 
+hnc_release: "~^." # pick first match of regular expression

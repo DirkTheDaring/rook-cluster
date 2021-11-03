@@ -1,0 +1,28 @@
+# DNS
+harbor_domain:          "example.com"
+harbor_subdomain:       ""
+harbor_core_hostname:   "harbor"
+harbor_notary_hostname: "notary"
+
+# Kubernetes
+harbor_namespace:       "harbor"
+
+# Argocd
+harbor_argocd_project:            "default"
+harbor_argocd_namespace:          "argocd"
+harbor_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+harbor_chart_url:      https://helm.goharbor.io
+harbor_chart_name:     harbor
+harbor_chart_jmespath: entries."harbor"[].version
+#harbor_chart_version:  "~^1\\.7\\."
+#harbor_chart_version: "1.7.3"
+harbor_chart_version: ""
+
+harbor_releases_url:      "https://api.github.com/repos/goharbor/harbor/releases"
+harbor_releases_jmespath: "[].tag_name" 
+#harbor_release: "~^." # pick first match of regular expression
+#harbor_release: "v2.2.4-rc1"
+
+harbor_persistence_storage_class: nfs-client

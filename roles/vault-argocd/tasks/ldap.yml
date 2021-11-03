@@ -1,0 +1,78 @@
+# kubectl -n $NAMESPACE exec -it vault-0 -- vault auth list --format=json
+#
+
+- debug:
+    msg: "{{ vault_credentials.root_token }}"
+
+- name: login as root
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - --namespace
+    - "{{ vault_namespace }}"
+    - exec
+    - vault-0
+    - --
+    - vault
+    - login
+    - "{{ vault_credentials.root_token }}" 
+ 
+- name: get auth list
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - --namespace
+    - "{{ vault_namespace }}"
+    - exec
+    - vault-0
+    - --
+    - vault
+    - auth
+    - list
+    - --format=json
+  register: vault_auth_list_result
+
+- set_fact:
+    vault_auth_dict: "{{ vault_auth_list_result.stdout | from_json }}"
+
+- debug:
+    msg: "{{ vault_auth_dict }}"
+
+- name: enable ldap
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - --namespace
+    - "{{ vault_namespace }}"
+    - exec
+    - vault-0
+    - --
+    - vault
+    - auth
+    - enable
+    - ldap
+  when: "'ldap/' not in vault_auth_dict"
+
+- name: enable ldap
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - --namespace
+    - "{{ vault_namespace }}"
+    - exec
+    - vault-0
+    - --
+    - vault
+    - write
+    - auth/ldap/config
+    - "url={{ vault_ldap_url }}"
+    - "userattr={{ vault_ldap_userattr }}"
+    - "userdn={{ vault_ldap_userdn }}"
+    - "groupdn={{ vault_ldap_groupdn }}"
+    - "groupfilter={{ vault_ldap_groupfilter }}"
+    - "groupattr={{ vault_ldap_groupattr }}"
+    - "binddn={{ vault_ldap_binddn }}"
+    - "bindpass={{ vault_ldap_bindpass }}"
+    - "insecure_tls={{ vault_ldap_insecure_tls }}"
+#  when: "'ldap/' not in vault_auth_dict"
+        

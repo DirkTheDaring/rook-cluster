@@ -1,0 +1,3 @@
+argo_workflows_fqdn: "{{ argo_workflows_hostname }}{{ '' if argo_workflows_subdomain == '' else '.' + argo_workflows_subdomain }}.{{ argo_workflows_domain }}"
+
+argo_workflows_credentials_dir: "{{ argo_workflows_root_credentials_dir }}/argocd-workflows"

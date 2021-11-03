@@ -1,0 +1,31 @@
+# DNS
+velero_domain:       "example.com"
+velero_subdomain:    ""
+velero_hostname:     "velero"
+
+# Kubernetes
+velero_namespace:    "velero"
+
+# Argocd
+velero_argocd_namespace:          "argocd"
+velero_argocd_destination_server: "https://kubernetes.default.svc"
+
+velero_chart_url:      https://vmware-tanzu.github.io/helm-charts
+velero_chart_name:     velero
+velero_chart_jmespath: entries."velero"[].version
+velero_chart_version:  ""
+#velero_chart_version: "~^2"
+#velero_chart_version: "2.24.0"
+
+velero_releases_url:      "https://api.github.com/repos/vmware-tanzu/velero/releases"
+velero_releases_jmespath: "[].tag_name"
+#velero_release: "~^" # pick first match of regular expression
+#velero_release: "v1.7.0"
+velero_release: "v1.6.3"
+
+#velero_aws_access_key_id:     vmnlz3dWjY
+#velero_aws_secret_access_key: QBpFGKS7y0FpyFiN7SZ8gw08oiPVKlWhJfNMV5mZ
+#
+# Ansible
+velero_root_credentials_dir: "{{ playbook_dir }}/credentials"
+

@@ -1,0 +1,4 @@
+- name: create ingress
+  kubernetes.core.k8s:
+    template: ingress.yaml.jinja2
+

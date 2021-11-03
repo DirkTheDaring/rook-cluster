@@ -1,0 +1,72 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ harbor_argocd_namespace }}
+  name:      harbor
+spec:
+  destination:
+    server:    {{ harbor_argocd_destination_server }}
+    namespace: {{ harbor_namespace }}
+  project: {{ harbor_argocd_project }}
+  source:
+    repoURL:        {{ harbor_chart_url  }}
+    chart:          {{ harbor_chart_name }}
+    targetRevision: {{ harbor_chart_version }}
+    helm:
+      parameters:
+      - name: persistence.persistentVolumeClaim.registry.storageClass
+        value: "{{ harbor_persistence_storage_class }}"
+      - name: persistence.persistentVolumeClaim.registry.accessMode
+        value: "ReadWriteOnce"
+      - name: persistence.persistentVolumeClaim.registry.size
+        value: "5Gi"
+      - name: persistence.persistentVolumeClaim.chartmuseum.storageClass
+        value: "{{ harbor_persistence_storage_class }}"
+      - name: persistence.persistentVolumeClaim.chartmuseum.accessMode
+        value: "ReadWriteOnce"
+      - name: persistence.persistentVolumeClaim.chartmuseum.size
+        value: "5Gi"
+      - name: persistence.persistentVolumeClaim.jobservice.storageClass
+        value: "{{ harbor_persistence_storage_class }}"
+      - name: persistence.persistentVolumeClaim.jobservice.accessMode
+        value: "ReadWriteOnce"
+      - name: persistence.persistentVolumeClaim.jobservice.size
+        value: "1Gi"
+      - name: persistence.persistentVolumeClaim.database.storageClass
+        value: "{{ harbor_persistence_storage_class }}"
+      - name: persistence.persistentVolumeClaim.database.accessMode
+        value: "ReadWriteOnce"
+      - name: persistence.persistentVolumeClaim.database.size
+        value: "1Gi"
+      - name: persistence.persistentVolumeClaim.redis.storageClass
+        value: "{{ harbor_persistence_storage_class }}"
+      - name: persistence.persistentVolumeClaim.redis.accessMode
+        value: "ReadWriteOnce"
+      - name: persistence.persistentVolumeClaim.redis.size
+        value: "1Gi"
+      - name: persistence.persistentVolumeClaim.trivy.storageClass
+        value: "{{ harbor_persistence_storage_class }}"
+      - name: persistence.persistentVolumeClaim.trivy.accessMode
+        value: "ReadWriteOnce"
+      - name: persistence.persistentVolumeClaim.trivy.size
+        value: "5Gi"
+      - name: expose.tls.enabled
+        value: "false"
+        forceString: true
+      - name: expose.ingress.hosts.core
+        value: "{{ harbor_core_fqdn }}"
+      - name: expose.ingress.hosts.notary
+        value: "{{ harbor_notary_fqdn }}"
+      - name: expose.ingress.controller
+        value: "default"
+      - name: expose.ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.entrypoints
+        value: websecure
+      - name: expose.ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls
+        value: "true"
+        forceString: true
+      - name: externalURL
+        value: "https://{{ harbor_core_fqdn }}"
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

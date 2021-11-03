@@ -1,0 +1,26 @@
+- name: create application
+  kubernetes.core.k8s:
+    template: application.yaml.jinja2
+
+  # we have to wait until argocd has deployed.
+  # if do not check for the namespace, we get a 404 on the pod search
+  # so we need to check for the namespace first
+- name: wait until namespace appears
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - "while true; do kubectl get namespace {{ nfs_subdir_external_provisioner_namespace }} && break; sleep 3; done"
+
+#  # we have to wait until argocd has deployed the application, only indicator is a running pod
+#- name: wait until pod appears
+#  ansible.builtin.command: 
+#    argv:
+#    -  bash 
+#    - -c 
+#    - >
+#      while [ -z "kubectl -n {{ nfs_provisioner_namespace }} get pods -l app.kubernetes.io/name=traefik -o custom-columns=NAME:metadata.name --no-headers" ]; do 
+#        echo  waiting for traefik pod
+#        sleep 10
+#      done
+#

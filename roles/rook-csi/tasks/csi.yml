@@ -1,0 +1,92 @@
+  
+- name: get major and minor version to determine the release tag in git 
+  set_fact:
+    rook_csi_release_tag: "{{ rook_csi_release[1:].split('.')[0:2]|join('.') }}"
+  when: not (rook_csi_release_tag is defined and rook_csi_release_tag != "")
+
+#- debug:
+#    msg: "{{ rook_csi_release_tag }}"
+
+- name: build git raw url with release tag 
+  set_fact:
+    rook_csi_release_url: "https://raw.githubusercontent.com/kubernetes-csi/external-snapshotter/{{ 'release-' + rook_csi_release_tag if rook_csi_release_tag != 'master' else 'master' }}"
+    base:
+    - client/config/crd/snapshot.storage.k8s.io_volumesnapshotclasses.yaml
+    - client/config/crd/snapshot.storage.k8s.io_volumesnapshotcontents.yaml
+    - client/config/crd/snapshot.storage.k8s.io_volumesnapshots.yaml
+    - deploy/kubernetes/snapshot-controller/rbac-snapshot-controller.yaml
+    - deploy/kubernetes/snapshot-controller/setup-snapshot-controller.yaml
+    app:
+    - deploy/kubernetes/csi-snapshotter/rbac-csi-snapshotter.yaml
+    - deploy/kubernetes/csi-snapshotter/rbac-external-provisioner.yaml
+    - deploy/kubernetes/csi-snapshotter/setup-csi-snapshotter.yaml
+
+
+- name: Create directory for rook_csi_tmp_dir
+  ansible.builtin.file:
+    path: "{{ rook_csi_tmp_dir }}"
+    state: directory
+    mode: '0755'
+  when: rook_csi_tmp_dir is defined and rook_csi_tmp_dir != ""
+
+- block: 
+  - name: Create temporary directory
+    ansible.builtin.tempfile:
+      state:  directory
+    register: rook_csi_tmp_dir_created
+  - set_fact:
+      rook_csi_tmp_dir: "{{ rook_csi_tmp_dir_created.path }}"
+  when: not (rook_csi_tmp_dir is defined and rook_csi_tmp_dir != "")
+
+#- debug:
+#    msg: "rook_csi_tmp_dir = {{ rook_csi_tmp_dir }}"
+
+
+- name: download
+  get_url:
+    url:  "{{ rook_csi_release_url }}/{{ item            }}"
+    dest: "{{ rook_csi_tmp_dir     }}/{{ item | basename }}"
+    mode: '0440'
+  ignore_errors: yes
+  loop: "{{ base + app }}"
+
+- name: apply base
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ rook_csi_tmp_dir }}/{{ item | basename }}"
+  loop: "{{ base }}"
+
+- name: Create namespace
+  kubernetes.core.k8s:
+    name: "{{ rook_csi_system_namespace }}"
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: patch files if namespace is not default (csi)
+  ansible.builtin.command: 
+    argv: 
+    - sed
+    - -i
+    - -E
+    - "s/namespace:[ |\t]+default.*$/namespace: {{ rook_csi_system_namespace }}/g"
+    - "{{ rook_csi_tmp_dir }}/{{ item | basename }}"
+  loop: "{{ app }}"
+  when: rook_csi_system_namespace != "default"
+
+#- fail:
+#    msg: "intended"
+ 
+- name: apply app
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ rook_csi_system_namespace }}"
+    src: "{{ rook_csi_tmp_dir }}/{{ item | basename  }}"
+  loop: "{{ app }}"
+
+- name: Remove temporary directory
+  ansible.builtin.file:
+    path: "{{ rook_csi_tmp_dir }}"
+    state: absent
+  when: rook_csi_tmp_dir_created.path is defined
+

@@ -1,0 +1,37 @@
+- name: determine latest version of helm chart
+  block:
+  - uri:
+      url:            "{{ minio_chart_url }}/index.yaml"
+      return_content: yes
+    register: minio_chart_index
+
+  - name: extract chart_versions
+    set_fact:
+      minio_chart_versions: "{{ minio_chart_index.content | from_yaml | json_query(minio_chart_jmespath) }}"
+
+  - name: show available chart_versions
+    debug:
+      msg:       "minio_chart_versions: {{ minio_chart_versions }}"
+      verbosity: 2
+
+  - name: filter chart_versions if a regex was specified
+    set_fact:
+      minio_chart_versions: "{{ minio_chart_versions | select('match', minio_chart_version[1:] ) | list }}"
+    when: minio_chart_version.startswith("~")
+
+  - name: fail when there are no chart_versions to pick available
+    fail:
+     msg: "no release found: minio_chart_version={{ minio_chart_version }}"
+    when: minio_chart_versions|length == 0
+
+  - name: pick first item as release
+    set_fact:
+      minio_chart_version: "{{ minio_chart_versions[0] }}"
+
+  when: minio_chart_version == "" or minio_chart_version.startswith("~")
+
+- debug:
+    msg:       "minio_chart_version: {{ minio_chart_version | default('< not enforced >') }}"
+    verbosity: 2
+
+

@@ -1,0 +1,20 @@
+#- set_fact:
+#    metallb_application: "{{ lookup('template', 'application.yaml.jinja2')  }}"
+#
+#
+#- template:
+#    src: application.yaml.jinja2
+#    dest: /tmp/application.yaml
+#
+#- name: show templating results
+#  debug:
+#    msg: "{{ metallb_application }}"
+#    verbosity: 2
+#
+#- fail:
+#    msg: "xxxx"
+
+- name: create application
+  kubernetes.core.k8s: 
+    template: application.yaml.jinja2
+

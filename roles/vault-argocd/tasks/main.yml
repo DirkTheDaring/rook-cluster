@@ -1,0 +1,7 @@
+- import_tasks: chart-version.yml
+- import_tasks: release-version.yml
+- import_tasks: persistentvolumes.yml
+- import_tasks: argocd.yml
+- import_tasks: init.yml
+- import_tasks: ldap.yml
+- import_tasks: ingress.yml

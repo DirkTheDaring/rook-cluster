@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ rook_argocd_namespace }}
+  name:      rook-ceph-cluster
+spec:
+  destination:
+    namespace: rook-ceph
+    server:    https://kubernetes.default.svc
+  project: default
+  source:
+    chart:          rook-ceph-cluster
+    repoURL:        https://charts.rook.io/release
+    targetRevision: {{ rook_chart_version }}
+    helm:
+      parameters:
+      - name:  operatorNamespace
+        value: rook-ceph
+      - name: cephClusterSpec.dashboard.ssl
+        value: "false"
+      - name: cephClusterSpec.network.provider
+        value: "host"
+      - name:  cephClusterSpec.storage.useAllDevices
+        value: "false"
+      - name:  cephClusterSpec.storage.deviceFilter
+        value: "vd[c-z]"
+      - name:  cephClusterSpec.storage.config.metadataDevice
+        value: "vdb"
+      - name:  cephClusterSpec.placement.mon.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key
+        value: node-role.kubernetes.io/ceph-monitor
+      - name:  cephClusterSpec.placement.mon.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator
+        value: Exists
+      - name:  cephClusterSpec.placement.mgr.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key
+        value: node-role.kubernetes.io/ceph-monitor
+      - name:  cephClusterSpec.placement.mgr.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator
+        value: "Exists"
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

@@ -1,0 +1,55 @@
+# DNS
+argocd_domain:       "example.com"
+argocd_subdomain:    ""
+argocd_hostname:     "argocd"
+
+# Kubernetes
+argocd_namespace:    "argo-cd"
+
+# Argo-cd
+argocd_project:      "default"
+
+# Helm Chart
+argocd_chart_url:          https://argoproj.github.io/argo-helm
+argocd_chart_name:         argocd
+argocd_chart_jmespath:     entries."argo-cd"[].version
+argocd_chart_release_name: argocd
+
+#argocd_chart_version:  ""    # "" means get latest version
+#argocd_chart_version: "~^3"  # "" means get select first element of patteer
+
+# Github API
+argocd_releases_url:      "https://api.github.com/repos/argoproj/argo-cd/releases"
+argocd_releases_jmespath: "[].tag_name"
+#argocd_release:           "~^."
+
+# Credentials
+argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+# Ldap
+argocd_ldap_server:        ""  # ldap.example.com
+argocd_ldap_port:          "636"
+argocd_ldap_bind_dn:       ""
+argocd_ldap_bind_password: ""
+argocd_ldap_insecure_no_ssl: "false"
+argocd_ldap_insecure_tls:  "false"
+
+argocd_values: {}
+
+argocd_policy_users: []
+#- name: "demosuser"
+#  role: "role:readonly"
+argocd_policy_groups: []
+#- name: "demogroup"
+#  role: "role:admin"
+
+argocd_sso_list: []
+#- name: Argo Workflow
+#  id:   argo-workflows-sso
+#  uid:  0e56402e-93cd-49ed-a84b-ce8254a192e9
+#  redirectURIs:
+#  - https://argo-workflows.office.kaupon.de/oauth2/callback
+#  secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+
+#argocd_node_selector_hostname: prod1-node-mn35
+argocd_ldap_profile: "activedirectory"
