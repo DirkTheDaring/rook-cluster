@@ -16,19 +16,22 @@ nfs_subdir_external_provisioner_releases_jmespath: "[].tag_name"
 nfs_subdir_external_provisioner_argocd: false
 
 nfs_subdir_external_provisioners:
-- release_name: "nfs-subdir-external-provisioner"
-  server:    nfs.example.com
-  path:      /export/data
-# mount_options: []
+- namespace:    "nfs-storage"
+  release_name: "nfs-subdir-external-provisioner"
+  server:       "nfs.example.com"
+  path:         "/nfs/export/dynamic"
   storage_class:
-  name:         "nfs-client"
-##      path_pattern: "${.PVC.namespace}-${.PVC.name}"
-- release_name: "nfs-subdir-external-provisioner2"
-  server:    nfs.example.com
-  path:      /export/data
-  mount_options: []
+    name:         "nfs-client"
+  leader_election:
+    enabled: false
+- namespace:    "nfs-storage"
+  release_name: "nfs-subdir-external-provisioner2"
+  server:       "nfs.example.com"
+  path:         "/nfs/export/static"
   storage_class:
     name:         "nfs-static"
+    reclaim_policy: Retain
     path_pattern: "${.PVC.namespace}-${.PVC.name}"
-
-
+    on_delete: retain
+  leader_election:
+    enabled: false

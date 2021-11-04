@@ -6,13 +6,28 @@ nfs:
 {% for item in nfs.mount_options %}
   - item
 {% endfor %}
-{% endif  %}
+{% endif %}
 {% if nfs.storage_class is defined %}
 storageClass:
 {% if nfs.storage_class.name is defined %}
   name: {{ nfs.storage_class.name }}
-{% endif  %}
+{% endif %}
+{% if nfs.storage_class.reclaim_policy is defined %}
+  reclaimPolicy: {{ nfs.storage_class.reclaim_policy }}
+{% endif %}
+{% if nfs.storage_class.on_delete is defined %}
+  onDelete: {{ nfs.storage_class.on_delete }}
+{% endif %}
 {% if nfs.storage_class.path_pattern is defined %}
   pathPattern: {{ nfs.storage_class.path_pattern }}
-{% endif  %}
-{% endif  %}
+{% endif %}
+{% if nfs.storage_class.access_modes is defined %}
+  accessModes: {{ nfs.storage_class.access_modes }}
+{% endif %}
+{% endif %}
+{% if nfs.leader_election is defined %}
+leaderElection:
+{% if nfs.leader_election.enabled is defined %}
+  enabled: {{ nfs.leader_election.enabled }}
+{% endif %}
+{% endif %}

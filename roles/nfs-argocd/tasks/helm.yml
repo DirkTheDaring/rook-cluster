@@ -1,9 +1,9 @@
-#- set_fact:
-#    nfs_subdir_external_provisioner_values_yaml: "{{ lookup('template', 'values.yaml.jinja2') }}"
-
 #- copy:
-#    content: "{{ nfs_subdir_external_provisioner_values_yaml }}"
-#    dest: "/tmp/nfs-values.yaml"
+#    content: "{{ lookup('template', 'values.yaml.jinja2') }}"
+#    dest: "/tmp/{{ nfs.name }}-values.yaml"
+#  loop: "{{ nfs_subdir_external_provisioners }}"
+#  loop_control:
+#    loop_var: nfs 
 
 - name: Deploy with helm
   kubernetes.core.helm:
