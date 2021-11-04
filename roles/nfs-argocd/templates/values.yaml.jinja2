@@ -4,7 +4,7 @@ nfs:
 {% if nfs.mount_options is defined %}
   mountOptions:
 {% for item in nfs.mount_options %}
-  - item
+  - {{ item }}
 {% endfor %}
 {% endif %}
 {% if nfs.storage_class is defined %}
