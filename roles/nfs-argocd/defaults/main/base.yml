@@ -12,13 +12,23 @@ nfs_subdir_external_provisioner_releases_url:      https://api.github.com/repos/
 nfs_subdir_external_provisioner_releases_jmespath: "[].tag_name" 
 #nfs_subdir_external_provisioner_release:  "~^.*" # pick first match of regular expression
 
-#############################################################################
+# install with argocd (true) or with ansible helm (false)
+nfs_subdir_external_provisioner_argocd: false
 
-nfs_subdir_external_provisioner_namespace: nfs-storage
-nfs_subdir_external_provisioner_server:    nfs.example.com
-nfs_subdir_external_provisioner_path:      /export/data
+nfs_subdir_external_provisioners:
+- release_name: "nfs-subdir-external-provisioner"
+  server:    nfs.example.com
+  path:      /export/data
+# mount_options: []
+  storage_class:
+  name:         "nfs-client"
+##      path_pattern: "${.PVC.namespace}-${.PVC.name}"
+- release_name: "nfs-subdir-external-provisioner2"
+  server:    nfs.example.com
+  path:      /export/data
+  mount_options: []
+  storage_class:
+    name:         "nfs-static"
+    path_pattern: "${.PVC.namespace}-${.PVC.name}"
 
-#nfs_subdir_external_provisioner_mount_options: []
-#nfs_subdir_external_provisioner_storage_class_name:         "nfs-client"
-#nfs_subdir_external_provisioner_storage_class_name:         "nfs-static-provisioner"
-#nfs_subdir_external_provisioner_storage_class_path_pattern: "${.PVC.namespace}-${.PVC.name}"
+

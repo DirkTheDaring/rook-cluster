@@ -30,7 +30,7 @@ spec:
 {% endif  %}
 {% if nfs_subdir_external_provisioner_storage_class_path_pattern is defined %}
       - name: storageClass.pathPattern
-        value: {{ nfs_subdir_external_provisioner_storage_class_path_pattern }}
+        value: '{{ nfs_subdir_external_provisioner_storage_class_path_pattern }}'
 {% endif  %}
   syncPolicy:
     automated: {}

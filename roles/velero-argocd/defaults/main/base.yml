@@ -21,7 +21,7 @@ velero_releases_url:      "https://api.github.com/repos/vmware-tanzu/velero/rele
 velero_releases_jmespath: "[].tag_name"
 #velero_release: "~^" # pick first match of regular expression
 #velero_release: "v1.7.0"
-velero_release: "v1.6.3"
+#velero_release: "v1.6.3"
 
 #velero_aws_access_key_id:     vmnlz3dWjY
 #velero_aws_secret_access_key: QBpFGKS7y0FpyFiN7SZ8gw08oiPVKlWhJfNMV5mZ

@@ -1,0 +1,18 @@
+nfs:
+  server: {{ nfs.server }}
+  path:   {{ nfs.path }}
+{% if nfs.mount_options is defined %}
+  mountOptions:
+{% for item in nfs.mount_options %}
+  - item
+{% endfor %}
+{% endif  %}
+{% if nfs.storage_class is defined %}
+storageClass:
+{% if nfs.storage_class.name is defined %}
+  name: {{ nfs.storage_class.name }}
+{% endif  %}
+{% if nfs.storage_class.path_pattern is defined %}
+  pathPattern: {{ nfs.storage_class.path_pattern }}
+{% endif  %}
+{% endif  %}

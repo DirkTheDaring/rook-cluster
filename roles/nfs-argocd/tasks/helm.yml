@@ -1,0 +1,20 @@
+#- set_fact:
+#    nfs_subdir_external_provisioner_values_yaml: "{{ lookup('template', 'values.yaml.jinja2') }}"
+
+#- copy:
+#    content: "{{ nfs_subdir_external_provisioner_values_yaml }}"
+#    dest: "/tmp/nfs-values.yaml"
+
+- name: Deploy with helm
+  kubernetes.core.helm:
+    chart_ref:         nfs-subdir-external-provisioner/nfs-subdir-external-provisioner
+    chart_version:     "{{ nfs_subdir_external_provisioner_chart_version }}"
+    release_namespace: "{{ nfs.namespace }}"
+    release_name:      "{{ nfs.release_name }}"
+    create_namespace:  true
+    values:            "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
+    update_repo_cache: yes
+  when: not nfs_subdir_external_provisioner_argocd
+  loop: "{{ nfs_subdir_external_provisioners }}"
+  loop_control:
+    loop_var: nfs
