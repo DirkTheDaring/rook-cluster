@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-set -ex
+set -e
 DIRNAME=$(dirname "$0")
 cd "$DIRNAME/.."
 LIST=$(find credentials/ -name web.json)
