@@ -3,7 +3,6 @@
     name:     "{{ argocd_chart_name }}"
     repo_url: "{{ argocd_chart_url }}"
 
-
 - set_fact:
     argocd_values_yaml: "{{ lookup('template', 'values.yaml.jinja2') }}"
   when: argocd_ldap_server == ""

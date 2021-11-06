@@ -1,32 +1,32 @@
-- block: 
-  - set_fact:
-      traefik_application:  "{{ lookup('template', 'application.yaml.jinja2') }}"
-      traefik_ingressroute: "{{ lookup('template', 'ingressroute.yaml.jinja2') }}"
-      rook_ingressroute:    "{{ lookup('template', 'rook-ingressroute.yaml.jinja2') }}"
-
-  - copy:
-      content: "{{ traefik_application }}"
-      dest: "/tmp/x"
-  
-  - copy:
-      content: "{{ rook_ingressroute }}"
-      dest: "/tmp/y"
-  
-  - copy:
-      content: "{{ traefik_ingressroute }}"
-      dest: "/tmp/traefik.yaml"
-  
-  - name: show templating results
-    debug:
-      msg: "{{ rook_ingressroute }}"
-  
-  #- name: show templating results
-  #  debug:
-  #    msg: "{{ traefik_application }}"
-  
-  #- fail:
-  #   msg: "intended"
-  when: false
+#- block: 
+#  - set_fact:
+#      traefik_application:  "{{ lookup('template', 'application.yaml.jinja2') }}"
+#      traefik_ingressroute: "{{ lookup('template', 'ingressroute.yaml.jinja2') }}"
+#      rook_ingressroute:    "{{ lookup('template', 'rook-ingressroute.yaml.jinja2') }}"
+#
+#  - copy:
+#      content: "{{ traefik_application }}"
+#      dest: "/tmp/x"
+#  
+#  - copy:
+#      content: "{{ rook_ingressroute }}"
+#      dest: "/tmp/y"
+#  
+#  - copy:
+#      content: "{{ traefik_ingressroute }}"
+#      dest: "/tmp/traefik.yaml"
+#  
+#  - name: show templating results
+#    debug:
+#      msg: "{{ rook_ingressroute }}"
+#  
+#  #- name: show templating results
+#  #  debug:
+#  #    msg: "{{ traefik_application }}"
+#  
+#  #- fail:
+#  #   msg: "intended"
+#  when: false
 
 
 - name: create persistent volume for nfs-static
