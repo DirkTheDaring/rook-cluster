@@ -6,6 +6,7 @@ harbor_notary_hostname: "notary"
 
 # Kubernetes
 harbor_namespace:       "harbor"
+harbor_nodeSelector_hostname: "prod1-node-thor"
 
 # Argocd
 harbor_argocd_project:            "default"
@@ -26,3 +27,5 @@ harbor_releases_jmespath: "[].tag_name"
 #harbor_release: "v2.2.4-rc1"
 
 harbor_persistence_storage_class: nfs-client
+
+harbor_root_credentials_dir: "{{ playbook_dir }}/credentials"

@@ -1,2 +1,4 @@
 harbor_core_fqdn:   "{{ harbor_core_hostname }}{{ '' if harbor_subdomain == '' else '.' + harbor_subdomain }}.{{ harbor_domain }}"
 harbor_notary_fqdn: "{{ harbor_notary_hostname }}{{ '' if harbor_subdomain == '' else '.' + harbor_subdomain }}.{{ harbor_domain }}"
+
+harbor_credentials_dir:  "{{ harbor_root_credentials_dir }}/harbor"

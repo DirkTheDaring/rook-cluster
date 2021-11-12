@@ -66,6 +66,32 @@ spec:
         forceString: true
       - name: externalURL
         value: "https://{{ harbor_core_fqdn }}"
+{% if harbor_nodeSelector_hostname is defined and harbor_nodeSelector_hostname != "" %}
+      - name: nginx.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: portal.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: core.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: jobservice.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: registry.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: chartmuseum.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: trivy.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: notary.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: signer.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: database.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: redis.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+      - name: exporter.nodeSelector.kubernetes\.io\/hostname
+        value: "{{ harbor_nodeSelector_hostname }}"
+{% endif %} 
   syncPolicy:
     automated: {}
     syncOptions:
