@@ -6,7 +6,7 @@ harbor_notary_hostname: "notary"
 
 # Kubernetes
 harbor_namespace:       "harbor"
-harbor_nodeSelector_hostname: "prod1-node-thor"
+#harbor_nodeSelector_hostname: "hostname"
 
 # Argocd
 harbor_argocd_project:            "default"
