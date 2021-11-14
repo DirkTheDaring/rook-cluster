@@ -1,3 +1,4 @@
 - name: create application
-  kubernetes.core.k8s: 
+  kubernetes.core.k8s:
     template: application.yaml.jinja2
+  when: rook_deployment == "argocd"

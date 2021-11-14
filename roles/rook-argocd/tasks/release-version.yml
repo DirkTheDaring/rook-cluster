@@ -9,7 +9,7 @@
     set_fact:
       rook_releases: "{{ rook_releases.json | to_json | from_json | json_query(rook_releases_jmespath) }}"
 
-  - name: show available releases 
+  - name: show available releases
     debug:
       msg:       "rook_releases: {{ rook_releases }}"
       verbosity: 2
@@ -23,7 +23,7 @@
     fail:
      msg: "no release found: rook_release={{ rook_release }}"
     when: rook_releases|length == 0
-      
+
   - name: pick first item as release
     set_fact:
       rook_release: "{{ rook_releases[0] }}"

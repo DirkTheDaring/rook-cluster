@@ -4,11 +4,11 @@
 
 - block:
   - name: create storage class
-    kubernetes.core.k8s: 
+    kubernetes.core.k8s:
       template: storageclass.yaml.jinja2
-    loop: 
+    loop:
     - name:          rook-cephfs-delete
-      reclaimPolicy: Delete 
+      reclaimPolicy: Delete
     - name:          rook-cephfs-retain
       reclaimPolicy: Retain
 
