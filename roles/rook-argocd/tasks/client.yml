@@ -61,7 +61,7 @@
       argv:
       - bash 
       - -c
-      - "kubectl get --namespace {{ rook_namespace }} secret rgw-admin-ops-user rook-ceph-mon -o custom-columns=name:metadata.name --no-headers 2>/dev/null | xargs echo"
+      - "kubectl get --namespace {{ rook_namespace }} secret rgw-admin-ops-user rook-ceph-mon -o custom-columns=name:metadata.name --no-headers 2>/dev/null ; exit 0"
     register: rook_ceph_secret 
  
   - name: run script if secret does not exist
