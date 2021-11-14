@@ -46,3 +46,8 @@ rook_ceph_quirk: false
 
 rook_root_credentials_dir:         "{{ playbook_dir }}/credentials"
 rook_storage_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+
+# Deployment argocd or helm
+#rook_deployment: "argocd"
+rook_deployment: "helm"
