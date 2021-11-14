@@ -1,0 +1,30 @@
+# DNS
+keycloak_domain:       "example.com"
+keycloak_subdomain:    ""
+keycloak_hostname:     "keycloak"
+
+# Kubernetes
+keycloak_namespace:    "keycloak"
+
+# Argo-cd
+keycloak_project:      "default"
+
+# Helm Chart
+keycloak_chart_repo_name:    bitnami
+keycloak_chart_url:          https://charts.bitnami.com/bitnami
+
+keycloak_chart_name:         bitnami/keycloak
+keycloak_chart_release_name: keycloak
+keycloak_chart_jmespath:     entries."keycloak"[].version
+
+#keycloak_chart_version:  ""    # "" means get latest version
+#keycloak_chart_version: "~^5"  # "" means get select first element of patteer
+
+# Github API
+keycloak_releases_url:      "https://api.github.com/repos/keycloak/keycloak/releases"
+keycloak_releases_jmespath: "[].tag_name"
+#keycloak_release:           "~^."
+#keycloak_release:           "15.0.2"
+
+# Credentials
+keycloak_root_credentials_dir: "{{ playbook_dir }}/credentials"

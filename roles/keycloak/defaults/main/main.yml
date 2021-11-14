@@ -1,0 +1,3 @@
+# fqdn fully qualified domain name
+keycloak_fqdn:            "{{ keycloak_hostname }}{{ '' if keycloak_subdomain == '' else '.' + keycloak_subdomain }}.{{ keycloak_domain }}"
+keycloak_credentials_dir: "{{ keycloak_root_credentials_dir }}/argocd"

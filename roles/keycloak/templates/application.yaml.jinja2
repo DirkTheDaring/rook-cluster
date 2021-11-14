@@ -1,0 +1,38 @@
+#
+# https://artifacthub.io/packages/helm/bitnami/minio?modal=security-report
+#
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ keycloak_argocd_namespace }}
+  name:      {{ keycloak_chart_release_name }}
+spec:
+  destination:
+    namespace: {{ keycloak_namespace }}
+    server:    {{ keycloak_argocd_destination_server }}
+  project:     default
+  source:
+    repoURL:        {{ keycloak_chart_url  }}
+    chart:          {{ keycloak_chart_release_name }}
+    targetRevision: {{ keycloak_chart_version }}
+    helm:
+      parameters:
+      - name: global.storageClass
+        value: "nfs-client"
+      - name: ingress.enabled
+        value: "true"
+      - name:  'ingress.hostname'
+        value: '{{ keycloak_fqdn }}'
+      - name:  'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.entrypoints'
+        value: 'websecure'
+      - name:  'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+        value: 'true'
+        forceString: true
+      - name: service.type
+        value: "ClusterIP"
+      - name: proxyAddressForwarding
+        value: "true"
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
