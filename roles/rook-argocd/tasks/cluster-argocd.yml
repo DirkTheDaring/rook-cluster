@@ -10,15 +10,4 @@
       - -c
       - "while [[ \"$(kubectl -n {{ rook_argocd_namespace }} get application rook-ceph -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done"
 
-  - name: create ingress
-    kubernetes.core.k8s:
-      template: ingress.yaml.jinja2
-
-  - name: wait until rados gw is showing up (can take up to 20 minutes)
-    ansible.builtin.command: 
-      argv:
-      - bash 
-      - -c
-      - "while [ -z \"$(kubectl -n {{ rook_namespace }} get pod -l app=rook-ceph-rgw --no-headers -o custom-columns=name:metadata.name)\"  ]; do sleep 3;done"
-
   when: rook_ceph_server

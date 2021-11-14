@@ -56,12 +56,12 @@
       dest: "{{ rook_build_dir }}/client-cluster-create.sh"
       mode: '0755'
 
-  - name: test if secret already exists
+  - name: test if secrets rgw-admin-ops-user and rook-ceph-mon already exist
     ansible.builtin.command: 
       argv:
       - bash 
       - -c
-      - "kubectl get --namespace {{ rook_namespace }} secret rook-ceph-mon -o custom-columns=name:metadata.name --no-headers 2>/dev/null || echo"
+      - "kubectl get --namespace {{ rook_namespace }} secret rgw-admin-ops-user rook-ceph-mon -o custom-columns=name:metadata.name --no-headers 2>/dev/null || echo"
     register: rook_ceph_secret 
  
   - name: run script if secret does not exist
@@ -111,4 +111,3 @@
     when: tmpdir is defined and 'path' in tmpdir
 
   when: not rook_ceph_server
-

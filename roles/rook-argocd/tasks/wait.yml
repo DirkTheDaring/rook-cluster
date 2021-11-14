@@ -1,0 +1,33 @@
+  # At least after an argocd deployment you cannot be sure that the rollout is immediatly tiggered
+  # thus any subsquent kubectl -n <namespace> can/will get a 404 from kubernetes
+- name: wait until namespace appears 
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - "while true; do kubectl get namespace {{ rook_namespace }} && break; sleep 3; done"
+
+- name: wait until rook-ceph-operator appears
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - >
+      while [ -z "$(kubectl -n {{ rook_namespace }} get pods -l app=rook-ceph-operator --output=jsonpath='{.items[*].metadata.name}')" ]; do 
+        echo rook-ceph-operator not found
+        sleep 10
+      done
+
+- name: wait until rook-ceph-operator becomes ready
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - wait
+    - -n 
+    - "{{ rook_namespace }}"
+    - --timeout=600s
+    - --for=condition=Ready
+    - pod
+    - -l
+    - app=rook-ceph-operator
+
