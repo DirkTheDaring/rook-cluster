@@ -1,19 +1,15 @@
-- name: helm install
-  blocK:
+- name: deploy with helm
+  block:
   - name: Add chart repo
     kubernetes.core.helm_repository:
       name:     "{{ rook_chart_repo_name }}"
       repo_url: "{{ rook_chart_url }}"
 
+
   - name: render values.yaml
     set_fact:
       rook_values_yaml: "{{ lookup('template', 'values.yaml.jinja2') }}"
 
-  - name: copy values.yaml for debugging
-    copy:
-      content: "{{ rook_values_yaml }}"
-      dest: "/tmp/rook-values.yaml"
-    when: true
 
   - name: Deploy helm chart
     kubernetes.core.helm:
@@ -22,6 +18,7 @@
       release_namespace: "{{ rook_namespace }}"
       release_name:      "{{ rook_chart_release_name }}"
       create_namespace:  true
-  #    values:            "{{ rook_values_yaml | from_yaml }}"
+#      values:            "{{ rook_values_yaml | from_yaml }}"
       update_repo_cache: yes
+
   when: rook_deployment == "helm"

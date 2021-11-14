@@ -30,8 +30,8 @@ rook_releases_jmespath: "[].tag_name"
 #rook_release:           "~^v1\\.7\\."
 #rook_release:           "v1.7.6"
 
-#rook_default_storage_class: ""
-rook_default_storage_class: "rook-cephfs-delete"
+rook_default_storage_class: ""
+#rook_default_storage_class: "rook-cephfs-delete"
 
 # CSI
 rook_csi_enabled: true

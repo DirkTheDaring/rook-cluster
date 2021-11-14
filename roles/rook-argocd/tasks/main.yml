@@ -1,13 +1,14 @@
 - import_tasks: chart-version.yml
 - import_tasks: release-version.yml
 
-- import_tasks: argocd-debug.yml
-- import_tasks: argocd.yml
+- import_tasks: argocd-debug.yml   # if rook_deployment == "argocd"
+- import_tasks: argocd.yml         # if rook_deployment == "argocd"
 - import_tasks: helm.yml
+          # if rook_deployment == "helm"
 - import_tasks: wait.yml
 
-- import_tasks: cluster-argocd.yml  # only runs for server
-- import_tasks: cluster-helm.yml    # only runs for server
+- import_tasks: cluster-argocd.yml  # only runs for server if rook_deployment == "argocd"
+- import_tasks: cluster-helm.yml    # only runs for server if rook_deployment == "helm"
 - import_tasks: ingress.yml         # only runs for server
 - import_tasks: export.yml          # only runs for server
 - import_tasks: credentials.yml     # only runs for server
