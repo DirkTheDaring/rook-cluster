@@ -1,0 +1,4 @@
+# fqdn fully qualified domain name
+argo_dataflow_fqdn: "{{ argo_dataflow_hostname }}{{ '' if argo_dataflow_subdomain == '' else '.' + argo_dataflow_subdomain }}.{{ argo_dataflow_domain }}"
+argo_dataflow_credentials_dir: "{{ argo_dataflow_root_credentials_dir }}/argocd"
+

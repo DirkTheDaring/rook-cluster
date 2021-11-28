@@ -1,1 +1,2 @@
 - import_tasks: operator.yml
+- import_tasks: ingress.yml

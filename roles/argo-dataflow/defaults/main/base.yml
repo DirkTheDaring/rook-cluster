@@ -1,0 +1,7 @@
+# DNS
+argo_dataflow_domain:       "example.com"
+argo_dataflow_subdomain:    ""
+argo_dataflow_hostname:     "argo-dataflow-system"
+
+# Kubernetes
+argo_dataflow_namespace:    "argo-dataflow-system"

@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  namespace: argo-dataflow-system
+  name:      argo-dataflow-system
+spec:
+  rules:
+  - host: {{ argo_dataflow_fqdn }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: controller-manager-metrics-service
+            port:
+              #number: 2746
+              number: 8443
+        path: /
+        pathType: Prefix
