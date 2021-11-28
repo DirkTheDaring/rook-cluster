@@ -1,11 +1,16 @@
 #!/usr/bin/bash
 set -ex
+# Requires: 
+# pip install --user kubernetes
+
 ANSIBLE_MIN_VERSION=2.11.5
 
 check_ansible_min_version()
 {
   local MIN_VERSION=$1
-  local VERSION=($(ansible --version|awk '{print substr($3,1, length($3)-1);exit}'))
+  # old version string: ansible 2.9.27
+  # new version string  ansible [core 2.11.6]
+  local VERSION=($(ansible --version | grep -m1 '^ansible ' | awk 'match($0,/([0-9]+\.[0-9]+\.[0-9]+)/,a) {print a[1]}'))
   local VERSION_ARRAY=($(echo $VERSION|sed 's/\./ /g'))
   local MIN_VERSION_ARRAY=($(echo $MIN_VERSION|sed 's/\./ /g'))
   #  at least mininum version of ansible, otherwise endless troubles with collections!
@@ -50,6 +55,7 @@ export KUBECONFIG
 
 check_ansible_min_version "$ANSIBLE_MIN_VERSION"
 
+#ansible-galaxy collection install --force -r collections/requirements.yml 
 ansible-galaxy collection install -r collections/requirements.yml 
 
 INVENTORY_DIR=inventory/$CONFIG_NAME/$CONFIG_STAGE
@@ -57,6 +63,6 @@ if [ ! -d "$INVENTORY_DIR" ]; then
     echo inventory directory does not exist: $INVENTORY_DIR
     exit 1
 fi
-
+#export ANSIBLE_LIBRARY=$(realpath "$DIRNAME/modules")
 ansible-playbook "$PLAYBOOK" -e config_name=$CONFIG_NAME -e config_stage=$CONFIG_STAGE -i "$INVENTORY_DIR" $*
 
