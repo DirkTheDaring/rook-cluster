@@ -44,6 +44,41 @@ spec:
       - name: server.nodeSelector.kubernetes\.io\/hostname
         value: {{ argo_workflows_nodeSelector_hostname }}
 {% endif %} 
+      # postgresql
+      - name: controller.persistence.postgresql.host
+        value: {{ argo_workflows_credentials_postgresql.name }}
+      - name: controller.persistence.postgresql.port
+        value: "{{ argo_workflows_credentials_postgresql.port }}"
+      - name: controller.persistence.postgresql.database
+        value: {{ argo_workflows_credentials_postgresql.database_name }}
+      - name: controller.persistence.postgresql.tableName
+        value: argo_workflows
+      - name: controller.persistence.postgresql.userNameSecret.name
+        value: credentials-postgresql 
+      - name: controller.persistence.postgresql.userNameSecret.key
+        value: username
+      - name: controller.persistence.postgresql.passwordSecret.name
+        value: credentials-postgresql 
+      - name: controller.persistence.postgresql.passwordSecret.key
+        value: password
+      # s3 (minio)
+      - name: artifactRepository.archiveLogs
+        value: "true"
+      - name: artifactRepository.s3.accessKeySecret.name
+        value: credentials-s3
+      - name: artifactRepository.s3.accessKeySecret.key
+        value: accesskey
+      - name: artifactRepository.secretKeySecret.name
+        value: credentials-s3
+      - name: artifactRepository.secretKeySecret.key
+        value: secretkey
+      - name: artifactRepository.insecure
+        value: "false"
+      - name: artifactRepository.bucket
+        value: "{{ argo_workflows_credentials_s3.bucket }}"
+      - name: artifactRepository.endpoint
+        value: "{{ argo_workflows_credentials_s3.url }}"
+   
   syncPolicy:
     automated: {}
     syncOptions:

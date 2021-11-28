@@ -1,0 +1,32 @@
+- name: wait until pod appears
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - "while true; do [ -n \"$(kubectl -n {{ minio_namespace }} get pod -o custom-columns=name:metadata.name --no-headers)\" ] && break; sleep 5; done"
+  register: minio_namespace_result
+
+- name: get pod name
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - --namespace
+    - "{{ minio_namespace }}"
+    - get 
+    - pods
+    - -o
+    - custom-columns=name:metadata.name
+    - --no-headers 
+  register: minio_pod_name
+
+- name: wait until pod becomes ready
+  ansible.builtin.command: 
+    argv:
+    - kubectl
+    - wait
+    - --namespace
+    - "{{ minio_namespace }}"
+    - --timeout=600s
+    - --for=condition=Ready
+    - pod
+    - "{{ minio_pod_name.stdout }}"

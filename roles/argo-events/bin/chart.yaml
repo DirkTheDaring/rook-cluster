@@ -1,0 +1,6 @@
+repo_name: argo
+repo_url:  https://argoproj.github.io/argo-helm
+name:      argo-events
+version:   ""
+#version:   "~^1.6"
+#version:   "1.6.4"

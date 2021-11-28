@@ -27,12 +27,13 @@ argo_workflows_releases_jmespath: "[].tag_name"
 argo_workflows_argocd_namespace:             "argocd"
 argo_workflows_argocd_destination_server:    "https://kubernetes.default.svc"
 
-
 argo_workflows_values: {}
 
 # Credentials
-argo_workflows_root_credentials_dir: "{{ playbook_dir }}/credentials"
+#argo_workflows_root_credentials_dir: "{{ playbook_dir }}/credentials"
 
 argo_workflows_sso_client_secret: "none"
 
 #argo_workflows_nodeSelector_hostname: prod1-node-mn35
+argo_workflows_credentials_s3_json: "{{ playbook_dir }}/credentials/minio/buckets/default.json"
+argo_workflows_credentials_postgresl_json: ""

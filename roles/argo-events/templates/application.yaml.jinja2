@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ argo_events_application_argocd_namespace }}
+  name:      argo-events
+spec:
+  destination:
+    server:    {{ argo_events_application_destination_server }}
+    namespace: {{ argo_events_application_destination_namespace }}
+  project: default
+  source:
+    repoURL:        {{ argo_events_helm_repo_url }}
+    chart:          {{ argo_events_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+{% if argo_events_application_node_selector_hostname is defined and argo_events_application_node_selector_hostname != "" %}
+      - name: sensorController.nodeSelector.kubernetes\.io\/hostname
+        value: {{ argo_events_application_node_selector_hostname }}
+      - name: eventsourceController.nodeSelector.kubernetes\.io\/hostname
+        value: {{ argo_events_application_node_selector_hostname }}
+      - name: eventbusController.nodeSelector.kubernetes\.io\/hostname
+        value: {{ argo_events_application_node_selector_hostname }}
+{% endif %}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

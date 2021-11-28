@@ -1,0 +1,3 @@
+repo_name: argo
+repo_url:  https://argoproj.github.io/argo-helm
+name:      argocd-notifications

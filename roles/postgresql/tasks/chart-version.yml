@@ -1,0 +1,35 @@
+- name: determine latest version of helm chart
+  block:
+  - uri:
+      url:            "{{ postgresql_chart_url }}/index.yaml"
+      return_content: yes
+    register: postgresql_chart_index
+
+  - name: extract chart_versions
+    set_fact:
+      postgresql_chart_versions: "{{ postgresql_chart_index.content | from_yaml | json_query(postgresql_chart_jmespath) }}"
+
+  - name: show available chart_versions
+    debug:
+      msg:       "postgresql_chart_versions: {{ postgresql_chart_versions }}"
+      verbosity: 2
+
+  - name: filter chart_versions if a regex was specified
+    set_fact:
+      postgresql_chart_versions: "{{ postgresql_chart_versions | select('match', postgresql_chart_version[1:] ) | list }}"
+    when: postgresql_chart_version.startswith("~")
+
+  - name: fail when there are no chart_versions to pick available
+    fail:
+     msg: "no release found: postgresql_chart_version={{ postgresql_chart_version }}"
+    when: postgresql_chart_versions|length == 0
+
+  - name: pick first item as release
+    set_fact:
+      postgresql_chart_version: "{{ postgresql_chart_versions[0] }}"
+
+  when: postgresql_chart_version == "" or postgresql_chart_version.startswith("~")
+
+- debug:
+    msg:       "postgresql_chart_version: {{ postgresql_chart_version | default('< not enforced >') }}"
+    verbosity: 2

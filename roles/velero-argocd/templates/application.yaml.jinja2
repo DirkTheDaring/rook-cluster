@@ -49,16 +49,16 @@ spec:
       - name: configuration.provider
         value: "aws"
       - name: configuration.backupStorageLocation.bucket
-        value: "{{ minio_credentials.bucket }}"
+        value: "{{ velero_credentials_s3.bucket }}"
       - name: configuration.backupStorageLocation.config.region
         value: "minio"
       - name: configuration.backupStorageLocation.config.s3ForcePathStyle
         value: "true"
         forceString: true
       - name: configuration.backupStorageLocation.config.s3Url
-        value: "{{ minio_credentials.url }}"
+        value: "{{ velero_credentials_s3.url }}"
       - name: configuration.backupStorageLocation.config.publicUrl
-        value: "{{ minio_credentials.url }}"
+        value: "{{ velero_credentials_s3.url }}"
       - name: configuration.loglevel
         value: "debug"
       - name: configuration.resticTimeout

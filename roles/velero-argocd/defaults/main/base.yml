@@ -27,5 +27,5 @@ velero_releases_jmespath: "[].tag_name"
 #velero_aws_secret_access_key: QBpFGKS7y0FpyFiN7SZ8gw08oiPVKlWhJfNMV5mZ
 #
 # Ansible
-velero_root_credentials_dir: "{{ playbook_dir }}/credentials"
-
+#velero_root_credentials_dir: "{{ playbook_dir }}/credentials"
+velero_credentials_s3_json: "{{ playbook_dir }}/credentials/minio/config.json"

@@ -1,0 +1,15 @@
+controller:
+  persistence:
+    postgresql:
+      host: {{ argo_workflows_credentials_postgresql.name }}
+      port: {{ argo_workflows_credentials_postgresql.port }}
+      database: {{ argo_workflows_credentials_postgresql.database_name }}
+      tableName: argo_workflows
+      # the database secrets must be in the same namespace of the controller
+      userNameSecret:
+       name: credentials-postgresql
+        key: username
+      passwordSecret:
+        name: credentials-postgresql
+        key: password
+

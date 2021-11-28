@@ -1,0 +1,4 @@
+- import_tasks: release-version.yml
+- import_tasks: chart-version.yml
+- import_tasks: helm.yml
+- import_tasks: credentials.yml

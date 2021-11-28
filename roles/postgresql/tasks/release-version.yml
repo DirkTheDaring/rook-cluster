@@ -1,0 +1,36 @@
+- name: get available releases
+  block:
+  - uri:
+      url:            "{{ postgresql_releases_url }}"
+      return_content: no
+    register: postgresql_releases
+
+  - name: extract releases
+    set_fact:
+      postgresql_releases: "{{ postgresql_releases.json | to_json | from_json | json_query(postgresql_releases_jmespath) }}"
+
+  - name: show available releases 
+    debug:
+      msg:       "postgresql_releases: {{ postgresql_releases }}"
+      verbosity: 2
+
+  - name: filter releases if a regex was specified
+    set_fact:
+      postgresql_releases: "{{ postgresql_releases | select('match', postgresql_release[1:] ) |list }}"
+    when: postgresql_release.startswith("~")
+
+  - name: fail when there are no releases to pick available
+    fail:
+     msg: "no release found: postgresql_release={{ postgresql_release }}"
+    when: postgresql_releases|length == 0
+      
+  - name: pick first item as release
+    set_fact:
+      postgresql_release: "{{ postgresql_releases[0] }}"
+
+  when: postgresql_release is defined and postgresql_release.startswith("~")
+
+- debug:
+    msg:       "postgresql_release: {{ postgresql_release | default('< not enforced >') }}"
+    verbosity: 2
+

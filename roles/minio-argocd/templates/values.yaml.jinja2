@@ -1,0 +1,26 @@
+#
+# https://artifacthub.io/packages/helm/bitnami/minio?modal=security-report
+
+ingress:
+  enabled: true
+  hostname: "{{ minio_gui_fqdn }}"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+
+extraEnv:
+- name:  "MINIO_DOMAIN"
+  value: "{{ minio_api_fqdn }}"
+
+apiIngress:
+  enabled: true
+  hostname: "{{ minio_api_fqdn }}"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  extraHosts:
+  - name: "*.{{ minio_api_fqdn }}"
+    path: "/"
+
+persistence:
+  storageClass: "{{ minio_persistence_storage_class }}"

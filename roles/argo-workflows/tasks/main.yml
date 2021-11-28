@@ -1,4 +1,8 @@
 - import_tasks: chart-version.yml
 - import_tasks: release-version.yml
-- import_tasks: argocd.yml
+- import_tasks: config.yml
+- import_tasks: namespace.yml
+- import_tasks: postgresql-secret.yml
+- import_tasks: s3-secret.yml
 - import_tasks: secret.yml
+- import_tasks: argocd.yml

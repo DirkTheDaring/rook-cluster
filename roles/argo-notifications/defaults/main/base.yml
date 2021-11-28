@@ -1,0 +1,18 @@
+# Github
+argo_notifications_github_project_name:    argoproj/notifications-engine
+argo_notifications_github_project_version: "" #  "" means pick latest
+#argo_notifications_github_project_version: '~^'
+
+# Helm Chart
+argo_notifications_helm_repo_name:     argo
+argo_notifications_helm_repo_url:      https://argoproj.github.io/argo-helm
+argo_notifications_helm_chart_name:    argocd-notifications
+argo_notifications_helm_chart_version: ""  #  "" means pick latest
+
+# Argo application
+argo_notifications_application_argocd_namespace:       argo-cd
+argo_notifications_application_destination_server:     https://kubernetes.default.svc
+argo_notifications_application_destination_namespace:  argo-notifications
+
+argo_notifications_application_node_selector_hostname: prod1-node-mn35
+

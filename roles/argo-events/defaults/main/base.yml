@@ -1,0 +1,19 @@
+# Github
+argo_events_github_project_name:    argoproj/argo-events
+argo_events_github_project_version: "" #  "" means pick latest
+
+#argo_events_github_project_version: "v1.5.3"
+#argo_events_github_project_version: '~^v[0-9]+\.[0-9]+\.[0-9]+$'
+
+# Helm Chart
+argo_events_helm_repo_name:     argo
+argo_events_helm_repo_url:      https://argoproj.github.io/argo-helm
+argo_events_helm_chart_name:    argo-events
+argo_events_helm_chart_version: ""  #  "" means pick latest
+
+# Argo application
+argo_events_application_argocd_namespace:       argo-cd
+argo_events_application_destination_server:     https://kubernetes.default.svc
+argo_events_application_destination_namespace:  argo-events
+
+argo_events_application_node_selector_hostname: prod1-node-mn35

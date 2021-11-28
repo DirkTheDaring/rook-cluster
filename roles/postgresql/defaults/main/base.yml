@@ -1,0 +1,45 @@
+# Kubernetes
+postgresql_namespace:     postgresql
+postgresql_name:          postgresql
+
+# DNS
+postgresql_domain:        "example.com"
+postgresql_subdomain:     ""
+postgresql_hostname:      "postgresql"
+
+# Argocd
+postgresql_argocd_namespace:          "argocd"
+postgresql_argocd_project:            "default"
+postgresql_argocd_destination_server: "https://kubernetes.default.svc"
+
+#
+postgresql_releases_url:      "https://github.com/postgres/postgres/releases"
+postgresql_releases_jmespath: "[].tag_name"
+#postgresql_release: "~^RELEASE.2021-07" # pick first match of regular expression
+#postgresql_release: "RELEASE.2021-05"  # lock to release
+
+# Helm Chart
+postgresql_chart_url:       "https://charts.bitnami.com/bitnami"
+postgresql_chart_name:      "bitnami/postgresql"
+postgresql_chart_repo_name: "bitnami"
+postgresql_chart_jmespath:  "entries.postgresql[].version"
+
+postgresql_chart_version: ""      # pick latest version
+#postgresql_chart_version: "~^8.1" # pick first version matching regex (~ indicates regex)
+#postgresql_chart_version: "8.1.9" # lock to version
+
+postgresql_deployment:  "helm"
+
+# Kubernetes
+postgresql_storage_class: ""
+postgresql_node_selector: {}
+
+postgresql_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+postgresql_databases: []
+#- chart_version:      "10.13.8" 
+#  namespace:          argo-workflows
+#  name:               postgresql
+#  database_name:      argo-workflows
+#  database_username:  argo-workflows
+#  database_password:  argo-workflows

@@ -4,8 +4,8 @@ global:
     tag: "{{ argocd_release }}"
 {% endif %}
 
-{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
 controller:
+{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
   nodeSelector:
     kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
 {% endif %}
@@ -122,6 +122,14 @@ dex:
 
 configs:
   secret:
+{% if argocd_gitlab_secret is defined and argocd_gitlab_secret != "" %}
+    # Shared secret for authenticating GitLab webhook events
+    gitlabSecret: "{{ argocd_gitlab_secret }}"
+{% endif %}
+{% if argocd_github_secret is defined and argocd_github_secret != "" %}
+    # Shared secret for authenticating Github webhook events
+    githubbSecret: "{{ argocd_github_secret }}"
+{% endif %}
     extra:
       dex.ldap.bindDN: "{{ argocd_ldap_bind_dn }}"
       dex.ldap.bindPW: "{{ argocd_ldap_bind_password }}"

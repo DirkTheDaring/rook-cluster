@@ -1,0 +1,3 @@
+- name: create secret
+  kubernetes.core.k8s: 
+    template: namespace.yaml.jinja2

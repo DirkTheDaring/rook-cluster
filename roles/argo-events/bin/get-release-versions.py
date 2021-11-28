@@ -1,0 +1,1 @@
+../../../bin/get-release-versions.py

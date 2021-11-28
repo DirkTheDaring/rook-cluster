@@ -1,0 +1,1 @@
+../../../bin/get-chart-versions.sh

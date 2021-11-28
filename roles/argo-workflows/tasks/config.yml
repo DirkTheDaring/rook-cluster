@@ -1,0 +1,10 @@
+- set_fact:
+    argo_workflows_credentials_s3:         "{{ lookup('file', argo_workflows_credentials_s3_json ) | from_json }}"
+    argo_workflows_credentials_postgresql: "{{ lookup('file', argo_workflows_credentials_postgresql_json ) | from_json }}"
+
+- debug:
+    msg: "{{ item }}"
+  loop:
+  - "{{ argo_workflows_credentials_s3 }}"
+  - "{{ argo_workflows_credentials_postgresql }}"
+

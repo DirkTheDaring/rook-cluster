@@ -1,0 +1,14 @@
+global:
+  storageClass: "{{ postgresql_storage_class }}"
+  postgresql:
+    postgresqlDatabase: "{{ item.database_name }}"
+    postgresqlUsername: "{{ item.database_username }}"
+    postgresqlPassword: "{{ item.database_password }}"
+persistence:
+  storageClass: "{{ postgresql_storage_class }}"
+{% if postgresql_node_selector is defined and postgresql_node_selector is mapping %}
+primary:
+  nodeSelector:
+    {{ postgresql_node_selector | to_yaml(indent=4) }} 
+{% endif %}
+

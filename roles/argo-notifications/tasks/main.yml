@@ -1,0 +1,3 @@
+- import_tasks: github-version.yml
+- import_tasks: helm-version.yml
+- import_tasks: argocd.yml

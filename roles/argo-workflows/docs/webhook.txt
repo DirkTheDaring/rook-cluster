@@ -1,0 +1,14 @@
+Webhooks in Argocd
+https://argo-cd.readthedocs.io/en/stable/operator-manual/webhook/
+
+https://{{ your domain }}/api/webhook
+
+Problem:
+Gitlab reports
+"Import url is blocked: Requests to the local network are not allowed".
+Solution:
+(1) login as admin
+ Admin -> Settings -> Network -> Outbound Requests -> Allow requests to the local network from hooks and services
+(https://gitlab.com/gitlab-org/gitlab/-/issues/26845)
+
+

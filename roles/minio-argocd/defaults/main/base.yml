@@ -14,9 +14,10 @@ minio_argocd_project:            "default"
 minio_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
-minio_chart_url:      "https://charts.bitnami.com/bitnami"
-minio_chart_name:     "minio"
-minio_chart_jmespath: "entries.\"{{ minio_chart_name }}\"[].version"
+minio_chart_url:       "https://charts.bitnami.com/bitnami"
+minio_chart_name:      "bitnami/minio"
+minio_chart_repo_name: "bitnami"
+minio_chart_jmespath:  "entries.minio[].version"
 
 minio_chart_version: ""      # pick latest version
 #minio_chart_version: "~^8.1" # pick first version matching regex (~ indicates regex)
@@ -38,10 +39,11 @@ minio_persistence_storage_class: nfs-static
 #minio_additional_parameters: 
 
 minio_root_credentials_dir: "{{ playbook_dir }}/credentials"
-
 # 
 minio_nfs_mount_options: []
 #- nfsvers=3
 #- noac
 
-minio_bucket_name: "default"
+minio_deployment: "helm"
+
+minio_bucket_names: []
