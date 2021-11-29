@@ -10,10 +10,10 @@ argocd_namespace:    "argo-cd"
 argocd_project:      "default"
 
 # Helm Chart
-argocd_chart_url:          https://argoproj.github.io/argo-helm
-argocd_chart_name:         argocd
-argocd_chart_jmespath:     entries."argo-cd"[].version
-argocd_chart_release_name: argocd
+argocd_helm_repo_name:     argocd
+argocd_helm_repo_url:      https://argoproj.github.io/argo-helm
+argocd_helm_chart_name:    argo-cd
+argocd_helm_chart_version: ""  #  "" means pick latest
 
 #argocd_chart_version:  ""    # "" means get latest version
 #argocd_chart_version: "~^3"  # "" means get select first element of patteer

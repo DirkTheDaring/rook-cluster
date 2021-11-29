@@ -10,15 +10,11 @@ keycloak_namespace:    "keycloak"
 keycloak_project:      "default"
 
 # Helm Chart
-keycloak_chart_repo_name:    bitnami
-keycloak_chart_url:          https://charts.bitnami.com/bitnami
-
-keycloak_chart_name:         bitnami/keycloak
-keycloak_chart_release_name: keycloak
-keycloak_chart_jmespath:     entries."keycloak"[].version
-
-#keycloak_chart_version:  ""    # "" means get latest version
-#keycloak_chart_version: "~^5"  # "" means get select first element of patteer
+keycloak_helm_repo_name:     bitnami
+keycloak_helm_repo_url:      https://charts.bitnami.com/bitnami
+keycloak_helm_chart_name:    keycloak
+keycloak_helm_chart_version: ""  #  "" means pick latest
+#keycloak_helm_chart_version: "~^5"  # "" means get select first element of pattern
 
 # Github API
 keycloak_releases_url:      "https://api.github.com/repos/keycloak/keycloak/releases"

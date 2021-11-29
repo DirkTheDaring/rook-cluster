@@ -14,12 +14,13 @@ harbor_argocd_namespace:          "argocd"
 harbor_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
-harbor_chart_url:      https://helm.goharbor.io
-harbor_chart_name:     harbor
-harbor_chart_jmespath: entries."harbor"[].version
-#harbor_chart_version:  "~^1\\.7\\."
-#harbor_chart_version: "1.7.3"
-harbor_chart_version: ""
+harbor_helm_repo_name:     harbor
+harbor_helm_repo_url:      https://helm.goharbor.io
+harbor_helm_chart_name:    harbor
+harbor_helm_chart_version: ""  #  "" means pick latest
+#harbor_helm_chart_version:  "~^1\\.7\\."
+#harbor_helm_chart_version: "1.7.3"
+
 
 harbor_releases_url:      "https://api.github.com/repos/goharbor/harbor/releases"
 harbor_releases_jmespath: "[].tag_name" 

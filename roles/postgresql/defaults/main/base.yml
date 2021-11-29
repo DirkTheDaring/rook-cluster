@@ -19,14 +19,12 @@ postgresql_releases_jmespath: "[].tag_name"
 #postgresql_release: "RELEASE.2021-05"  # lock to release
 
 # Helm Chart
-postgresql_chart_url:       "https://charts.bitnami.com/bitnami"
-postgresql_chart_name:      "bitnami/postgresql"
-postgresql_chart_repo_name: "bitnami"
-postgresql_chart_jmespath:  "entries.postgresql[].version"
-
-postgresql_chart_version: ""      # pick latest version
-#postgresql_chart_version: "~^8.1" # pick first version matching regex (~ indicates regex)
-#postgresql_chart_version: "8.1.9" # lock to version
+postgresql_helm_repo_name:     bitnami
+postgresql_helm_repo_url:      https://charts.bitnami.com/bitnami
+postgresql_helm_chart_name:    postgresql
+postgresql_helm_chart_version: ""  #  "" means pick latest
+#postgresql_helm_chart_version: "~^8.1" # pick first version matching regex (~ indicates regex)
+#postgresql_helm_chart_version: "8.1.9" # lock to version
 
 postgresql_deployment:  "helm"
 

@@ -1,11 +1,10 @@
-#############################################################################
 # Helm Chart
-nfs_subdir_external_provisioner_chart_url:      https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
-nfs_subdir_external_provisioner_chart_name:     nfs-subdir-external-provisioner
-nfs_subdir_external_provisioner_chart_jmespath: entries."nfs-subdir-external-provisioner"[].version
-nfs_subdir_external_provisioner_chart_version:  ""
-#nfs_subdir_external_provisioner_chart_version:  "~^4"
-#nfs_subdir_external_provisioner_chart_version:  "4.0.14"
+nfs_subdir_external_provisioner_helm_repo_name:     nfs-subdir-external-provisioner
+nfs_subdir_external_provisioner_helm_repo_url:      https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
+nfs_subdir_external_provisioner_helm_chart_name:    nfs-subdir-external-provisioner
+nfs_subdir_external_provisioner_helm_chart_version: ""  #  "" means pick latest
+#nfs_subdir_external_provisioner_helm_chart_version:  "~^4"
+#nfs_subdir_external_provisioner_helm_chart_version:  "4.0.14"
 
 # Github 
 nfs_subdir_external_provisioner_releases_url:      https://api.github.com/repos/kubernetes-sigs/nfs-subdir-external-provisioner/releases

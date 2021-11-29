@@ -10,12 +10,13 @@ vault_namespace: "vault-system"
 vault_argocd_namespace:             "argocd"
 vault_argocd_destination_server:    "https://kubernetes.default.svc"
 
-vault_chart_url:      https://helm.releases.hashicorp.com
-vault_chart_name:     vault
-vault_chart_jmespath: entries."vault"[].version
-vault_chart_version:  ""
-#vault_chart_version:  "~^0.17"
-#vault_chart_version: "0.17.0"
+# Helm Chart
+vault_helm_repo_name:     vault
+vault_helm_repo_url:      https://helm.releases.hashicorp.com
+vault_helm_chart_name:    vault
+vault_helm_chart_version: ""  #  "" means pick latest
+#vault_helm_chart_version:  "~^0.17"
+#vault_helm_chart_version: "0.17.0"
 
 vault_releases_url:      "https://api.github.com/repos/hashicorp/vault/releases"
 vault_releases_jmespath: "[].tag_name" 

@@ -10,12 +10,13 @@ velero_namespace:    "velero"
 velero_argocd_namespace:          "argocd"
 velero_argocd_destination_server: "https://kubernetes.default.svc"
 
-velero_chart_url:      https://vmware-tanzu.github.io/helm-charts
-velero_chart_name:     velero
-velero_chart_jmespath: entries."velero"[].version
-velero_chart_version:  ""
-#velero_chart_version: "~^2"
-#velero_chart_version: "2.24.0"
+# Helm Chart
+velero_helm_repo_name:     velero
+velero_helm_repo_url:      https://vmware-tanzu.github.io/helm-charts
+velero_helm_chart_name:    velero
+velero_helm_chart_version: ""  #  "" means pick latest
+#velero_helm_chart_version: "~^2"
+#velero_helm_chart_version: "2.24.0"
 
 velero_releases_url:      "https://api.github.com/repos/vmware-tanzu/velero/releases"
 velero_releases_jmespath: "[].tag_name"

@@ -7,12 +7,12 @@ metallb_hostname:     "metallb"
 metallb_namespace: metallb-system
 
 # Helm Chart
-metallb_chart_url:      https://metallb.github.io/metallb
-metallb_chart_name:     metallb
-metallb_chart_jmespath: entries."metallb"[].version
-metallb_chart_version:  ""
-#metallb_chart_version: "~^0.10"
-#metallb_chart_version: "0.10.3"
+metallb_helm_repo_name:     metallb
+metallb_helm_repo_url:      https://metallb.github.io/metallb
+metallb_helm_chart_name:    metallb
+metallb_helm_chart_version: ""  #  "" means pick latest
+#metallb_helm_chart_version: "~^0.10"
+#metallb_helm_chart_version: "0.10.3"
 
 # argocd
 metallb_argocd_namespace:             "argocd"

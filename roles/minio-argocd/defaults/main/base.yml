@@ -14,14 +14,13 @@ minio_argocd_project:            "default"
 minio_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
-minio_chart_url:       "https://charts.bitnami.com/bitnami"
-minio_chart_name:      "bitnami/minio"
-minio_chart_repo_name: "bitnami"
-minio_chart_jmespath:  "entries.minio[].version"
+minio_helm_repo_name:     bitnami
+minio_helm_repo_url:      https://charts.bitnami.com/bitnami
+minio_helm_chart_name:    minio
+minio_helm_chart_version: ""  #  "" means pick latest
+#minio_helm_chart_version: "~^8.1" # pick first version matching regex (~ indicates regex)
+#minio_helm_chart_version: "8.1.9" # lock to version
 
-minio_chart_version: ""      # pick latest version
-#minio_chart_version: "~^8.1" # pick first version matching regex (~ indicates regex)
-#minio_chart_version: "8.1.9" # lock to version
 
 minio_releases_url:      "https://api.github.com/repos/minio/minio/releases"
 minio_releases_jmespath: "[].tag_name"
