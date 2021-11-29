@@ -1,6 +1,11 @@
 #
 # https://artifacthub.io/packages/helm/bitnami/minio?modal=security-report
 
+{% if 'aws_access_key_id' in minio_credentials %}
+auth:
+  rootUser:     {{ minio_credentials.aws_access_key_id }}
+  rootPassword: {{ minio_credentials.aws_secret_access_key }}
+{% endif %}
 ingress:
   enabled: true
   hostname: "{{ minio_gui_fqdn }}"

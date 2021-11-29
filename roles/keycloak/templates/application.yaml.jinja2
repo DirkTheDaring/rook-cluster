@@ -5,16 +5,16 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   namespace: {{ keycloak_argocd_namespace }}
-  name:      {{ keycloak_chart_release_name }}
+  name:      {{ keycloak_chart_release_name | default('keycloak') }}
 spec:
   destination:
     namespace: {{ keycloak_namespace }}
     server:    {{ keycloak_argocd_destination_server }}
   project:     default
   source:
-    repoURL:        {{ keycloak_chart_url  }}
-    chart:          {{ keycloak_chart_release_name }}
-    targetRevision: {{ keycloak_chart_version }}
+    repoURL:        {{ keycloak_helm_repo_url  }}
+    chart:          {{ keycloak_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
       - name: global.storageClass

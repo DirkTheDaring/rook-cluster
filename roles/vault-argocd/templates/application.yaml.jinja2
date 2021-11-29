@@ -9,9 +9,9 @@ spec:
     namespace: {{ vault_namespace }}
   project: default
   source:
-    repoURL:        {{ vault_chart_url  }}
-    chart:          {{ vault_chart_name }}
-    targetRevision: {{ vault_chart_version }}
+    repoURL:        {{ vault_helm_repo_url  }}
+    chart:          {{ vault_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
       - name: injector.image.repository

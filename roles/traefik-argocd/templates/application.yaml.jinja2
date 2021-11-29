@@ -9,9 +9,9 @@ spec:
     namespace: {{ traefik_namespace }}
   project: default
   source:
-    repoURL:        {{ traefik_chart_url     }}
-    chart:          {{ traefik_chart_name    }}
-    targetRevision: {{ traefik_chart_version }}
+    repoURL:        {{ traefik_helm_repo_url }}
+    chart:          {{ traefik_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
         - name: 'deployment.initContainers[0].name'

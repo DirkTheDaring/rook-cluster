@@ -9,9 +9,9 @@ spec:
     namespace: {{ velero_namespace }}
   project: default
   source:
-    repoURL:        {{ velero_chart_url  }}
-    chart:          {{ velero_chart_name }}
-    targetRevision: {{ velero_chart_version }}
+    repoURL:        {{ velero_helm_repo_url  }}
+    chart:          {{ velero_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
       - name: image.pullPolicy

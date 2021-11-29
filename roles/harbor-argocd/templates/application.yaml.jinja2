@@ -9,9 +9,9 @@ spec:
     namespace: {{ harbor_namespace }}
   project: {{ harbor_argocd_project }}
   source:
-    repoURL:        {{ harbor_chart_url  }}
-    chart:          {{ harbor_chart_name }}
-    targetRevision: {{ harbor_chart_version }}
+    repoURL:        {{ harbor_helm_repo_url }}
+    chart:          {{ harbor_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
       - name: persistence.persistentVolumeClaim.registry.storageClass

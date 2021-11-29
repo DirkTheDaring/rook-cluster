@@ -9,9 +9,9 @@ spec:
     namespace: {{ argo_workflows_namespace }}
   project: default
   source:
-    repoURL:        {{ argo_workflows_chart_url  }}
-    chart:          {{ argo_workflows_chart_name }}
-    targetRevision: {{ argo_workflows_chart_version }}
+    repoURL:        {{ argo_workflows_helm_repo_url  }}
+    chart:          {{ argo_workflows_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
       - name:  server.ingress.enabled

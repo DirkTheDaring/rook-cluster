@@ -4,7 +4,6 @@ global:
     tag: "{{ argocd_release }}"
 {% endif %}
 
-
 {% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
 controller:
   nodeSelector:

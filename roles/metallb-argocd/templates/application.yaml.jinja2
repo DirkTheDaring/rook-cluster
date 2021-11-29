@@ -9,9 +9,9 @@ spec:
     namespace: {{ metallb_namespace }}
   project: default
   source:
-    repoURL:        {{ metallb_chart_url  }}
-    chart:          {{ metallb_chart_name }}
-    targetRevision: {{ metallb_chart_version }}
+    repoURL:        {{ metallb_helm_repo_url  }}
+    chart:          {{ metallb_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
       - name: configInline.address-pools[0].name
