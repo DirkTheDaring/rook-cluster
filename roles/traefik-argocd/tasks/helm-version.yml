@@ -1,0 +1,37 @@
+#- name: traefik_helm_repo_name
+#  debug:
+#    msg: 'traefik_helm_repo_name: {{ traefik_helm_repo_name }}'
+#    verbosity: 2
+#
+#- name: traefik_helm_repo_url
+#  debug:
+#    msg: 'traefik_helm_repo_url: {{ traefik_helm_repo_url }}'
+#    verbosity: 2
+#
+#- name: traefik_helm_chart_name
+#  debug:
+#    msg: 'traefik_helm_chart_name: {{ traefik_helm_chart_name }}'
+#    verbosity: 2
+#
+#- name: traefik_helm_chart_version
+#  debug:
+#    msg: 'traefik_helm_chart_version: {{ traefik_helm_chart_version}}'
+#    verbosity: 2
+
+- name: get latest helm chart version
+  helm.chart.version:
+    repo_name:  "{{ traefik_helm_repo_name }}"
+    repo_url:   "{{ traefik_helm_repo_url }}"
+    name:       "{{ traefik_helm_chart_name }}"
+    version:    "{{ traefik_helm_chart_version | default('') }}"
+  register: result
+
+- name: dump result
+  debug:
+    msg: '{{ result }}'
+    verbosity: 2
+
+- name: dump fact helm_chart_version
+  debug:
+    msg: '{{ helm_chart_version }}'
+    verbosity: 1

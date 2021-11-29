@@ -1,0 +1,37 @@
+#- name: metallb_helm_repo_name
+#  debug:
+#    msg: 'metallb_helm_repo_name: {{ metallb_helm_repo_name }}'
+#    verbosity: 2
+#
+#- name: metallb_helm_repo_url
+#  debug:
+#    msg: 'metallb_helm_repo_url: {{ metallb_helm_repo_url }}'
+#    verbosity: 2
+#
+#- name: metallb_helm_chart_name
+#  debug:
+#    msg: 'metallb_helm_chart_name: {{ metallb_helm_chart_name }}'
+#    verbosity: 2
+#
+#- name: metallb_helm_chart_version
+#  debug:
+#    msg: 'metallb_helm_chart_version: {{ metallb_helm_chart_version}}'
+#    verbosity: 2
+
+- name: get latest helm chart version
+  helm.chart.version:
+    repo_name:  "{{ metallb_helm_repo_name }}"
+    repo_url:   "{{ metallb_helm_repo_url }}"
+    name:       "{{ metallb_helm_chart_name }}"
+    version:    "{{ metallb_helm_chart_version | default('') }}"
+  register: result
+
+- name: dump result
+  debug:
+    msg: '{{ result }}'
+    verbosity: 2
+
+- name: dump fact helm_chart_version
+  debug:
+    msg: '{{ helm_chart_version }}'
+    verbosity: 1
