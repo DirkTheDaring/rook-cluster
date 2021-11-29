@@ -1,0 +1,10 @@
+- name: Check if file exists
+  ansible.builtin.stat:
+    path: "{{ minio_credentials_dir + '/config.json' }}"
+  register: minio_config_file
+
+- set_fact:
+    minio_credentials: "{{ lookup('file', minio_credentials_dir + '/config.json' ) if minio_config_file.stat.exists else '{}' | from_json }}"
+
+- debug:
+    msg: "{{ minio_credentials }}"
