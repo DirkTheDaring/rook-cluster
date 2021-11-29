@@ -2,8 +2,8 @@
   block:
   - name: Add chart repo
     kubernetes.core.helm_repository:
-      name:     "{{ minio_chart_repo_name }}"
-      repo_url: "{{ minio_chart_url }}"
+      name:     "{{ minio_helm_repo_name }}"
+      repo_url: "{{ minio_helm_repo_url }}"
 
   - name: render values.yaml
     set_fact:
@@ -11,8 +11,8 @@
 
   - name: Deploy helm chart
     kubernetes.core.helm:
-      chart_ref:         "{{ minio_chart_name }}"
-      chart_version:     "{{ minio_chart_version }}"
+      chart_ref:         "{{ minio_helm_repo_name }}/{{ minio_helm_chart_name }}"
+      chart_version:     "{{ helm_chart_version }}"
       release_namespace: "{{ minio_namespace }}"
       release_name:      "{{ minio_name }}"
       create_namespace:  true

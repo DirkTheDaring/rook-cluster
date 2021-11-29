@@ -2,8 +2,8 @@
   block:
   - name: Add chart repo
     kubernetes.core.helm_repository:
-      name:     "{{ rook_chart_repo_name }}"
-      repo_url: "{{ rook_chart_url }}"
+      name:     "{{ rook_helm_repo_name }}"
+      repo_url: "{{ rook_helm_repo_url }}"
 
 
   - name: render values.yaml
@@ -13,10 +13,10 @@
 
   - name: Deploy helm chart
     kubernetes.core.helm:
-      chart_ref:         "{{ rook_chart_name }}"
-      chart_version:     "{{ rook_chart_version }}"
+      chart_ref:         "{{ rook_helm_repo_name }}/{{ rook_helm_chart_name }}"
+      chart_version:     "{{ rook_helm_chart_version }}"
       release_namespace: "{{ rook_namespace }}"
-      release_name:      "{{ rook_chart_release_name }}"
+      release_name:      "{{ rook_chart_release_name | default('rook-ceph') }}"
       create_namespace:  true
 #      values:            "{{ rook_values_yaml | from_yaml }}"
       update_repo_cache: yes

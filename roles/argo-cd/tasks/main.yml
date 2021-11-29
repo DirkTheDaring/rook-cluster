@@ -1,9 +1,4 @@
-- name: KUBECONFIG
-  fail:
-   msg: "environment variable KUBECONFIG not set. please set and export KUBECONFIG"
-  when: not lookup('env', 'KUBECONFIG')
-
-- import_tasks: chart-version.yml
+- import_tasks: helm-version.yml
 - import_tasks: release-version.yml
 - import_tasks: helm.yml
 - import_tasks: deploy.yml

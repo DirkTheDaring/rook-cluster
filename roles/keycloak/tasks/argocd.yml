@@ -12,4 +12,4 @@
     argv:
     - bash 
     - -c
-    - "while [[ \"$(kubectl -n {{ keycloak_argocd_namespace }} get application {{ keycloak_chart_release_name }} -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done"
+    - "while [[ \"$(kubectl -n {{ keycloak_argocd_namespace }} get application {{ keycloak_chart_release_name | default('keycloak') }} -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done"

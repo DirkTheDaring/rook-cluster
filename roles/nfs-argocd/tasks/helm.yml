@@ -7,8 +7,8 @@
 
 - name: Deploy with helm
   kubernetes.core.helm:
-    chart_ref:         nfs-subdir-external-provisioner/nfs-subdir-external-provisioner
-    chart_version:     "{{ nfs_subdir_external_provisioner_chart_version }}"
+    chart_ref:         "{{ nfs_subdir_external_provisioner_helm_repo_name }}/{{ nfs_subdir_external_provisioner_helm_chart_name }}"
+    chart_version:     "{{ helm_chart_version }}"
     release_namespace: "{{ nfs.namespace }}"
     release_name:      "{{ nfs.release_name }}"
     create_namespace:  true
