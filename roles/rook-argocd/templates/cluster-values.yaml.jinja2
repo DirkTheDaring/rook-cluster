@@ -1,11 +1,11 @@
 operatorNamespace: rook-ceph
 cephClusterSpec:
   dashboard:
-    ssl: "false"
+    ssl: false
   network:
     provider: "host"
   storage:
-    useAllDevices: "false"
+    useAllDevices: false
     deviceFilter:  "vd[c-z]"
     config:
       metadataDevice: "vdb"

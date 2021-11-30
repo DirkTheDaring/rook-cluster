@@ -11,7 +11,7 @@ spec:
   source:
     chart:          rook-ceph-cluster
     repoURL:        https://charts.rook.io/release
-    targetRevision: {{ rook_chart_version }}
+    targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
       - name:  operatorNamespace

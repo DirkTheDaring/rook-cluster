@@ -23,7 +23,7 @@
     # dangerous heuristic, but fore now no better source
   - name: extract major.minor version
     set_fact:
-      rook_basic_version: "{{ rook_chart_version[1:].split('.')[0] }}.{{ rook_chart_version[1:].split('.')[1] }}"
+      rook_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"
     when: rook_basic_version is not defined
 
   - debug:
