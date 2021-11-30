@@ -4,8 +4,8 @@ global:
     tag: "{{ argocd_release }}"
 {% endif %}
 
-controller:
 {% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
+controller:
   nodeSelector:
     kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
 {% endif %}
