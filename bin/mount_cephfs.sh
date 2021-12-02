@@ -8,7 +8,8 @@ if [ "$2" == "" ]; then
   echo "need mountpoint. e.g. /opt/ceph"
   exit 2
 fi 
-JSON=$(cat credentials/fritz.box/storage1/rook/config.json)
+JSON=$(cat "$1")
+MNT=$2
 ROOK_EXTERNAL_CEPH_MON_DATA=$(jq -r ".rook_external_ceph_mon_data" <<< "$JSON")
 ROOK_EXTERNAL_CEPH_MON_DATA=${ROOK_EXTERNAL_CEPH_MON_DATA//[a-c]=/}
 ROOK_EXTERNAL_ADMIN_SECRET=$(jq -r ".rook_external_admin_secret" <<<"$JSON")
