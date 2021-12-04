@@ -9,7 +9,7 @@ spec:
     server:    https://kubernetes.default.svc
   project: default
   source:
-    repoURL:        {{ rook_helm_repo_name }}
+    repoURL:        {{ rook_helm_repo_url }}
     chart:          {{ rook_helm_chart_name }}
     targetRevision: {{ helm_chart_version }}
 {% if not rook_ceph_server %}
