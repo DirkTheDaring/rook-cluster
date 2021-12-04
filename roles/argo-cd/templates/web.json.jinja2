@@ -1,5 +1,5 @@
 {
-  "url": "{{ argocd_url }}",
-  "username": "{{ argocd_username }}",
-  "password": "{{ argocd_password }}"
+  "url": "{{ argocd_url | to_json }}",
+  "username": "{{ argocd_username | to_json }}",
+  "password": "{{ argocd_password | to_json }}"
 }

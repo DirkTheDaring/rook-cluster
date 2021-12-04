@@ -1,8 +1,8 @@
 {
-  "namespace": "{{ item.namespace }}",
-  "name": "{{ item.name }}", 
+  "namespace": "{{ item.namespace | to_json }}",
+  "name": "{{ item.name | to_json }}", 
   "port":  5432,
-  "database_name":     "{{ item.database_name }}",
-  "database_username": "{{ item.database_username }}",
-  "database_password": "{{ item.database_password }}"
+  "database_name":     "{{ item.database_name | to_json }}",
+  "database_username": "{{ item.database_username | to_json }}",
+  "database_password": "{{ item.database_password | to_json  }}"
 }

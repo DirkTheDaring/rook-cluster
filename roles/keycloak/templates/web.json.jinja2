@@ -1,5 +1,5 @@
 {
-  "url": "{{ keycloak_url }}",
-  "username": "{{ keycloak_username }}",
-  "password": "{{ keycloak_password }}"
+  "url": "{{ keycloak_url | to_json }}",
+  "username": "{{ keycloak_username | to_json }}",
+  "password": "{{ keycloak_password | to_json }}"
 }

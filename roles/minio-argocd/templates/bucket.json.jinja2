@@ -1,7 +1,7 @@
 {
   "hostname": "{{ item }}.{{ minio_api_fqdn }}",
   "url": "https://{{ item }}.{{ minio_api_fqdn }}",
-  "aws_access_key_id": "{{ minio_username }}",
-  "aws_secret_access_key": "{{ minio_password }}",
-  "bucket": "{{ item }}"
+  "aws_access_key_id": "{{ minio_username | to_json }}",
+  "aws_secret_access_key": "{{ minio_password | to_json }}",
+  "bucket": "{{ item | to_json }}"
 }
