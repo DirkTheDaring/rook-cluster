@@ -33,7 +33,7 @@ spec:
       - name: persistence.persistentVolumeClaim.jobservice.size
         value: "1Gi"
       - name: persistence.persistentVolumeClaim.database.storageClass
-        value: "{{ harbor_persistence_storage_class }}"
+        value: "{{ harbor_persistence_database_storage_class }}"
       - name: persistence.persistentVolumeClaim.database.accessMode
         value: "ReadWriteOnce"
       - name: persistence.persistentVolumeClaim.database.size

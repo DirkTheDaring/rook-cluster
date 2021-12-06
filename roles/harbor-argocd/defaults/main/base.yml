@@ -28,5 +28,5 @@ harbor_releases_jmespath: "[].tag_name"
 #harbor_release: "v2.2.4-rc1"
 
 harbor_persistence_storage_class: nfs-client
-
+harbor_persistence_database_storage_class: nfs-client
 harbor_root_credentials_dir: "{{ playbook_dir }}/credentials"
