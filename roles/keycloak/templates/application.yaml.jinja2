@@ -17,21 +17,94 @@ spec:
     targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
-      - name: global.storageClass
-        value: "nfs-client"
-      - name: ingress.enabled
-        value: "true"
-      - name:  'ingress.hostname'
-        value: '{{ keycloak_fqdn }}'
-      - name:  'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.entrypoints'
-        value: 'websecure'
-      - name:  'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
-        value: 'true'
-        forceString: true
-      - name: service.type
-        value: "ClusterIP"
-      - name: proxyAddressForwarding
-        value: "true"
+        - name: global.storageClass
+          value: "nfs-client"
+        - name: ingress.enabled
+          value: "true"
+        - name: ingress.hostname
+          value: '{{ keycloak_fqdn }}'
+        - name:  'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.entrypoints'
+          value: "websecure"
+        - name:  'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+          value: "true"
+          forceString: true
+        - name: service.type
+          value: "ClusterIP"
+        - name: proxyAddressForwarding
+          value: "true"
+        - name: initContainers[0].command[0]
+          value: "sh"
+        - name: initContainers[0].command[1]
+          value: "-c"
+          # You cannot use a '$', which limits sh scripts severly: https://github.com/argoproj/argo-cd/issues/6878. 
+        - name: initContainers[0].command[2]
+          value: "cp -ar /opt/bitnami/java/lib/security/. /srv; cd /srv; find /usr/local/share/ca-certificates/ -name '*.pem' -exec keytool -keystore cacerts -storepass changeit -noprompt -import -file {} + ; ls -l /srv"
+        - name: initContainers[0].image
+          value: "docker.io/bitnami/keycloak:15.0.2-debian-10-r94"
+        - name: initContainers[0].imagePullPolicy
+          value: "IfNotPresent"
+        - name: initContainers[0].name
+          value: "keycloak-phase-0"
+        - name: initContainers[0].terminationMessagePath
+          value: "/dev/termination-log"
+        - name: initContainers[0].terminationMessagePolicy
+          value: "File"
+        - name: initContainers[0].volumeMounts[0].name
+          value: "opt-bitnami-java-lib-security"
+        - name: initContainers[0].volumeMounts[0].mountPath
+          value: "/srv"
+        - name: initContainers[0].volumeMounts[1].name
+          value: "usr-local-share-ca-certificates"
+        - name: initContainers[0].volumeMounts[1].mountPath
+          value: "/usr/local/share/ca-certificates"
+        - name: initContainers[1].command[0]
+          value: "sh"
+        - name: initContainers[1].command[1]
+          value: "-c"
+        - name: initContainers[1].command[2]
+          value: "chown -R root.root /srv; apt update; apt install ca-certificates -y; update-ca-certificates; rm -f /mnt/*; cp -a /etc/ssl/certs/. /mnt/"
+        - name: initContainers[1].image
+          value: "docker.io/bitnami/minideb:buster"
+        - name: initContainers[1].imagePullPolicy
+          value: "IfNotPresent"
+        - name: initContainers[1].name
+          value: "keycloak-phase-1"
+        - name: initContainers[1].terminationMessagePath
+          value: "/dev/termination-log"
+        - name: initContainers[1].terminationMessagePolicy
+          value: "File"
+        - name: initContainers[1].volumeMounts[0].name
+          value: "etc-ssl-certs"
+        - name: initContainers[1].volumeMounts[0].mountPath
+          value: "/mnt"
+        - name: initContainers[1].volumeMounts[1].name
+          value: "usr-local-share-ca-certificates"
+        - name: initContainers[1].volumeMounts[1].mountPath
+          value: "/usr/local/share/ca-certificates"
+        - name: initContainers[1].volumeMounts[2].name
+          value: "opt-bitnami-java-lib-security"
+        - name: initContainers[1].volumeMounts[2].mountPath
+          value: "/srv"
+        - name: extraVolumes[0].name
+          value: "etc-ssl-certs"
+        - name: extraVolumes[1].name
+          value: "opt-bitnami-java-lib-security"
+        - name: extraVolumes[2].name
+          value: "usr-local-share-ca-certificates"
+        - name: extraVolumes[2].persistentVolumeClaim.claimName
+          value: "keycloak-cacerts"
+        - name: extraVolumeMounts[0].name
+          value: "etc-ssl-certs"
+        - name: extraVolumeMounts[0].mountPath
+          value: "/etc/ssl/certs"
+        - name: extraVolumeMounts[1].name
+          value: "usr-local-share-ca-certificates"
+        - name: extraVolumeMounts[1].mountPath
+          value: "/usr/local/share/ca-certificates"
+        - name: extraVolumeMounts[2].name
+          value: "opt-bitnami-java-lib-security"
+        - name: extraVolumeMounts[2].mountPath
+          value: "/opt/bitnami/java/lib/security"
   syncPolicy:
     automated: {}
     syncOptions:
