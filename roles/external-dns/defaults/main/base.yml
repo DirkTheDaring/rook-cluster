@@ -1,0 +1,21 @@
+# Github
+external_dns_github_project_name:    kubernetes-sigs/external-dns
+external_dns_github_project_version: "" #  "" means pick latest
+
+# Helm Chart
+external_dns_helm_repo_name:     bitnami
+external_dns_helm_repo_url:      https://charts.bitnami.com/bitnami
+external_dns_helm_chart_name:    external-dns
+external_dns_helm_chart_version: ""  #  "" means pick latest
+#external_dns_helm_chart_version: "~^5"  # "" means get select first element of pattern
+
+# Kubernetes
+external_dns_namespace:       "external-dns"
+
+# Argocd
+external_dns_argocd_project:            "default"
+external_dns_argocd_namespace:          "argo-cd"
+external_dns_argocd_destination_server: "https://kubernetes.default.svc"
+
+external_dns_provider: "aws"
+external_dns_extra_env: []

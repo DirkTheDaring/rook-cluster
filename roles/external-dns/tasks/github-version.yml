@@ -1,0 +1,16 @@
+- name: get latest (default) version from github.
+  github.project.version:
+    name:    "{{ external_dns_github_project_name }}"
+    version: "{{ external_dns_github_project_version | default('') }}"
+  register: result
+
+- name: dump result
+  debug:
+    msg: '{{ result }}'
+    verbosity: 2
+
+- name: dump fact github_project_version 
+  debug:
+    msg: '{{ github_project_version }}'
+    verbosity: 1
+

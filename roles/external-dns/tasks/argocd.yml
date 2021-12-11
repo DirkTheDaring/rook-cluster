@@ -1,0 +1,9 @@
+#- ansible.builtin.template:
+#    src:  application.yaml.jinja2
+#    dest: /tmp/application.yaml
+#    mode: '0644'
+
+
+- name: create application
+  kubernetes.core.k8s: 
+    template: application.yaml.jinja2

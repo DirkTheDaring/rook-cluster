@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ external_dns_argocd_namespace }}
+  name:      external-dns
+spec:
+  destination:
+    server:    {{ external_dns_argocd_destination_server }}
+    namespace: {{ external_dns_namespace }}
+  project: {{ external_dns_argocd_project }}
+  source:
+    repoURL:        {{ external_dns_helm_repo_url }}
+    chart:          {{ external_dns_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+      - name:  provider
+        value: {{ external_dns_provider }}
+{% for item in external_dns_extra_env %}
+      - name:  extraEnv[{{ loop.index0 }}].name
+        value: {{ item.name }}
+      - name:  extraEnv[{{ loop.index0 }}].value
+        value: {{ item.value }}
+{% endfor %}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
