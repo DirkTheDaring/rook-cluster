@@ -40,7 +40,7 @@ spec:
           value: "-c"
           # You cannot use a '$', which limits sh scripts severly: https://github.com/argoproj/argo-cd/issues/6878. 
         - name: initContainers[0].command[2]
-          value: "cp -ar /opt/bitnami/java/lib/security/. /srv; cd /srv; find /usr/local/share/ca-certificates/ -name '*.pem' -exec keytool -keystore cacerts -storepass changeit -noprompt -import -file {} + ; ls -l /srv"
+          value: "cp -ar /opt/bitnami/java/lib/security/. /srv; cd /srv; find /usr/local/share/ca-certificates/ -name '*.pem' -exec keytool -keystore cacerts -storepass changeit -noprompt -import -alias {} -file {} + ; ls -l /srv"
         - name: initContainers[0].image
           value: "docker.io/bitnami/keycloak:15.0.2-debian-10-r94"
         - name: initContainers[0].imagePullPolicy
