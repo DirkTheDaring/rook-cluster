@@ -82,11 +82,14 @@ server:
           usernamePrompt: Email
           userSearch:
             baseDN: "{{ argocd_ldap_user_basedn }}"
+            # filter + username are used for selection of user in LDAP
             filter: "(objectClass=person)"
             username: userPrincipalName
+            # These are the attributes taken from LDAP
             idAttr: DN
             emailAttr: userPrincipalName
-            nameAttr: cn
+            nameAttr: sAMAccountName
+            preferredUsernameAttr: cn
           groupSearch:
             baseDN: "{{ argocd_ldap_group_basedn }}"
             filter: "(objectClass=group)"
