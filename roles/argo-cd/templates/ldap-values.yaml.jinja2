@@ -88,8 +88,8 @@ server:
             # These are the attributes taken from LDAP
             idAttr: DN
             emailAttr: userPrincipalName
-            #nameAttr: sAMAccountName
-            nameAttr: userPrincipalName
+            nameAttr: sAMAccountName
+            #nameAttr: userPrincipalName
             preferredUsernameAttr: cn
           groupSearch:
             baseDN: "{{ argocd_ldap_group_basedn }}"
