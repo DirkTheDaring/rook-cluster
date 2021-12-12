@@ -79,7 +79,7 @@ server:
           bindDN: "$dex.ldap.bindDN"
           # ldap bind password in argocd-secret
           bindPW: "$dex.ldap.bindPW"
-          usernamePrompt: Username
+          usernamePrompt: Email
           userSearch:
             baseDN: "{{ argocd_ldap_user_basedn }}"
             filter: "(objectClass=person)"
