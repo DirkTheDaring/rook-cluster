@@ -5,6 +5,7 @@ keycloak_hostname:     "keycloak"
 
 # Kubernetes
 keycloak_namespace:    "keycloak"
+keycloak_global_storage_class: ""
 
 # Argo-cd
 keycloak_project:      "default"
@@ -24,3 +25,9 @@ keycloak_releases_jmespath: "[].tag_name"
 
 # Credentials
 keycloak_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+# NFS
+keycloak_cacerts_nfs_server: 127.0.0.1
+keycloak_cacerts_nfs_path:   /srv
+
+

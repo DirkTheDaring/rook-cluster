@@ -17,8 +17,10 @@ spec:
     targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
+{% if keycloak_global_storage_class != "" %}
         - name: global.storageClass
-          value: "nfs-client"
+          value: "{{ keycloak_global_storage_class }}"
+{% endif %}
         - name: ingress.enabled
           value: "true"
         - name: ingress.hostname
