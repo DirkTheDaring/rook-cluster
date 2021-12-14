@@ -15,37 +15,37 @@ spec:
     helm:
       parameters:
       - name: persistence.persistentVolumeClaim.registry.storageClass
-        value: "{{ harbor_persistence_storage_class }}"
+        value: "{{ harbor_persistence_registry_storage_class | default(harbor_persistence_storage_class) }}"
       - name: persistence.persistentVolumeClaim.registry.accessMode
         value: "ReadWriteOnce"
       - name: persistence.persistentVolumeClaim.registry.size
         value: "5Gi"
       - name: persistence.persistentVolumeClaim.chartmuseum.storageClass
-        value: "{{ harbor_persistence_storage_class }}"
+        value: "{{ harbor_persistence_chartmuseum_storage_class | default(harbor_persistence_storage_class) }}"
       - name: persistence.persistentVolumeClaim.chartmuseum.accessMode
         value: "ReadWriteOnce"
       - name: persistence.persistentVolumeClaim.chartmuseum.size
         value: "5Gi"
       - name: persistence.persistentVolumeClaim.jobservice.storageClass
-        value: "{{ harbor_persistence_storage_class }}"
+        value: "{{ harbor_persistence_jobservice_storage_class | default(harbor_persistence_storage_class) }}"
       - name: persistence.persistentVolumeClaim.jobservice.accessMode
         value: "ReadWriteOnce"
       - name: persistence.persistentVolumeClaim.jobservice.size
         value: "1Gi"
       - name: persistence.persistentVolumeClaim.database.storageClass
-        value: "{{ harbor_persistence_database_storage_class }}"
+        value: "{{ harbor_persistence_database_storage_class| default(harbor_persistence_storage_class) }}"
       - name: persistence.persistentVolumeClaim.database.accessMode
         value: "ReadWriteOnce"
       - name: persistence.persistentVolumeClaim.database.size
         value: "1Gi"
       - name: persistence.persistentVolumeClaim.redis.storageClass
-        value: "{{ harbor_persistence_storage_class }}"
+        value: "{{ harbor_persistence_redis_storage_class | default(harbor_persistence_storage_class) }}"
       - name: persistence.persistentVolumeClaim.redis.accessMode
         value: "ReadWriteOnce"
       - name: persistence.persistentVolumeClaim.redis.size
         value: "1Gi"
       - name: persistence.persistentVolumeClaim.trivy.storageClass
-        value: "{{ harbor_persistence_storage_class }}"
+        value: "{{ harbor_persistence_trivy_storage_class | default(harbor_persistence_storage_class) }}"
       - name: persistence.persistentVolumeClaim.trivy.accessMode
         value: "ReadWriteOnce"
       - name: persistence.persistentVolumeClaim.trivy.size
