@@ -5,9 +5,10 @@ cd "$DIRNAME/.."
 LIST=$(find credentials/ -name web.json)
 
 for FILE in $LIST; do
-URL=$(cat $FILE |jq -r ".url")
-USERNAME=$(cat $FILE |jq -r .username)
-PASSWORD=$(cat $FILE |jq -r .password)
+#echo $FILE
+URL=$(jq -r ".url" "$FILE")
+USERNAME=$(jq -r .username "$FILE")
+PASSWORD=$(jq -r .password "$FILE")
 
 cat<<EOF
 
