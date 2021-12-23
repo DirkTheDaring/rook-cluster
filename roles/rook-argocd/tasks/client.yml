@@ -24,17 +24,34 @@
   - name: extract major.minor version
     set_fact:
       rook_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"
+      rook_version_major: "{{ helm_chart_version[1:].split('.')[0] | int }}"
+      rook_version_minor: "{{ helm_chart_version[1:].split('.')[1] | int }}"
     when: rook_basic_version is not defined
 
   - debug:
       msg: "rook_basic_version: {{ rook_basic_version }}"
-
+  - debug:
+      msg: "rook_version_major: {{ rook_version_major }}"
+  - debug:
+      msg: "rook_version_minor  {{ rook_version_minor  }}"
   - debug:
       msg: "rook_build_dir: {{ rook_build_dir }}"
 
-  - set_fact:
+  - name: Set urls for version <= 1.8
+    set_fact:
       url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/import-external-cluster.sh"
       url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/cluster-external-management.yaml"
+    when:
+    - rook_version_major|int == 1
+    - rook_version_minor|int <= 7
+
+  - name: Set urls for version >= 1.8
+    set_fact:
+      url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
+      url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external-management.yaml"
+    when:
+    - rook_version_major|int == 1
+    - rook_version_minor|int == 8
 
   - set_fact:
       #rook_export_variables: "{{ lookup('file', rook_credentials_dir + '/server-config.sh' ) }}"
