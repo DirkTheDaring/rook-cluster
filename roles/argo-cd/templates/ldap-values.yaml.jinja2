@@ -61,6 +61,7 @@ server:
             idAttr: distinguishedName
             emailAttr: mail
             nameAttr: displayName
+            preferredUsernameAttr: cn
           groupSearch:
             baseDN: "{{ argocd_ldap_group_basedn }}"
             filter: "(objectClass=group)"
