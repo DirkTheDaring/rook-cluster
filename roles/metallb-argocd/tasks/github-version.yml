@@ -1,0 +1,15 @@
+- name: Get latest version from github
+  github.project.version:
+    name:    "{{ metallb_github_project_name    | default(metallb_releases_url) }}"
+    version: "{{ metallb_github_project_version | default(metallb_release       | default('')) }}"
+  register: result
+
+- name: Dump result
+  debug:
+    msg: '{{ result }}'
+    verbosity: 2
+
+- name: Dump fact github_project_version 
+  debug:
+    msg: '{{ github_project_version }}'
+    verbosity: 1

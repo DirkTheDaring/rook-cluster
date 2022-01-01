@@ -1,0 +1,57 @@
+# Values which evaluate to "None" (because variable is an empty string), will be pruned 
+# in a later step - as this makes troubles with helm charts (None can overrwrite your dict)
+#
+global:
+  storageClass: "{{ keycloak_global_storage_class }}"
+ingress:
+  enabled: true
+  hostname: "{{ keycloak_fqdn }}"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+service:
+  type: ClusterIP
+proxyAddressForwarding: true
+initContainers:
+- command:
+  - sh
+  - -c
+  # You cannot use a $ in argo, which limits sh scripts severely: https://github.com/argoproj/argo-cd/issues/6878. 
+  # Also the -alias flag must be set in the script, as otherwise the import tool always uses the same name for alias
+  # which fails on second import with alias already exists - yes these are junk names, but hey without $ no script processing
+  - cp -ar /opt/bitnami/java/lib/security/. /srv; cd /srv; find /usr/local/share/ca-certificates/ -name *.pem -exec keytool -keystore cacerts -storepass changeit -noprompt -import -alias {} -file {} \\; ; ls -l /srv
+  image: docker.io/bitnami/keycloak:15.0.2-debian-10-r94
+  imagePullPolicy: IfNotPresent
+  name: keycloak-phase-0
+  volumeMounts:
+  - name: opt-bitnami-java-lib-security
+    mountPath: /srv
+  - name: usr-local-share-ca-certificates
+    mountPath: /usr/local/share/ca-certificates
+- command:
+  - sh
+  - -c
+  - chown -R root.root /srv; apt update; apt install ca-certificates -y; update-ca-certificates; rm -f /mnt/*; cp -a /etc/ssl/certs/. /mnt/
+  image: docker.io/bitnami/minideb:buster
+  imagePullPolicy: IfNotPresent
+  name: keycloak-phase-1
+  volumeMounts:
+  - name:      etc-ssl-certs
+    mountPath: /mnt
+  - name:      usr-local-share-ca-certificates
+    mountPath: /usr/local/share/ca-certificates
+  - name:      opt-bitnami-java-lib-security
+    mountPath: /srv
+extraVolumes:
+- name: etc-ssl-certs
+- name: opt-bitnami-java-lib-security
+- name: usr-local-share-ca-certificates
+  persistentVolumeClaim:
+    claimName: keycloak-cacerts
+extraVolumeMounts:
+- name:       etc-ssl-certs
+  mountPath: /etc/ssl/certs
+- name:       usr-local-share-ca-certificates
+  mountPath: /usr/local/share/ca-certificates
+- name:       opt-bitnami-java-lib-security
+  mountPath: /opt/bitnami/java/lib/security

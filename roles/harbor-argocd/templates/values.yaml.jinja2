@@ -1,0 +1,77 @@
+persistence:
+  persistentVolumeClaim:
+    registry:
+      storageClass: {{ harbor_persistence_registry_storage_class | default(harbor_persistence_storage_class) }}
+      accessMode: ReadWriteOnce
+      size: 5Gi
+    chartmuseum:
+      storageClass: {{ harbor_persistence_chartmuseum_storage_class | default(harbor_persistence_storage_class) }}
+      accessMode: ReadWriteOnce
+      size: 5Gi
+    jobservice:
+      storageClass: {{ harbor_persistence_jobservice_storage_class | default(harbor_persistence_storage_class) }}
+      accessMode: ReadWriteOnce
+      size: 1Gi
+    database:
+      storageClass: {{ harbor_persistence_database_storage_class| default(harbor_persistence_storage_class) }}
+      accessMode: ReadWriteOnce
+      size: 1Gi
+    redis:
+      storageClass: {{ harbor_persistence_redis_storage_class | default(harbor_persistence_storage_class) }}
+      accessMode: ReadWriteOnce
+      size: 1Gi
+    trivy:
+      storageClass: {{ harbor_persistence_trivy_storage_class | default(harbor_persistence_storage_class) }}
+      accessMode:   ReadWriteOnce
+      size: 5Gi
+
+expose:
+  tls:
+    enabled: false
+  ingress:
+    hosts:
+      core: {{ harbor_core_fqdn }}
+      notary: {{ harbor_notary_fqdn }}
+    controller:  default
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+
+externalURL: https://{{ harbor_core_fqdn }}
+
+nginx:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+portal:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+core:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+jobservice:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+registry:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+chartmuseum:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+trivy:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+notary:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+signer:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+database:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+redis:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+exporter:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}

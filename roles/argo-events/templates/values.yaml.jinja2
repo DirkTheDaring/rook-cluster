@@ -1,0 +1,9 @@
+sensorController:
+  nodeSelector:
+    kubernetes.io/hostname: {{ argo_events_application_node_selector_hostname }}
+eventsourceController:
+  nodeSelector:
+    kubernetes.io/hostname: {{ argo_events_application_node_selector_hostname }}
+eventbusController:
+  nodeSelector:
+    kubernetes.io/hostname: {{ argo_events_application_node_selector_hostname }}

@@ -1,0 +1,24 @@
+# tasks/wait-for-pod-by-label.yml
+- name: Wait until pod with label app=rook-ceph-operator appears
+  ansible.builtin.command:
+    argv:
+    -  bash
+    - -c
+    - >
+      while [ -z "$(kubectl -n {{ rook_namespace }} get pods -l app=rook-ceph-operator --output=jsonpath='{.items[*].metadata.name}')" ]; do
+        echo label app=rook-ceph-operator not found
+        sleep 10
+      done
+
+- name: Wait until pod with label app=rook-ceph-operator becomes ready
+  ansible.builtin.command:
+    argv:
+    - kubectl
+    - wait
+    - -n
+    - "{{ rook_namespace }}"
+    - --timeout=600s
+    - --for=condition=Ready
+    - pod
+    - -l
+    - app=rook-ceph-operator

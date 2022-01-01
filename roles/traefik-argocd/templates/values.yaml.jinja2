@@ -1,0 +1,61 @@
+deployment:
+  initContainers:
+  - name:  set-volume-permissions
+    image: "busybox:1.31.1"
+    command:
+    - sh
+    - -c
+    - chmod 700 /data;chown 65532.65532 /data
+    volumeMounts:
+    - name: data
+      mountPath: /data
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+logs:
+  general:
+    level: INFO
+
+ports:
+  web: 
+    redirectTo: websecure
+{% for port in traefik_ports %}
+  {{ port.name }}:
+    port: {{ port.value }}
+    expose: true
+    exposedPort: {{ port.value }}
+    protocol: TCP
+{% endfor %}
+
+service:
+  spec:
+    loadBalancerIP: "{{ traefik_loadbalancer_ip }}"
+  annotations:
+    metallb.universe.tf/address-pool: loadbalanced
+
+ingressClass:
+  enabled: 'false'
+
+persistence:
+  enabled: 'true'
+  accessMode: ReadWriteOnce
+  size: 128Mi
+  storageClass: {{ traefik_persistence_storage_class }}
+
+image:
+  name:  {{ '"' + traefik_image_name + '"' if traefik_image_name is defined and traefik_image_name | length }}
+  tag:   {{ '"' + traefik_image_tag + '"'  if traefik_image_tag  is defined and traefik_image_tag  | length }}
+
+additionalArguments:
+{% for item in traefik_values_additional_arguments %}
+- {{ item }}
+{% endfor %}
+
+env:
+{% for item in traefik_values_env %}
+- name:  "{{ item.name }}"
+  value: "{{ item.value }}"
+{% endfor %}
+

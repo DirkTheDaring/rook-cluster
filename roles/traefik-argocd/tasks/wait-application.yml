@@ -1,0 +1,6 @@
+- name: wait until application status turns to synced in argocd
+  ansible.builtin.command: 
+    argv:
+    - bash 
+    - -c
+    - "while [[ \"$(kubectl -n {{ argocd_namespace }} get application traefik -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done"

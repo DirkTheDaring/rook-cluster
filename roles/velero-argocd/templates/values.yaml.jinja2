@@ -1,0 +1,67 @@
+# Check for new versions:
+#
+# Repo: velero/velero
+# Tags: https://hub.docker.com/r/velero/velero/tags?page=1&ordering=last_updated
+#
+# Repo: velero-plugin-for-csi
+# Tags: https://hub.docker.com/r/velero/velero-plugin-for-csi/tags?page=1&ordering=last_updated
+#
+# Repo: gcr.io/heptio-images/velero-restic-restore-helper
+# Tags: https://hub.docker.com/r/velero/velero-restic-restore-helper/tags?page=1&ordering=last_updated
+
+image:
+  pullPolicy: IfNotPresent
+  repository: velero/velero
+  # https://hub.docker.com/r/velero/velero/tags?page=1&ordering=last_updated
+  tag: "{{ velero_values_image_tag }}"
+
+initContainers:
+  - name: velero-plugin-for-aws
+    # https://hub.docker.com/r/velero/velero-plugin-for-aws/tags?page=1&ordering=last_updated
+    image: "{{ velero_init_container_aws_image }}"
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+  - name: velero-plugin-for-csi
+    # https://hub.docker.com/r/velero/velero-plugin-for-csi/tags?page=1&ordering=last_updated
+    image: "{{ velero_init_container_csi_image }}"
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+configuration:
+  provider: aws
+  backupStorageLocation:
+    bucket: "{{ velero_configuration_backup_storage_location_bucket }}"
+    config:
+      region:    "{{ velero_configuration_backup_storage_location_config_region }}"
+      s3ForcePathStyle: true
+      s3Url:     "{{ velero_configuration_backup_storage_location_config_s3_url }}"
+      publicUrl: "{{ velero_configuration_backup_storage_location_config_s3_public_url }}"
+  loglevel: "{{ velero_configuration_log_level }}"
+  resticTimeout: 12h
+  feature: EnableCSI
+
+credentials:
+  existingSecret: cloud-credentials
+  useSecret: true
+  secretContents: {}
+  extraEnvVars: {}
+snapshotsEnabled: true
+configMaps:
+  restic-restore-action-config:
+    labels:
+      velero.io/plugin-config: ""
+      velero.io/restic: RestoreItemAction
+    data:
+      # https://hub.docker.com/r/velero/velero-restic-restore-helper/tags?page=1&ordering=last_updated
+      image: "{{ velero_config_maps_restic_restore_action_config_data_image }}"
+
+deployRestic: true
+kubectl:
+  image:
+    tag: "{{ velero_kubectl_image_tag }}"
+

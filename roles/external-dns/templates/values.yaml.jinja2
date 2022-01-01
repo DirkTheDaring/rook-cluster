@@ -1,0 +1,6 @@
+provider: {{ external_dns_provider }}
+extraEnv:
+{% for item in external_dns_extra_env %}
+- name:  {{ item.name }}
+  value: {{ item.value }}
+{% endfor %}

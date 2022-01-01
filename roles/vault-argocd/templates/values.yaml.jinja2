@@ -1,0 +1,41 @@
+injector:
+  image:
+    repository: "hashicorp/vault-k8s"
+    tag: "0.13.1"
+server:
+  ingress:
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+      traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+  - host: "{{ vault_fqdn }}"
+  service:
+    enabled: "true"
+  ha:
+    enabled: "true"
+    replicas: "3"
+    raft:
+      enabled: "true"
+      config: |
+        ui = true
+
+        listener "tcp" {
+          tls_disable = 1
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+        }
+
+        storage "raft" {
+          path = "/vault/data"
+        }
+
+        service_registration "kubernetes" {}
+  dataStorage:
+    storageClass: "{{ vault_dataStorage_storage_class }}"
+  auditStorage:
+    enabled: "true"
+    storageClass: "{{ vault_auditStorage_storage_class }}"
+ui:
+  enabled: "true"
+  serviceType: "LoadBalancer"
+
