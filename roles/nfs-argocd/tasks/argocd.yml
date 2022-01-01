@@ -1,5 +1,0 @@
-- name: create application
-  kubernetes.core.k8s:
-    template: application.yaml.jinja2
-  when: nfs_subdir_external_provisioner_argocd
-
