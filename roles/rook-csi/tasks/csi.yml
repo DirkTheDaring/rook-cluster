@@ -58,7 +58,7 @@
 
 - name: Create namespace
   kubernetes.core.k8s:
-    name: "{{ rook_csi_system_namespace }}"
+    name: "{{ rook_csi_namespace }}"
     api_version: v1
     kind: Namespace
     state: present
@@ -69,10 +69,10 @@
     - sed
     - -i
     - -E
-    - "s/namespace:[ |\t]+default.*$/namespace: {{ rook_csi_system_namespace }}/g"
+    - "s/namespace:[ |\t]+default.*$/namespace: {{ rook_csi_namespace }}/g"
     - "{{ rook_csi_tmp_dir }}/{{ item | basename }}"
   loop: "{{ app }}"
-  when: rook_csi_system_namespace != "default"
+  when: rook_csi_namespace != "default"
 
 #- fail:
 #    msg: "intended"
@@ -80,7 +80,7 @@
 - name: apply app
   kubernetes.core.k8s:
     state: present
-    namespace: "{{ rook_csi_system_namespace }}"
+    namespace: "{{ rook_csi_namespace }}"
     src: "{{ rook_csi_tmp_dir }}/{{ item | basename  }}"
   loop: "{{ app }}"
 

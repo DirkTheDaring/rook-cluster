@@ -1,10 +1,3 @@
-- name: wait until namespace appears
-  ansible.builtin.command: 
-    argv:
-    - bash 
-    - -c 
-    - "while true; do kubectl get namespace {{ traefik_namespace }} && break; sleep 3; done"
-
 - name: test if ingressroute already exists
   ansible.builtin.command: 
     argv:

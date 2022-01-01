@@ -1,2 +1,4 @@
-- import_tasks: operator.yml
+- import_tasks: install-operator.yml
 - import_tasks: ingress.yml
+# no wait in the orig
+#- import_tasks: wait-for-namespace.yml

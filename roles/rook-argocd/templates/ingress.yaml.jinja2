@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: {{ rook_namespace }}
-  name:      rook-ceph
+  name:      rook
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
@@ -17,4 +17,3 @@ spec:
             port:
               number: 7000
         pathType: ImplementationSpecific
-

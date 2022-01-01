@@ -1,3 +1,3 @@
-- import_tasks: helm-version.yml
-- import_tasks: release-version.yml
+- import_tasks: github-version.yml
+- import_tasks: helm-chart-version.yml
 - import_tasks: argocd.yml

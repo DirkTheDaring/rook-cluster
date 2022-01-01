@@ -1,15 +1,50 @@
+server:
+  ingress:
+    enabled: "true"
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    hosts:
+    - "{{ argo_workflows_fqdn }}"
+  sso:
+    issuer: "https://argocd.{{ argo_workflows_domain }}/api/dex"
+    clientId:
+      name: "argocd-repo-creds-argo-workflows-sso"
+    clientId:
+      key: "client-id"
+    clientSecret:
+      name: "argocd-repo-creds-argo-workflows-sso"
+      key:  "client-secret"
+    redirectUrl: "https://{{ argo_workflows_fqdn }}/oauth2/callback"
+    extraArgs:
+    - --auth-mode=sso
+
 controller:
+  nodeSelector:
+    kubernetes.io/hostname: "{{ argo_workflows_nodeSelector_hostname }}"
   persistence:
     postgresql:
-      host: {{ argo_workflows_credentials_postgresql.name }}
-      port: {{ argo_workflows_credentials_postgresql.port }}
-      database: {{ argo_workflows_credentials_postgresql.database_name }}
+      host: "{{ argo_workflows_credentials_postgresql.name }}"
+      port: "{{ argo_workflows_credentials_postgresql.port }}"
+      database: "{{ argo_workflows_credentials_postgresql.database_name }}"
       tableName: argo_workflows
-      # the database secrets must be in the same namespace of the controller
       userNameSecret:
-       name: credentials-postgresql
+        name: credentials-postgresql 
         key: username
       passwordSecret:
-        name: credentials-postgresql
+        name: credentials-postgresql 
         key: password
 
+# s3 (minio)
+artifactRepository:
+  archiveLogs: "true"
+  s3:
+    accessKeySecret: 
+      name: credentials-s3
+      key: accesskey
+    secretKeySecret:
+      name: credentials-s3
+      key: secretkey
+  insecure: "false"
+  bucket: "{{ argo_workflows_credentials_s3.bucket }}"
+  endpoint: "{{ argo_workflows_credentials_s3.url }}"

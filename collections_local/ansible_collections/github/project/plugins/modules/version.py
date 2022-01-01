@@ -96,8 +96,17 @@ def project_version(config):
         regex = version[1:]
     elif version != "":
         return version
-  
-    cache_dir = os.environ['HOME'] + "/.cache/github-releases/" + config[GITHUB_PROJECT_NAME]
+ 
+    project_name = config[GITHUB_PROJECT_NAME]
+    prefix = "https://api.github.com/repos/"
+    if project_name.startswith(prefix):
+        array = project_name[len(prefix):].split("/") 
+        if len(array) > 1:
+            project_name = array[0] + "/" + array[1]
+        else:
+           return ""
+
+    cache_dir = os.environ['HOME'] + "/.cache/github-releases/" + project_name
     cache_file = cache_dir + "/releases.json"
 
     if not os.path.isdir(cache_dir):
@@ -108,7 +117,7 @@ def project_version(config):
     if os.path.isfile(cache_file) and is_cachefile_expired(cache_file, cache_time):
         os.remove(cache_file)
 
-    url = "https://api.github.com/repos/" + config[GITHUB_PROJECT_NAME] + "/releases"
+    url = "https://api.github.com/repos/" + project_name + "/releases"
 
     if not os.path.isfile(cache_file):
         urllib.request.urlretrieve(url, cache_file)

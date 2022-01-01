@@ -6,15 +6,23 @@
   gather_facts: False
   #any_errors_fatal: True
   roles:
-  - argo-cd
-  - argo-workflows
-  - metallb-argocd
-  - rook-argocd
-  - traefik-argocd
-  - rook-csi
-  - nfs-argocd
-  - vault-argocd
-  - vault-unseal
+  #- argo-cd
+  #- argo-dataflow
+  #- argo-events
+  #- postgresql
+  #- argo-workflows  # requires postgresql, minio
+  #- argo-notifications # Requires postgresql
   - minio-argocd
-  - velero-argocd
-##  - harbor-argocd
+  #- velero-argocd
+  #- vault-argocd # FIXME
+  #- harbor-argocd
+  #- keycloak
+#  - traefik-argocd
+  #- metallb-argocd
+  #- nfs-argocd
+#  - helm-info
+#  - rook-argocd
+#  - rook-csi # FIXME
+# All storage layers are not deployed by argo, as argo + argo-workflows depend on int
+#  - vault-unseal
+#  - velero-client

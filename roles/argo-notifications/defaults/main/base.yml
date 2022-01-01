@@ -1,18 +1,45 @@
+# DNS
+argo_notifications_domain:       "example.com"
+argo_notifications_subdomain:    ""
+argo_notifications_hostname:     "argo-notifications"
+
+# Kubernetes
+argo_notifications_namespace:    "argo-notifications"
+
+# Argocd
+argo_notifications_argocd_project:            "default"
+argo_notifications_argocd_namespace:          "argo-cd"
+argo_notifications_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+argo_notifications_helm_release_name:  argo-notifications
+
+argo_notifications_helm_repo_name:     argo
+argo_notifications_helm_repo_url:      https://argoproj.github.io/argo-helm
+argo_notifications_helm_chart_name:    argocd-notifications
+argo_notifications_helm_chart_version: ""        # empty strings means pick latest
+#argo_notifications_helm_chart_version: "~^1\.7\."    # pick by regular expression
+#argo_notifications_helm_chart_version: "1.7.0" # set absolute version
+
+# Github Repository
+argo_notifications_releases_url:      "https://api.github.com/repos/argoproj/notifications-engine/releases"
+argo_notifications_releases_jmespath: "[].tag_name"
+#argo_notifications_release: "~^v1\.2\." # pick first match of regular expression
+#argo_notifications_release: "v1.2.1"
+
+# Configuration Database
+argo_notifications_root_credentials_dir: "{{ playbook_dir }}/credentials"
+argo_notifications_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['
 # Github
 argo_notifications_github_project_name:    argoproj/notifications-engine
 argo_notifications_github_project_version: "" #  "" means pick latest
 #argo_notifications_github_project_version: '~^'
 
-# Helm Chart
-argo_notifications_helm_repo_name:     argo
-argo_notifications_helm_repo_url:      https://argoproj.github.io/argo-helm
-argo_notifications_helm_chart_name:    argocd-notifications
-argo_notifications_helm_chart_version: ""  #  "" means pick latest
-
-# Argo application
-argo_notifications_application_argocd_namespace:       argo-cd
-argo_notifications_application_destination_server:     https://kubernetes.default.svc
-argo_notifications_application_destination_namespace:  argo-notifications
-
+# Kubernetes
 argo_notifications_application_node_selector_hostname: prod1-node-mn35
 

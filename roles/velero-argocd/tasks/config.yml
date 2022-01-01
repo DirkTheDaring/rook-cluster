@@ -2,4 +2,3 @@
     velero_credentials_s3: "{{ lookup('file', velero_credentials_s3_json ) | from_json }}"
 - debug:
     msg: "{{ velero_credentials_s3 }}"
-

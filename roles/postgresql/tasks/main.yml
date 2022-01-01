@@ -1,4 +1,4 @@
-- import_tasks: release-version.yml
-- import_tasks: helm-version.yml
+#- import_tasks: github-version.yml  # No releases on github
+- import_tasks: helm-chart-version.yml
 - import_tasks: helm.yml
 - import_tasks: credentials.yml

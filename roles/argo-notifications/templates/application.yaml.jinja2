@@ -1,20 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  namespace: {{ argo_notifications_application_argocd_namespace }}
-  name:      argo-notifications
+  namespace: {{ argo_notifications_argocd_namespace }}
+  name:      {{ argo_notifications_helm_release_name }}
 spec:
   destination:
-    server:    {{ argo_notifications_application_destination_server }}
-    namespace: {{ argo_notifications_application_destination_namespace }}
-  project: default
+    server:    {{ argo_notifications_argocd_destination_server }}
+    namespace: {{ argo_notifications_namespace }}
+  project: {{ argo_notifications_argocd_project }}
   source:
     repoURL:        {{ argo_notifications_helm_repo_url }}
     chart:          {{ argo_notifications_helm_chart_name }}
     targetRevision: {{ helm_chart_version }}
-#    helm:
-#      parameters:
+    helm:
+      parameters:
+{{ argo_notifications_application_params }}
   syncPolicy:
     automated: {}
     syncOptions:
     - CreateNamespace=true
+

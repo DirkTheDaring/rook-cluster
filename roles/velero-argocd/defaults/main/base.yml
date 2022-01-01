@@ -7,26 +7,31 @@ velero_hostname:     "velero"
 velero_namespace:    "velero"
 
 # Argocd
-velero_argocd_namespace:          "argocd"
+velero_argocd_project:            "default"
+velero_argocd_namespace:          "argo-cd"
 velero_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
+velero_helm_release_name:  velero
+
 velero_helm_repo_name:     velero
 velero_helm_repo_url:      https://vmware-tanzu.github.io/helm-charts
 velero_helm_chart_name:    velero
-velero_helm_chart_version: ""  #  "" means pick latest
-#velero_helm_chart_version: "~^2"
-#velero_helm_chart_version: "2.24.0"
+velero_helm_chart_version: ""        # empty strings means pick latest
+#velero_helm_chart_version: "~^2\.24\."    # pick by regular expression
+#velero_helm_chart_version: "2.24.0" # set absolute version
 
+# Github Repository
 velero_releases_url:      "https://api.github.com/repos/vmware-tanzu/velero/releases"
 velero_releases_jmespath: "[].tag_name"
-#velero_release: "~^" # pick first match of regular expression
-#velero_release: "v1.7.0"
-#velero_release: "v1.6.3"
+#velero_release: "~^v1\.7\." # pick first match of regular expression
+#velero_release: "v1.7.1"
 
-#velero_aws_access_key_id:     vmnlz3dWjY
-#velero_aws_secret_access_key: QBpFGKS7y0FpyFiN7SZ8gw08oiPVKlWhJfNMV5mZ
-#
-# Ansible
-#velero_root_credentials_dir: "{{ playbook_dir }}/credentials"
-velero_credentials_s3_json: "{{ playbook_dir }}/credentials/minio/config.json"
+# Configuration Database
+velero_root_credentials_dir: "{{ playbook_dir }}/credentials"
+velero_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['

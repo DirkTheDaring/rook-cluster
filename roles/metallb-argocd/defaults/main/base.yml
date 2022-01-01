@@ -4,24 +4,37 @@ metallb_subdomain:    ""
 metallb_hostname:     "metallb"
 
 # Kubernetes
-metallb_namespace: metallb-system
+metallb_namespace:    "metallb-system"
+
+# Argocd
+metallb_argocd_project:            "default"
+metallb_argocd_namespace:          "argo-cd"
+metallb_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
+metallb_helm_release_name:  metallb
+
 metallb_helm_repo_name:     metallb
 metallb_helm_repo_url:      https://metallb.github.io/metallb
 metallb_helm_chart_name:    metallb
-metallb_helm_chart_version: ""  #  "" means pick latest
-#metallb_helm_chart_version: "~^0.10"
-#metallb_helm_chart_version: "0.10.3"
+metallb_helm_chart_version: ""        # empty strings means pick latest
+#metallb_helm_chart_version: "~^0\.11\."    # pick by regular expression
+#metallb_helm_chart_version: "0.11.0" # set absolute version
 
-# argocd
-metallb_argocd_namespace:             "argocd"
-metallb_argocd_destination_server:    "https://kubernetes.default.svc"
-
-# Github API
+# Github Repository
 metallb_releases_url:      "https://api.github.com/repos/metallb/metallb/releases"
-metallb_releases_jmespath: "[].tag_name" 
-#metallb_release: "~^v0.10" # pick first match of regular expression
+metallb_releases_jmespath: "[].tag_name"
+#metallb_release: "~^v0\.11\." # pick first match of regular expression
+#metallb_release: "v0.11.0"
 
+# Configuration Database
+metallb_root_credentials_dir: "{{ playbook_dir }}/credentials"
+metallb_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['
+
+# Metallb Pool
 metallb_pool_address:  "192.168.0.0/16"
-

@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   namespace: {{ harbor_argocd_namespace }}
-  name:      harbor
+  name:      {{ harbor_helm_release_name }}
 spec:
   destination:
     server:    {{ harbor_argocd_destination_server }}
@@ -14,84 +14,9 @@ spec:
     targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
-      - name: persistence.persistentVolumeClaim.registry.storageClass
-        value: "{{ harbor_persistence_registry_storage_class | default(harbor_persistence_storage_class) }}"
-      - name: persistence.persistentVolumeClaim.registry.accessMode
-        value: "ReadWriteOnce"
-      - name: persistence.persistentVolumeClaim.registry.size
-        value: "5Gi"
-      - name: persistence.persistentVolumeClaim.chartmuseum.storageClass
-        value: "{{ harbor_persistence_chartmuseum_storage_class | default(harbor_persistence_storage_class) }}"
-      - name: persistence.persistentVolumeClaim.chartmuseum.accessMode
-        value: "ReadWriteOnce"
-      - name: persistence.persistentVolumeClaim.chartmuseum.size
-        value: "5Gi"
-      - name: persistence.persistentVolumeClaim.jobservice.storageClass
-        value: "{{ harbor_persistence_jobservice_storage_class | default(harbor_persistence_storage_class) }}"
-      - name: persistence.persistentVolumeClaim.jobservice.accessMode
-        value: "ReadWriteOnce"
-      - name: persistence.persistentVolumeClaim.jobservice.size
-        value: "1Gi"
-      - name: persistence.persistentVolumeClaim.database.storageClass
-        value: "{{ harbor_persistence_database_storage_class| default(harbor_persistence_storage_class) }}"
-      - name: persistence.persistentVolumeClaim.database.accessMode
-        value: "ReadWriteOnce"
-      - name: persistence.persistentVolumeClaim.database.size
-        value: "1Gi"
-      - name: persistence.persistentVolumeClaim.redis.storageClass
-        value: "{{ harbor_persistence_redis_storage_class | default(harbor_persistence_storage_class) }}"
-      - name: persistence.persistentVolumeClaim.redis.accessMode
-        value: "ReadWriteOnce"
-      - name: persistence.persistentVolumeClaim.redis.size
-        value: "1Gi"
-      - name: persistence.persistentVolumeClaim.trivy.storageClass
-        value: "{{ harbor_persistence_trivy_storage_class | default(harbor_persistence_storage_class) }}"
-      - name: persistence.persistentVolumeClaim.trivy.accessMode
-        value: "ReadWriteOnce"
-      - name: persistence.persistentVolumeClaim.trivy.size
-        value: "5Gi"
-      - name: expose.tls.enabled
-        value: "false"
-      - name: expose.ingress.hosts.core
-        value: "{{ harbor_core_fqdn }}"
-      - name: expose.ingress.hosts.notary
-        value: "{{ harbor_notary_fqdn }}"
-      - name: expose.ingress.controller
-        value: "default"
-      - name: expose.ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.entrypoints
-        value: websecure
-      - name: expose.ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls
-        value: "true"
-        forceString: true
-      - name: externalURL
-        value: "https://{{ harbor_core_fqdn }}"
-{% if harbor_nodeSelector_hostname is defined and harbor_nodeSelector_hostname != "" %}
-      - name: nginx.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: portal.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: core.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: jobservice.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: registry.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: chartmuseum.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: trivy.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: notary.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: signer.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: database.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: redis.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-      - name: exporter.nodeSelector.kubernetes\.io\/hostname
-        value: "{{ harbor_nodeSelector_hostname }}"
-{% endif %} 
+{{ harbor_application_params }}
   syncPolicy:
     automated: {}
     syncOptions:
     - CreateNamespace=true
+

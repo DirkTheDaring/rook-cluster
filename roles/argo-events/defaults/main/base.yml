@@ -1,19 +1,43 @@
-# Github
-argo_events_github_project_name:    argoproj/argo-events
-argo_events_github_project_version: "" #  "" means pick latest
+# DNS
+argo_events_domain:       "example.com"
+argo_events_subdomain:    ""
+argo_events_hostname:     "argo-events"
 
-#argo_events_github_project_version: "v1.5.3"
-#argo_events_github_project_version: '~^v[0-9]+\.[0-9]+\.[0-9]+$'
+# Kubernetes
+argo_events_namespace:    "argo-events"
+argo_events_application_node_selector_hostname: prod1-node-mn35
+
+# Argocd
+argo_events_argocd_project:            "default"
+argo_events_argocd_namespace:          "argo-cd"
+argo_events_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
+argo_events_helm_release_name:  argo-events
+
 argo_events_helm_repo_name:     argo
 argo_events_helm_repo_url:      https://argoproj.github.io/argo-helm
 argo_events_helm_chart_name:    argo-events
-argo_events_helm_chart_version: ""  #  "" means pick latest
+argo_events_helm_chart_version: ""        # empty strings means pick latest
+#argo_events_helm_chart_version: "~^2\.24\."    # pick by regular expression
+#argo_events_helm_chart_version: "2.24.0" # set absolute version
 
-# Argo application
-argo_events_application_argocd_namespace:       argo-cd
-argo_events_application_destination_server:     https://kubernetes.default.svc
-argo_events_application_destination_namespace:  argo-events
+# Github Repository
+argo_events_releases_url:      "https://api.github.com/repos/argoproj/argo-events/releases"
+argo_events_releases_jmespath: "[].tag_name"
+#argo_events_release: "~^v1\.5\." # pick first match of regular expression
+#argo_events_release: "v1.5.5"
 
-argo_events_application_node_selector_hostname: prod1-node-mn35
+# Configuration Database
+argo_events_root_credentials_dir: "{{ playbook_dir }}/credentials"
+# Github
+argo_events_github_project_name:    argoproj/argo-events
+argo_events_github_project_version: "" #  "" means pick latest
+#argo_events_github_project_version: "v1.5.3"
+#argo_events_github_project_version: '~^v[0-9]+\.[0-9]+\.[0-9]+$'
+argo_events_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['

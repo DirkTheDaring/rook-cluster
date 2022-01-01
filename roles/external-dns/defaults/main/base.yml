@@ -1,21 +1,43 @@
-# Github
-external_dns_github_project_name:    kubernetes-sigs/external-dns
-external_dns_github_project_version: "" #  "" means pick latest
-
-# Helm Chart
-external_dns_helm_repo_name:     bitnami
-external_dns_helm_repo_url:      https://charts.bitnami.com/bitnami
-external_dns_helm_chart_name:    external-dns
-external_dns_helm_chart_version: ""  #  "" means pick latest
-#external_dns_helm_chart_version: "~^5"  # "" means get select first element of pattern
+# DNS
+external_dns_domain:       "example.com"
+external_dns_subdomain:    ""
+external_dns_hostname:     "external-dns"
 
 # Kubernetes
-external_dns_namespace:       "external-dns"
+external_dns_namespace:    "external-dns"
 
 # Argocd
 external_dns_argocd_project:            "default"
 external_dns_argocd_namespace:          "argo-cd"
 external_dns_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+external_dns_helm_release_name:  external-dns
+
+external_dns_helm_repo_name:     bitnami
+external_dns_helm_repo_url:      https://charts.bitnami.com/bitnami
+external_dns_helm_chart_name:    external-dns
+external_dns_helm_chart_version: ""        # empty strings means pick latest
+#external_dns_helm_chart_version: "~^1\.7\."    # pick by regular expression
+#external_dns_helm_chart_version: "1.7.0" # set absolute version
+
+# Github Repository
+external_dns_releases_url:      "https://api.github.com/repos/kubernetes-sigs/external-dns/releases"
+external_dns_releases_jmespath: "[].tag_name"
+#external_dns_release: "~^v0\.10\." # pick first match of regular expression
+#external_dns_release: "v0.10.2"
+
+# Configuration Database
+external_dns_root_credentials_dir: "{{ playbook_dir }}/credentials"
+external_dns_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['
+# Github
+external_dns_github_project_name:    kubernetes-sigs/external-dns
+external_dns_github_project_version: "" #  "" means pick latest
 
 external_dns_provider: "aws"
 external_dns_extra_env: []

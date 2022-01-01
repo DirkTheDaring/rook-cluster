@@ -1,34 +1,46 @@
+#- name: Create temporary file
+#  ansible.builtin.tempfile:
+#    state: file
+#    suffix: yaml
+#  register: tempfile
 
-- set_fact:
-    velero_application: "{{ lookup('template', 'application.yaml.jinja2')  }}"
-- name: show templating results
-  debug:
-    msg: "{{ velero_application }}"
-    verbosity: 2
+#- set_fact:
+#    tempfile_path: "{{ tempfile.path if ansible_verbosity < 3 else '/tmp/velero-values.yaml' }}"
+
+- name: Create values.yaml content if verbosity > 2
+  ansible.builtin.template:
+    src:  "values.yaml.jinja2"
+    dest: "/tmp/velero-values.yaml"
+    mode: '0664'
+  when: ansible_verbosity > 2
+
+- name: Load yaml and prune none values
+  set_fact:
+    velero_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml | prune_none_value }}"
+
+#- name: Prepare List which needs to be tagged with forceString
+#  set_fact:
+#    force_string_list: 
+#    - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+#    - 'initContainers[0].command[2]'
+
+- name: Transform to application params
+  set_fact:
+    velero_application_params: "{{ velero_values | chart_values_to_argo_parameters(velero_force_string_dict) }}"
+
+- name: Write result to /tmp/velero-application
+  ansible.builtin.copy:
+    content: "{{ velero_application_params }}"
+    dest: /tmp/velero-application-params.yml
+  when: ansible_verbosity > 2
+
+- name: Create application.yaml content if verbosity > 2
+  ansible.builtin.template:
+    src:  "application.yaml.jinja2"
+    dest: "/tmp/velero-application.yaml"
+    mode: '0664'
+  when: ansible_verbosity > 2
 
 - name: create application
-  kubernetes.core.k8s: 
+  kubernetes.core.k8s:
     template: application.yaml.jinja2
-
-- name: wait until namespace appears 
-  ansible.builtin.command: 
-    argv:
-    -  bash 
-    - -c 
-    - "while true; do kubectl get namespace {{ velero_namespace }} && break; sleep 3; done"
-
-# FIXME kubectl get secret --namespace minio minio -o jsonpath="{.data.access-key}" | base64 --decode
-# FIXME kubectl get secret --namespace minio minio -o jsonpath="{.data.secret-key}" | base64 --decode
-
-- name: create secret
-  kubernetes.core.k8s: 
-    definition:
-      apiVersion: v1
-      kind: Secret
-      metadata:
-        namespace: "{{ velero_namespace }}"
-        name:      cloud-credentials
-      type: Opaque
-      data:
-        cloud: "{{ lookup('template', 'cloud-credentials.ini.jinja2') | b64encode }}"
-

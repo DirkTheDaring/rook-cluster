@@ -4,29 +4,43 @@ vault_subdomain:    ""
 vault_hostname:     "vault"
 
 # Kubernetes
-vault_namespace: "vault-system"
+vault_namespace:    "vault-system"
 
 # Argocd
-vault_argocd_namespace:             "argocd"
-vault_argocd_destination_server:    "https://kubernetes.default.svc"
+vault_argocd_project:            "default"
+vault_argocd_namespace:          "argo-cd"
+vault_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
+vault_helm_release_name:  vault
+
 vault_helm_repo_name:     vault
 vault_helm_repo_url:      https://helm.releases.hashicorp.com
 vault_helm_chart_name:    vault
-vault_helm_chart_version: ""  #  "" means pick latest
-#vault_helm_chart_version:  "~^0.17"
-#vault_helm_chart_version: "0.17.0"
+vault_helm_chart_version: ""        # empty strings means pick latest
+#vault_helm_chart_version: "~^0\.18\."    # pick by regular expression
+#vault_helm_chart_version: "0.18.0" # set absolute version
 
+# Github Repository
 vault_releases_url:      "https://api.github.com/repos/hashicorp/vault/releases"
-vault_releases_jmespath: "[].tag_name" 
-#vault_release: "~^v1\\.8\\." # pick first match of regular expression
-#vault_release: "v1.8.4"
-#
+vault_releases_jmespath: "[].tag_name"
+#vault_release: "~^v1\.9\." # pick first match of regular expression
+#vault_release: "v1.9.2"
 
+# Configuration Database
 vault_root_credentials_dir: "{{ playbook_dir }}/credentials"
+vault_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['
 
+# S3 Credentials
+#vault_aws_access_key_id:     vmnlz3dWjY
+#vault_aws_secret_access_key: QBpFGKS7y0FpyFiN7SZ8gw08oiPVKlWhJfNMV5mZ
 
+# LDAP
 vault_ldap_binddn:       "cn=binduser,dc=dot,dc=com"
 vault_ldap_bindpass:     ""
 vault_ldap_insecure_tls: "false"
@@ -41,9 +55,10 @@ vault_ldap_groupdn:     cn=Users
 vault_ldap_groupfilter: "(&(objectClass=group)(member={{ '{{.UserDN}}' }}))"
 vault_ldap_groupattr:   cn
 
+# Persistence
 vault_dataStorage_storage_class:  rook-cephfs-retain
 vault_auditStorage_storage_class: rook-cephfs-retain
 
-vault_nfs_enabled: true
-vault_nfs_server: 127.0.0.1
-vault_nfs_path:   /volume1/container/static/vault
+vault_nfs_enabled: false
+vault_nfs_server:  127.0.0.1
+vault_nfs_path:    /volume1/container/static/vault

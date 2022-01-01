@@ -1,3 +1,5 @@
+# Fixme we should really make sure that files are downloaded again
+# if there is a new version
 - name: create tmpdir
   block:
   - name: Create temporary build directory

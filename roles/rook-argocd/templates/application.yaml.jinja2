@@ -2,20 +2,20 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   namespace: {{ rook_argocd_namespace }}
+  # we have already a running system which defaults to "rook-ceph". Therefore must not be changed
   name:      rook-ceph
 spec:
   destination:
+    server:    {{ rook_argocd_destination_server }}
     namespace: {{ rook_namespace }}
-    server:    https://kubernetes.default.svc
-  project: default
+  project: {{ rook_argocd_project }}
   source:
     repoURL:        {{ rook_helm_repo_url }}
     chart:          {{ rook_helm_chart_name }}
     targetRevision: {{ helm_chart_version }}
-{% if not rook_ceph_server %}
     helm:
       parameters:
-{% endif %}
+#  rook_application_params 
   syncPolicy:
     automated: {}
     syncOptions:

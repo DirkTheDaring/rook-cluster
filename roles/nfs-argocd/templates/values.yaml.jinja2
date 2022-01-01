@@ -1,33 +1,23 @@
 nfs:
   server: {{ nfs.server }}
   path:   {{ nfs.path }}
-{% if nfs.mount_options is defined %}
+{% if 'mount_options' in nfs %}
   mountOptions:
 {% for item in nfs.mount_options %}
   - {{ item }}
 {% endfor %}
 {% endif %}
-{% if nfs.storage_class is defined %}
+
+{% if 'storage_class' in nfs %}
 storageClass:
-{% if nfs.storage_class.name is defined %}
-  name: {{ nfs.storage_class.name }}
+  name:          {{ nfs.storage_class.name if 'name' in nfs.storage_class }}
+  reclaimPolicy: {{ nfs.storage_class.reclaim_policy if 'reclaim_policy' in nfs.storage_class }}
+  onDelete:      {{ nfs.storage_class.on_delete if 'on_delete' in nfs.storage_class }}
+  pathPattern:   {{ nfs.storage_class.path_pattern if 'path_pattern' in nfs.storage_class }}
+  accessModes:   {{ nfs.storage_class.access_modes if 'access_modes' in nfs.storage_class }}
 {% endif %}
-{% if nfs.storage_class.reclaim_policy is defined %}
-  reclaimPolicy: {{ nfs.storage_class.reclaim_policy }}
-{% endif %}
-{% if nfs.storage_class.on_delete is defined %}
-  onDelete: {{ nfs.storage_class.on_delete }}
-{% endif %}
-{% if nfs.storage_class.path_pattern is defined %}
-  pathPattern: {{ nfs.storage_class.path_pattern }}
-{% endif %}
-{% if nfs.storage_class.access_modes is defined %}
-  accessModes: {{ nfs.storage_class.access_modes }}
-{% endif %}
-{% endif %}
-{% if nfs.leader_election is defined %}
+{% if 'leader_election' in nfs %}
 leaderElection:
-{% if nfs.leader_election.enabled is defined %}
-  enabled: {{ nfs.leader_election.enabled }}
+  enabled: {{ nfs.leader_election.enabled if 'enabled' in nfs.leader_election }}
 {% endif %}
-{% endif %}
+

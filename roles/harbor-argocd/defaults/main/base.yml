@@ -1,32 +1,42 @@
 # DNS
-harbor_domain:          "example.com"
-harbor_subdomain:       ""
-harbor_core_hostname:   "harbor"
+harbor_domain:       "example.com"
+harbor_subdomain:    ""
+harbor_core_hostname: "harbor"
 harbor_notary_hostname: "notary"
 
 # Kubernetes
-harbor_namespace:       "harbor"
-#harbor_nodeSelector_hostname: "hostname"
+harbor_namespace:    "harbor"
 
 # Argocd
 harbor_argocd_project:            "default"
-harbor_argocd_namespace:          "argocd"
+harbor_argocd_namespace:          "argo-cd"
 harbor_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
+harbor_helm_release_name:  harbor
+
 harbor_helm_repo_name:     harbor
 harbor_helm_repo_url:      https://helm.goharbor.io
 harbor_helm_chart_name:    harbor
-harbor_helm_chart_version: ""  #  "" means pick latest
-#harbor_helm_chart_version:  "~^1\\.7\\."
-#harbor_helm_chart_version: "1.7.3"
+harbor_helm_chart_version: ""        # empty strings means pick latest
+#harbor_helm_chart_version: "~^1\.8\."    # pick by regular expression
+#harbor_helm_chart_version: "1.8.0" # set absolute version
 
-
+# Github Repository
 harbor_releases_url:      "https://api.github.com/repos/goharbor/harbor/releases"
-harbor_releases_jmespath: "[].tag_name" 
-#harbor_release: "~^." # pick first match of regular expression
-#harbor_release: "v2.2.4-rc1"
+harbor_releases_jmespath: "[].tag_name"
+#harbor_release: "~^v2\.4\." # pick first match of regular expression
+#harbor_release: "v2.4.1"
+
+# Configuration Database
+harbor_root_credentials_dir: "{{ playbook_dir }}/credentials"
+harbor_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['
+#harbor_nodeSelector_hostname: "hostname"
 
 harbor_persistence_storage_class: nfs-client
 #harbor_persistence_database_storage_class: nfs-client
-harbor_root_credentials_dir: "{{ playbook_dir }}/credentials"

@@ -1,33 +1,41 @@
-# Kubernetes
-minio_namespace:     minio
-minio_name:          minio
-
 # DNS
-minio_domain:        "example.com"
-minio_subdomain:     ""
-minio_gui_hostname:  "minio"
-minio_api_hostname:  "s3"
+minio_domain:       "example.com"
+minio_subdomain:    ""
+minio_gui_hostname: "minio"
+minio_api_hostname: "s3"
+
+# Kubernetes
+minio_namespace:    "minio"
 
 # Argocd
-minio_argocd_namespace:          "argocd"
 minio_argocd_project:            "default"
+minio_argocd_namespace:          "argo-cd"
 minio_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
+minio_helm_release_name:  minio
+
 minio_helm_repo_name:     bitnami
 minio_helm_repo_url:      https://charts.bitnami.com/bitnami
 minio_helm_chart_name:    minio
-minio_helm_chart_version: ""  #  "" means pick latest
-#minio_helm_chart_version: "~^8.1" # pick first version matching regex (~ indicates regex)
-#minio_helm_chart_version: "8.1.9" # lock to version
+minio_helm_chart_version: ""        # empty strings means pick latest
+#minio_helm_chart_version: "~^8\.1\."    # pick by regular expression
+#minio_helm_chart_version: "8.1.9" # set absolute version
 
-
+# Github Repository
 minio_releases_url:      "https://api.github.com/repos/minio/minio/releases"
 minio_releases_jmespath: "[].tag_name"
-#minio_release: "~^RELEASE.2021-07" # pick first match of regular expression
-#minio_release: "RELEASE.2021-05"  # lock to release
+#minio_release: "~^RELEASE.2021-05"
+#minio_release: "RELEASE.2021-05"
 
-
+# Configuration Database
+minio_root_credentials_dir: "{{ playbook_dir }}/credentials"
+minio_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['
 # only if nfs-static
 
 minio_nfs_enabled:        false
@@ -36,9 +44,7 @@ minio_nfs_enabled:        false
 minio_persistence_storage_class: nfs-static
 
 #minio_additional_parameters: 
-
-minio_root_credentials_dir: "{{ playbook_dir }}/credentials"
-# 
+ 
 minio_nfs_mount_options: []
 #- nfsvers=3
 #- noac

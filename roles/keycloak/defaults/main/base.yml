@@ -5,29 +5,39 @@ keycloak_hostname:     "keycloak"
 
 # Kubernetes
 keycloak_namespace:    "keycloak"
-keycloak_global_storage_class: ""
 
-# Argo-cd
-keycloak_project:      "default"
+# Argocd
+keycloak_argocd_project:            "default"
+keycloak_argocd_namespace:          "argo-cd"
+keycloak_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
+keycloak_helm_release_name:  keycloak
+
 keycloak_helm_repo_name:     bitnami
 keycloak_helm_repo_url:      https://charts.bitnami.com/bitnami
 keycloak_helm_chart_name:    keycloak
-keycloak_helm_chart_version: ""  #  "" means pick latest
-#keycloak_helm_chart_version: "~^5"  # "" means get select first element of pattern
+keycloak_helm_chart_version: ""        # empty strings means pick latest
+#keycloak_helm_chart_version: "~^5\.2\."    # pick by regular expression
+#keycloak_helm_chart_version: "5.2.8" # set absolute version
 
-# Github API
+# Github Repository
 keycloak_releases_url:      "https://api.github.com/repos/keycloak/keycloak/releases"
 keycloak_releases_jmespath: "[].tag_name"
-#keycloak_release:           "~^."
-#keycloak_release:           "15.0.2"
+#keycloak_release: "~^v16\.1\." # pick first match of regular expression
+#keycloak_release: "v16.1.0"
 
-# Credentials
+# Configuration Database
 keycloak_root_credentials_dir: "{{ playbook_dir }}/credentials"
+keycloak_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['
+# Kubernetes
+keycloak_global_storage_class: ""
 
 # NFS
 keycloak_cacerts_nfs_server: 127.0.0.1
 keycloak_cacerts_nfs_path:   /srv
-
-

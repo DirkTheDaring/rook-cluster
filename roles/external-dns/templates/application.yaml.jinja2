@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   namespace: {{ external_dns_argocd_namespace }}
-  name:      external-dns
+  name:      {{ external_dns_helm_release_name }}
 spec:
   destination:
     server:    {{ external_dns_argocd_destination_server }}
@@ -14,15 +14,9 @@ spec:
     targetRevision: {{ helm_chart_version }}
     helm:
       parameters:
-      - name:  provider
-        value: {{ external_dns_provider }}
-{% for item in external_dns_extra_env %}
-      - name:  extraEnv[{{ loop.index0 }}].name
-        value: {{ item.name }}
-      - name:  extraEnv[{{ loop.index0 }}].value
-        value: {{ item.value }}
-{% endfor %}
+{{ external_dns_application_params }}
   syncPolicy:
     automated: {}
     syncOptions:
     - CreateNamespace=true
+

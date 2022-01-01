@@ -1,14 +1,46 @@
-- name: argocd deployment 
-  block:
-  - name: create application
-    kubernetes.core.k8s:
-      template: application.yaml.jinja2
-  
-  - name: wait until application status turns to synced in argocd
-    ansible.builtin.command: 
-      argv:
-      - bash 
-      - -c
-      - "while [[ \"$(kubectl -n {{ minio_argocd_namespace }} get application {{ minio_name }} -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done"
-  
-  when: minio_deployment == "argocd"
+#- name: Create temporary file
+#  ansible.builtin.tempfile:
+#    state: file
+#    suffix: yaml
+#  register: tempfile
+
+#- set_fact:
+#    tempfile_path: "{{ tempfile.path if ansible_verbosity < 3 else '/tmp/minio-values.yaml' }}"
+
+- name: Create values.yaml content if verbosity > 2
+  ansible.builtin.template:
+    src:  "values.yaml.jinja2"
+    dest: "/tmp/minio-values.yaml"
+    mode: '0664'
+  when: ansible_verbosity > 2
+
+- name: Load yaml and prune none values
+  set_fact:
+    minio_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml | prune_none_value }}"
+
+#- name: Prepare List which needs to be tagged with forceString
+#  set_fact:
+#    force_string_list: 
+#    - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+#    - 'initContainers[0].command[2]'
+
+- name: Transform to application params
+  set_fact:
+    minio_application_params: "{{ minio_values | chart_values_to_argo_parameters(minio_force_string_dict) }}"
+
+- name: Write result to /tmp/minio-application
+  ansible.builtin.copy:
+    content: "{{ minio_application_params }}"
+    dest: /tmp/minio-application-params.yml
+  when: ansible_verbosity > 2
+
+- name: Create application.yaml content if verbosity > 2
+  ansible.builtin.template:
+    src:  "application.yaml.jinja2"
+    dest: "/tmp/minio-application.yaml"
+    mode: '0664'
+  when: ansible_verbosity > 2
+
+- name: create application
+  kubernetes.core.k8s:
+    template: application.yaml.jinja2

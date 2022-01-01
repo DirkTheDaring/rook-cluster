@@ -30,4 +30,5 @@
     loop: "{{ postgresql_databases }}"
     loop_control:
       index_var: i
+
   when: postgresql_deployment == "helm"

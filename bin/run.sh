@@ -65,4 +65,3 @@ if [ ! -d "$INVENTORY_DIR" ]; then
 fi
 #export ANSIBLE_LIBRARY=$(realpath "$DIRNAME/modules")
 ansible-playbook "$PLAYBOOK" -e config_name=$CONFIG_NAME -e config_stage=$CONFIG_STAGE -i "$INVENTORY_DIR" $*
-
