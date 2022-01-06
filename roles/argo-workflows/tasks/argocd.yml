@@ -5,12 +5,12 @@
 #  register: tempfile
 
 #- set_fact:
-#    tempfile_path: "{{ tempfile.path if ansible_verbosity < 3 else '/tmp/argo_workflows-values.yaml' }}"
+#    tempfile_path: "{{ tempfile.path if ansible_verbosity < 3 else '/tmp/argo-workflows-values.yaml' }}"
 
 - name: Create values.yaml content if verbosity > 2
   ansible.builtin.template:
     src:  "values.yaml.jinja2"
-    dest: "/tmp/argo_workflows-values.yaml"
+    dest: "/tmp/argo-workflows-values.yaml"
     mode: '0664'
   when: ansible_verbosity > 2
 
@@ -28,16 +28,16 @@
   set_fact:
     argo_workflows_application_params: "{{ argo_workflows_values | chart_values_to_argo_parameters(argo_workflows_force_string_dict) }}"
 
-- name: Write result to /tmp/argo_workflows-application
+- name: Write result to /tmp/argo-workflows-application
   ansible.builtin.copy:
     content: "{{ argo_workflows_application_params }}"
-    dest: /tmp/argo_workflows-application-params.yml
+    dest: /tmp/argo-workflows-application-params.yml
   when: ansible_verbosity > 2
 
 - name: Create application.yaml content if verbosity > 2
   ansible.builtin.template:
     src:  "application.yaml.jinja2"
-    dest: "/tmp/argo_workflows-application.yaml"
+    dest: "/tmp/argo-workflows-application.yaml"
     mode: '0664'
   when: ansible_verbosity > 2
 

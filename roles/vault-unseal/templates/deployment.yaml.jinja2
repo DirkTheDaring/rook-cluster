@@ -30,7 +30,8 @@ spec:
               topologyKey: kubernetes.io/hostname
             weight: 1
       containers:
-      - name: minio
+      - name: vault-unseal
+        # https://hub.docker.com/r/lrstanley/vault-unseal/tags
         image: lrstanley/vault-unseal:0.0.8
         imagePullPolicy: IfNotPresent
         securityContext:

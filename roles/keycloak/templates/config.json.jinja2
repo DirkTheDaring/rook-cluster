@@ -1,9 +1,9 @@
 {
   "admin_username": "postgres",
-  "addin_password": "{{ keycloak_postgresql_admin_password }}",
+  "admin_password": {{ keycloak_postgresql_admin_password | to_json }},
 
   "database_name": "bitnami_keycloak",
   "database_port": 5432,
   "username": "bn_keycloak",
-  "password": "{{ keycloak_postgresql_password }}"
+  "password": {{ keycloak_postgresql_password | to_json }}
 }

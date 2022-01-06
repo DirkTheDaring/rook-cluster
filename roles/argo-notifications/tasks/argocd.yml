@@ -5,12 +5,12 @@
 #  register: tempfile
 
 #- set_fact:
-#    tempfile_path: "{{ tempfile.path if ansible_verbosity < 3 else '/tmp/argo_notifications-values.yaml' }}"
+#    tempfile_path: "{{ tempfile.path if ansible_verbosity < 3 else '/tmp/argo-notifications-values.yaml' }}"
 
 - name: Create values.yaml content if verbosity > 2
   ansible.builtin.template:
     src:  "values.yaml.jinja2"
-    dest: "/tmp/argo_notifications-values.yaml"
+    dest: "/tmp/argo-notifications-values.yaml"
     mode: '0664'
   when: ansible_verbosity > 2
 
@@ -28,16 +28,16 @@
   set_fact:
     argo_notifications_application_params: "{{ argo_notifications_values | chart_values_to_argo_parameters(argo_notifications_force_string_dict) }}"
 
-- name: Write result to /tmp/argo_notifications-application
+- name: Write result to /tmp/argo-notifications-application
   ansible.builtin.copy:
     content: "{{ argo_notifications_application_params }}"
-    dest: /tmp/argo_notifications-application-params.yml
+    dest: /tmp/argo-notifications-application-params.yml
   when: ansible_verbosity > 2
 
 - name: Create application.yaml content if verbosity > 2
   ansible.builtin.template:
     src:  "application.yaml.jinja2"
-    dest: "/tmp/argo_notifications-application.yaml"
+    dest: "/tmp/argo-notifications-application.yaml"
     mode: '0664'
   when: ansible_verbosity > 2
 

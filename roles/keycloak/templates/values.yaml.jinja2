@@ -2,7 +2,7 @@
 # in a later step - as this makes troubles with helm charts (None can overrwrite your dict)
 #
 global:
-  storageClass: "{{ keycloak_global_storage_class }}"
+  storageClass: "{{ keycloak_postgresql_storage_class }}"
 ingress:
   enabled: true
   hostname: "{{ keycloak_fqdn }}"
@@ -55,3 +55,13 @@ extraVolumeMounts:
   mountPath: /usr/local/share/ca-certificates
 - name:       opt-bitnami-java-lib-security
   mountPath: /opt/bitnami/java/lib/security
+
+auth:
+  adminUser:          {{ keycloak_config.username if 'username' in keycloak_config }}
+  adminPassword:      {{ keycloak_config.password if 'password' in keycloak_config }}
+  managementUser:     {{ keycloak_management_config.username if 'username' in keycloak_management_config }}
+  managementPassword: {{ keycloak_management_config.password if 'password' in keycloak_management_config }}
+postgresql:
+  postgresqlUsername: {{ keycloak_postgresql_config.username if 'username' in keycloak_postgresql_config }}
+  postgresqlPassword: {{ keycloak_postgresql_config.password if 'password' in keycloak_postgresql_config }}
+

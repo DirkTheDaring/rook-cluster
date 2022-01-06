@@ -36,7 +36,7 @@ keycloak_force_string_dict:
   - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
 #  - '^env\['
 # Kubernetes
-keycloak_global_storage_class: ""
+keycloak_postgresql_storage_class: ""
 
 # NFS
 keycloak_cacerts_nfs_server: 127.0.0.1

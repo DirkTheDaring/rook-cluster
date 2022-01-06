@@ -1,4 +1,5 @@
 - import_tasks: helm-chart-version.yml
 - import_tasks: github-version.yml
 - import_tasks: argocd.yml
+- import_tasks: patch-configmap.yml
 - import_tasks: credentials.yml
