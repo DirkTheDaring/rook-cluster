@@ -1,3 +1,0 @@
-- import_tasks: github-version.yml
-- import_tasks: helm-chart-version.yml
-- import_tasks: argocd.yml

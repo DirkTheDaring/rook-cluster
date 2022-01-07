@@ -3,6 +3,9 @@ argocd_domain:       "example.com"
 argocd_subdomain:    ""
 argocd_hostname:     "argocd"
 
+# Deployment Method: argocd, helm
+argocd_deployment:    "argocd"
+
 # Kubernetes
 argocd_namespace:    "argo-cd"
 #argocd_node_selector_hostname: prod1-node-mn35

@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ postgresql_argocd_namespace }}
+  name:      {{ item.namespace + '-' + item.name if item.name == postgresql_helm_chart_name else item.namespace + "-" + item.name + "-" + postgresql_helm_chart_name  }}
+spec:
+  destination:
+    server:    {{ postgresql_argocd_destination_server }}
+    namespace: {{ item.namespace }}
+  project: {{ postgresql_argocd_project }}
+  source:
+    repoURL:        {{ postgresql_helm_repo_url }}
+    chart:          {{ postgresql_helm_chart_name }}
+    targetRevision: {{ item.chart_version if 'chart_version' in item and not item.chart_version == "" else helm_chart_version }}
+    helm:
+      parameters:
+{{  postgresql_result.results[i].ansible_facts.postgresql_values_yaml }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
+

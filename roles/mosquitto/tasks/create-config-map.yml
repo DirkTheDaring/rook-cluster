@@ -1,0 +1,23 @@
+- name: load confent
+  set_fact:
+    mosquitto_conf:  "{{ lookup('template', 'mosquitto.conf.jinja2') }}"
+
+- name: Create a k8s namespace
+  kubernetes.core.k8s:
+    state: present
+    api_version: v1
+    kind: Namespace
+    name: "{{ mosquitto_namespace }}"
+
+- name: Create a configmap
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+        namespace: "{{ mosquitto_namespace }}"
+        name:      mosquitto-extra-config
+      data:
+        mosquitto.conf: "{{ mosquitto_conf }}"
+      

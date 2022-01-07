@@ -3,6 +3,9 @@ external_dns_domain:       "example.com"
 external_dns_subdomain:    ""
 external_dns_hostname:     "external-dns"
 
+# Deployment Method: argocd, helm
+external_dns_deployment:    "argocd"
+
 # Kubernetes
 external_dns_namespace:    "external-dns"
 

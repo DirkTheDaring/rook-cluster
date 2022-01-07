@@ -2,4 +2,4 @@
 vault_unseal_credentials_dir: "{{ vault_unseal_root_credentials_dir }}/vault-unseal"
 
 vault_unseal_fqdn:                  "{{ vault_unseal_hostname }}{{ '' if vault_unseal_subdomain == '' else '.' + vault_unseal_subdomain }}.{{ vault_unseal_domain }}"
-vault_unseal_vault_credentials_dir: "{{ vault_unseal_root_credentials_dir }}/vault
+vault_unseal_vault_credentials_dir: "{{ vault_unseal_root_credentials_dir }}/vault"

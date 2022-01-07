@@ -3,6 +3,9 @@ argo_workflows_domain:       "example.com"
 argo_workflows_subdomain:    ""
 argo_workflows_hostname:     "argo-workflows"
 
+# Deployment Method: argocd, helm
+argo_workflows_deployment:    "argocd"
+
 # Kubernetes
 argo_workflows_namespace:    "argo-workflows"
 

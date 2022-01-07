@@ -1,0 +1,34 @@
+- name: deploy with helm
+  block:
+  - name: Add chart repo
+    kubernetes.core.helm_repository:
+      name:     "{{ postgresql_helm_repo_name }}"
+      repo_url: "{{ postgresql_helm_repo_url }}"
+
+  - name: render values.yaml
+    set_fact:
+      postgresql_values_yaml: "{{ lookup('template', 'multiple-values.yaml.jinja2') }}"
+    loop: "{{ postgresql_databases }}"
+    register: postgresql_result
+
+  - name: show content
+    debug:
+      msg: "{{ postgresql_result.results[i].ansible_facts.postgresql_values_yaml }}"
+    loop:  "{{ postgresql_databases }}"
+    loop_control:
+      index_var: i
+
+  - name: Deploy helm chart
+    kubernetes.core.helm:
+      chart_ref:         "{{ postgresql_helm_repo_name }}/{{ postgresql_helm_chart_name }}"
+      chart_version:     "{{ item.chart_version | default(helm_chart_version) }}"
+      release_namespace: "{{ item.namespace }}"
+      release_name:      "{{ item.name }}"
+      create_namespace:  true
+      values:            "{{ postgresql_result.results[i].ansible_facts.postgresql_values_yaml | from_yaml }}"
+      update_repo_cache: yes
+    loop: "{{ postgresql_databases }}"
+    loop_control:
+      index_var: i
+
+  when: postgresql_deployment == "helm"

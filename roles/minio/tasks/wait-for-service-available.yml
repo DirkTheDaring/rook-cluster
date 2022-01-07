@@ -1,0 +1,24 @@
+# Only these two waits in this order seems to make the time, to make subsequent api calls possible
+- name: Wait until response is available for api
+  uri:
+    url: "{{ minio_api_url }}"
+    follow_redirects: none
+    method: GET
+    status_code: [403]
+  register: _result
+  until: _result.status == 403
+  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
+  delay: 5 # Every 5 seconds
+
+- name: Wait until response is available for website
+  uri:
+    url: "{{ minio_gui_url }}"
+    follow_redirects: none
+    method: GET
+    status_code: [200]
+  register: _result
+  until: _result.status == 200
+  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)
+  delay: 5 # Every 5 seconds
+
+

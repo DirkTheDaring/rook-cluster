@@ -1,0 +1,4 @@
+Configure Users Settings using an Environment Variable
+https://goharbor.io/docs/2.3.0/install-config/configure-user-settings-cli/
+https://registry.terraform.io/providers/BESTSELLER/harbor/latest/docs/resources/configuration#oidc_auto_onboard
+

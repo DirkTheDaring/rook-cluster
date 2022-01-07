@@ -2,7 +2,7 @@
   kubernetes.core.k8s:
     template: pv.yaml.jinja2
 
-- name: create persistent volume clain
+- name: create persistent volume claim
   kubernetes.core.k8s:
     template: pvc.yaml.jinja2
 

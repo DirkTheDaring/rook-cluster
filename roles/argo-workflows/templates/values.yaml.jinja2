@@ -6,6 +6,8 @@ server:
       traefik.ingress.kubernetes.io/router.tls: "true"
     hosts:
     - "{{ argo_workflows_fqdn }}"
+  extraArgs:
+  - --auth-mode=sso
   sso:
     issuer: "https://argocd.{{ argo_workflows_domain }}/api/dex"
     clientId:
@@ -15,8 +17,6 @@ server:
       name: "argocd-repo-creds-argo-workflows-sso"
       key:  "client-secret"
     redirectUrl: "https://{{ argo_workflows_fqdn }}/oauth2/callback"
-    extraArgs:
-    - --auth-mode=sso
 
 controller:
   nodeSelector:

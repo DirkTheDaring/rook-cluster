@@ -1,0 +1,13 @@
+{
+  "auth_mode": "oidc_auth",
+  "oidc_name": "{{ harbor_oidc_provider_name }}",
+  "oidc_endpoint": "{{ harbor_oidc_endpoint }}",
+  "oidc_client_id": "{{ harbor_oidc_client_id }}",
+  "oidc_client_secret": "{{ harbor_oidc_client_secret }}",
+  "oidc_scope": "{{ harbor_oidc_scope }}",
+  "oidc_groups_claim": "{{ harbor_oidc_group_claim_name }}",
+  "oidc_admin_group": "{{ harbor_oidc_admingroup }}",
+  "oidc_verify_cert": true,
+  "oidc_auto_onboard": true,
+  "oidc_user_claim": "name"
+}

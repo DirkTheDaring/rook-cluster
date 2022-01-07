@@ -3,6 +3,9 @@ argo_events_domain:       "example.com"
 argo_events_subdomain:    ""
 argo_events_hostname:     "argo-events"
 
+# Deployment Method: argocd, helm
+argo_events_deployment:    "argocd"
+
 # Kubernetes
 argo_events_namespace:    "argo-events"
 argo_events_application_node_selector_hostname: prod1-node-mn35

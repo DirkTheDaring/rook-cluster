@@ -1,0 +1,5 @@
+- import_tasks: helm-chart-version.yml
+- import_tasks: create-config-map.yml
+- import_tasks: deploy-prepare.yml
+- import_tasks: deploy-argocd.yml
+- import_tasks: deploy-helm.yml

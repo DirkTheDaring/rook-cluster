@@ -3,6 +3,9 @@ vault_domain:       "example.com"
 vault_subdomain:    ""
 vault_hostname:     "vault"
 
+# Deployment Method: argocd, helm
+vault_deployment:    "argocd"
+
 # Kubernetes
 vault_namespace:    "vault-system"
 

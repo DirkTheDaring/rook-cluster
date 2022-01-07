@@ -3,6 +3,9 @@ postgresql_domain:       "example.com"
 postgresql_subdomain:    ""
 postgresql_hostname:     "postgresql"
 
+# Deployment Method: argocd, helm
+postgresql_deployment:    "argocd"
+
 # Kubernetes
 postgresql_namespace:    "postgresql"
 
@@ -29,18 +32,18 @@ postgresql_releases_jmespath: "[].tag_name"
 
 # Configuration Database
 postgresql_root_credentials_dir: "{{ playbook_dir }}/credentials"
-postgresql_deployment:  "helm"
 
 # Kubernetes
 postgresql_storage_class: ""
 postgresql_node_selector: {}
 
-postgresql_root_credentials_dir: "{{ playbook_dir }}/credentials"
+#postgresql_root_credentials_dir: "{{ playbook_dir }}/credentials"
 
 postgresql_databases: []
 #- chart_version:      "10.13.8" 
 #  namespace:          argo-workflows
-#  name:               postgresql
+#  # (name == dnsname) = databasename + "-postgresql"
+#  name:               argo-workflows-postgresql
 #  database_name:      argo-workflows
 #  database_username:  argo-workflows
 #  database_password:  argo-workflows

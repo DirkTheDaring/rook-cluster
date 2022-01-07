@@ -3,6 +3,9 @@ vault_unseal_domain:       "example.com"
 vault_unseal_subdomain:    ""
 vault_unseal_hostname:     "vault-unseal"
 
+# Deployment Method: argocd, helm
+vault_unseal_deployment:    "argocd"
+
 # Kubernetes
 vault_unseal_namespace:    "vault-unseal"
 

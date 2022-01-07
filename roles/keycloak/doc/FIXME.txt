@@ -1,0 +1,2 @@
+# Tool for keycloak
+https://www.reddit.com/r/devops/comments/fopqd1/keycloak_configuration_as_code/

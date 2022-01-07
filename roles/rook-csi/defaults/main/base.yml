@@ -3,6 +3,9 @@ rook_csi_domain:       "example.com"
 rook_csi_subdomain:    ""
 rook_csi_hostname:     "rook-csi"
 
+# Deployment Method: argocd, helm
+rook_csi_deployment:    "argocd"
+
 # Kubernetes
 rook_csi_namespace:    "csi-system"
 

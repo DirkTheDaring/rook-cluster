@@ -4,6 +4,9 @@ harbor_subdomain:    ""
 harbor_core_hostname: "harbor"
 harbor_notary_hostname: "notary"
 
+# Deployment Method: argocd, helm
+harbor_deployment:    "argocd"
+
 # Kubernetes
 harbor_namespace:    "harbor"
 

@@ -1,0 +1,34 @@
+persistence:
+#  data:
+#    enabled: true
+#    storageClass: nfs-client
+#    accessMode: "ReadOnlyMany"
+#    size: 100Mi
+  configinc:
+    enabled: true
+    type: "custom"
+    volumeSpec:
+      configMap:
+        name: mosquitto-extra-config
+
+service:
+  main:
+    ports:
+      http:
+        enabled: true
+        port: 9001
+      mqtt:
+        enabled: true
+        port: 1883
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    hosts:
+      - host: {{ mosquitto_fqdn }}
+        paths:
+          - path: /
+            pathType: Prefix

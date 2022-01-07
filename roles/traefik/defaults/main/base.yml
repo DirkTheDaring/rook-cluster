@@ -1,0 +1,59 @@
+# DNS
+traefik_domain:       "example.com"
+traefik_subdomain:    ""
+traefik_hostname:     "traefik"
+
+# Deployment Method: argocd, helm
+traefik_deployment:    "argocd"
+
+# Kubernetes
+traefik_namespace:    "ingress"
+
+# Argocd
+traefik_argocd_project:            "default"
+traefik_argocd_namespace:          "argo-cd"
+traefik_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+traefik_helm_release_name:  traefik
+
+traefik_helm_repo_name:     traefik
+traefik_helm_repo_url:      https://helm.traefik.io/traefik
+traefik_helm_chart_name:    traefik
+traefik_helm_chart_version: ""        # empty strings means pick latest
+#traefik_helm_chart_version: "~^10\.6\."    # pick by regular expression
+#traefik_helm_chart_version: "10.6.0" # set absolute version
+
+# Github Repository
+traefik_releases_url:      "https://api.github.com/repos/traefik/traefik/releases"
+traefik_releases_jmespath: "[].tag_name"
+#traefik_release: "~^v1\.7\." # pick first match of regular expression
+#traefik_release: "v1.7.33"
+
+# Configuration Database
+traefik_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+traefik_force_string_dict:
+  path_regex_list:
+  - '^env\['
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+
+traefik_loadbalancer_ip: "127.0.0.1"
+
+#traefik_persistence_storage_class: ceph-filesystem
+#traefik_persistence_storage_class: nfs-static
+
+traefik_nfs_static_enable: false
+#traefik_nfs_static_server: mynfs.server.com
+#traefik_nfs_static_path:   /shared
+
+#traefik_image_name: "mycustomizedtraefik"
+#traefik_image_tag:  "2.5.1"
+
+traefik_ports: []
+#- name: quassel-core
+#  value: "4242"
+#- name: jnlp
+#  value: "50000"
+
+traefik_additional_parameters: []

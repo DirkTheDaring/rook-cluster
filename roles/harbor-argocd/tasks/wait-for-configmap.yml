@@ -1,0 +1,8 @@
+- name: wait until configmap harbor-core appears
+  ansible.builtin.command: 
+    argv:
+    -  bash 
+    - -c 
+    - "while true; do [ -n \"$(kubectl -n {{ harbor_namespace }} get configmap -o custom-columns=name:metadata.name harbor-core --no-headers)\" ] && break; sleep 5; done"
+  register: harbor_namespace_result
+

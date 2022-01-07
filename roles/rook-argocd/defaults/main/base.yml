@@ -3,6 +3,9 @@ rook_domain:       "example.com"
 rook_subdomain:    ""
 rook_hostname:     "rook"
 
+# Deployment Method: argocd, helm
+rook_deployment:    "argocd"
+
 # Kubernetes
 rook_namespace:    "rook-ceph"
 

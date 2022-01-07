@@ -6,5 +6,5 @@
   roles:
   - argo-cd
   - rook-argocd
-  - metallb-argocd
-  - traefik-argocd
+  - metallb
+  - traefik

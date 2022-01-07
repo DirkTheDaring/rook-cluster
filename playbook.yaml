@@ -6,23 +6,37 @@
   gather_facts: False
   #any_errors_fatal: True
   roles:
+  #- nfs
+  #- metallb
+  #- traefik
   #- argo-cd
+  #- minio         # deployment requires argo-cd, runtime requires nfs
+  #- velero-argocd # deployment requires argo-cd, runtime requires minio
+  #- postgresql
+
   #- argo-dataflow
   #- argo-events
-  #- postgresql
-  #- argo-workflows  # requires postgresql, minio
-  #- argo-notifications # Requires postgresql
-  - minio-argocd
-  #- velero-argocd
-  #- vault-argocd # FIXME
-  #- harbor-argocd
-  #- keycloak
-#  - traefik-argocd
-  #- metallb-argocd
-  #- nfs-argocd
+  #- argo-workflows     # requires postgresql, minio(bucket=argo-workflows)
+  #- argo-notifications # requires postgresql
+
+  #- vault-argocd
+  #- vault-unseal
+  #- external-dns
+  - mosquitto
+
+#  - harbor-argocd
+#  - keycloak
+
 #  - helm-info
 #  - rook-argocd
 #  - rook-csi # FIXME
 # All storage layers are not deployed by argo, as argo + argo-workflows depend on int
-#  - vault-unseal
 #  - velero-client
+
+
+#  Datastructs for
+#  * Backup (where, what, data relevance)
+#  * Monitoring ( actions what to do if it fails?)
+#  * Dependency ( on which other services, certificates etc.., what is a must, what is needed at runtime, what for deployment)
+#  * Documentation Links (APIs, backup instructions, maintenance)
+#  * Update Policy

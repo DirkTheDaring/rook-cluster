@@ -3,6 +3,9 @@ velero_domain:       "example.com"
 velero_subdomain:    ""
 velero_hostname:     "velero"
 
+# Deployment Method: argocd, helm
+velero_deployment:    "argocd"
+
 # Kubernetes
 velero_namespace:    "velero"
 

@@ -1,9 +1,0 @@
-- import_tasks: config.yml
-- import_tasks: github-version.yml
-- import_tasks: helm-chart-version.yml
-- import_tasks: argocd.yml
-- import_tasks: helm.yml
-- import_tasks: wait-for-namespace.yml
-- import_tasks: wait-for-single-pod.yml
-- import_tasks: buckets.yml
-- import_tasks: credentials.yml
