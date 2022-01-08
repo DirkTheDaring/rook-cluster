@@ -1,0 +1,37 @@
+# DNS
+traefik_forward_auth_domain:       "example.com"
+traefik_forward_auth_subdomain:    ""
+traefik_forward_auth_hostname:     "traefik-forward-auth"
+
+# Deployment Method: argocd, helm
+traefik_forward_auth_deployment:    "argocd"
+
+# Kubernetes
+traefik_forward_auth_namespace:    "traefik-forward-auth"
+
+# Argocd
+traefik_forward_auth_argocd_project:            "default"
+traefik_forward_auth_argocd_namespace:          "argo-cd"
+traefik_forward_auth_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Configuration Database
+traefik_forward_auth_root_credentials_dir: "{{ playbook_dir }}/credentials"
+traefik_forward_auth_list: []
+#- name: keycloak
+#  default_provider: oidc
+#  providers_oidc_client_id: argocd-repo-creds-traefik-prod-sso
+#  providers_oidc_client_secret:  oidc_secret
+#  providers_oidc_issuer_url: https://argocd.office.example.com/api/dex
+#  auth_host: keycloak-oauth.office.example.com
+#  cookie_domain: office.example.com
+#  secret: c6ffb5d66882f8849588e2058914d88b
+#- name: dex
+#  default_provider: oidc
+#  providers_oidc_client_id: argocd-repo-creds-traefik-prod-sso
+#  providers_oidc_client_secret: oidc-cd_secret
+#  providers_oidc_issuer_url: https://argocd.office.example.com/api/dex
+#  auth_host: dex-oauth.office.example.com
+#  #auth_host: {{ config.name }}-oauth{{ '' if traefik_forward_auth_subdomain == '' else '.' + traefik_forward_auth_subdomain }}.{{ traefik_forward_auth_domain }}
+#  cookie_domain: office.example.com
+#  #cookie_domain: {{ traefik_forward_auth_domain if traefik_forward_auth_subdomain == '' else traefik_forward_auth_subdomain + '.' + traefik_forward_auth_subdomain }}
+#  secret: c6ffb5d66882f8849588e2058914d88b

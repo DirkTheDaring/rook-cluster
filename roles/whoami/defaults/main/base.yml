@@ -1,0 +1,19 @@
+# DNS
+whoami_domain:       "example.com"
+whoami_subdomain:    ""
+whoami_hostname:     "whoami"
+
+# Deployment Method: argocd, helm
+whoami_deployment:    "argocd"
+
+# Kubernetes
+whoami_namespace:    "whoami"
+
+# Argocd
+whoami_argocd_project:            "default"
+whoami_argocd_namespace:          "argo-cd"
+whoami_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Configuration Database
+whoami_root_credentials_dir: "{{ playbook_dir }}/credentials"
+whoami_middleware_name: traefik-forward-auth-dex@kubernetescrd

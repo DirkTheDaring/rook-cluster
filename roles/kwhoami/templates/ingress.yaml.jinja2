@@ -1,0 +1,23 @@
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: {{ kwhoami_namespace }}
+  name:      whoami
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.middlewares: {{ kwhoami_middleware_name }}
+    #traefik.ingress.kubernetes.io/router.middlewares: {{ kwhoami_namespace }}-forward-auth@kubernetescrd
+spec:
+  rules:
+  - host: {{ kwhoami_fqdn }}
+    http:
+      paths:
+      - backend:
+          service:
+            name: whoami
+            port:
+              number: 80
+        path: /
+        pathType: Prefix

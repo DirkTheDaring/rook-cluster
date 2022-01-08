@@ -1,0 +1,42 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: {{ traefik_forward_auth_namespace }}
+  name:      traefik-forward-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik-forward-auth
+  template:
+    metadata:
+      labels:
+        app: traefik-forward-auth
+    spec:
+      containers:
+      - name:  traefik-forward-auth
+        # https://github.com/thomseddon/traefik-forward-auth/releases
+        # https://hub.docker.com/r/thomseddon/traefik-forward-auth/tags
+        image: thomseddon/traefik-forward-auth:2.2.0
+        args:
+        - --log-level=debug
+        - --log-format=pretty
+        env:
+        - name:  DEFAULT_PROVIDER
+          value: oidc
+        - name:  PROVIDERS_OIDC_CLIENT_ID
+          value: "argocd-repo-creds-traefik-prod-sso"
+        - name:  PROVIDERS_OIDC_CLIENT_SECRET
+          value: "e1a76c10-2051-4bbe-b3ba-0d9b29b001ed"
+        - name:  PROVIDERS_OIDC_ISSUER_URL
+          value: "https://argocd.office.kaupon.de/api/dex"
+        - name:  AUTH_HOST
+          value: "auth.office.kaupon.de"
+        - name:  COOKIE_DOMAIN
+          value: "office.kaupon.de"
+          # Used to sign cookies authentication, should be a random (e.g. openssl rand -hex 16)
+        - name:  SECRET
+          value:  c6ffb5d66882f8849588e2058914d88b
+          #value: imtoosexyformyshorts
+        ports:
+        - containerPort: 4181

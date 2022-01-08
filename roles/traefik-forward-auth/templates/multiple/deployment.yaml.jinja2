@@ -1,0 +1,45 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: {{ traefik_forward_auth_namespace }}
+  name:      {{ config.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ config.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ config.name }}
+    spec:
+      containers:
+      - name:  traefik-forward-auth
+        # https://github.com/thomseddon/traefik-forward-auth/releases
+        # https://hub.docker.com/r/thomseddon/traefik-forward-auth/tags
+        image: thomseddon/traefik-forward-auth:2.2.0
+        args:
+        - --log-level=debug
+        - --log-format=pretty
+        env:
+        - name:  DEFAULT_PROVIDER
+          value: {{ config.default_provider }}
+        - name:  PROVIDERS_OIDC_CLIENT_ID
+          value: {{ config.providers_oidc_client_id }}
+        - name:  PROVIDERS_OIDC_CLIENT_SECRET
+          value: {{ config.providers_oidc_client_secret }}
+        - name:  PROVIDERS_OIDC_ISSUER_URL
+          value: {{ config.providers_oidc_issuer_url }}
+        - name:  AUTH_HOST
+          value: {{ config.auth_host }}
+        - name:  COOKIE_DOMAIN
+          value: {{ config.cookie_domain }}
+          # Used to sign cookies authentication, should be a random (e.g. openssl rand -hex 16)
+        - name:  SECRET
+          value: {{ config.secret }}
+{% if 'whitelist' in config %}
+        - name:  WHITELIST
+          value: {{ config.whitelist }}
+{% endif %}
+        ports:
+        - containerPort: 4181

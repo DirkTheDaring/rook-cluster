@@ -1,0 +1,19 @@
+# DNS
+kwhoami_domain:       "example.com"
+kwhoami_subdomain:    ""
+kwhoami_hostname:     "kwhoami"
+
+# Deployment Method: argocd, helm
+kwhoami_deployment:    "argocd"
+
+# Kubernetes
+kwhoami_namespace:    "kwhoami"
+
+# Argocd
+kwhoami_argocd_project:            "default"
+kwhoami_argocd_namespace:          "argo-cd"
+kwhoami_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Configuration Database
+kwhoami_root_credentials_dir: "{{ playbook_dir }}/credentials"
+kwhoami_middleware_name: traefik-forward-auth-keycloak@kubernetescrd

@@ -1,0 +1,23 @@
+- name: Template files
+  set_fact: 
+    traefik_forward_auth_resources: "{{ traefik_forward_auth_resources | default([]) | union([ lookup('template', item) ]) }}"
+  loop: 
+  - single/namespace.yaml.jinja2
+  - single/deployment.yaml.jinja2
+  - single/service.yaml.jinja2
+  - single/middleware.yaml.jinja2
+  - single/ingress.yaml.jinja2
+
+- name: Create operator
+  set_fact: 
+    traefik_forward_auth_operator: "{{ '---\n'.join(traefik_forward_auth_resources) }}"
+
+- name: Save operator
+  copy:
+    content: "{{ traefik_forward_auth_operator }}"
+    dest: /tmp/traefik_forward_auth_operator
+
+- name: apply operator
+  kubernetes.core.k8s:
+    src: /tmp/traefik_forward_auth_operator
+

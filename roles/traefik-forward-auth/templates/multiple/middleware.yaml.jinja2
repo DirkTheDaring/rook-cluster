@@ -1,0 +1,22 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  namespace: {{ traefik_forward_auth_namespace }}
+  name:      {{ config.name }}
+spec:
+  forwardAuth:
+    address: http://{{ config.name }}-oauth.{{ traefik_forward_auth_namespace }}:4181
+    trustForwardHeader: true
+#    authResponseHeadersRegex: "^X-"
+    authResponseHeaders:
+    - X-Forwarded-User
+#    - X-Auth-User
+#    - X-Auth-Audience
+#    - X-Auth-Email
+#    - X-Auth-Expiresin
+#    - X-Auth-Groups
+#    - X-Auth-Roles
+#    - X-Auth-Subject
+#    - X-Auth-Token
+#    - X-Auth-Userid
+#    - X-Auth-Username

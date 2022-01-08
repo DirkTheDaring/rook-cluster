@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: {{ kwhoami_namespace }}
+  name:      whoami
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: whoami
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+      - name:  whoami
+        image: containous/whoami
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP

@@ -1,0 +1,4 @@
+- include_tasks: multiple-operators-item.yml
+  loop: "{{ traefik_forward_auth_list }}"
+  loop_control:
+    loop_var: "config"
