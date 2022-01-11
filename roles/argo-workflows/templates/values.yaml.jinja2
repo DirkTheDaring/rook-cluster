@@ -23,7 +23,7 @@ controller:
     kubernetes.io/hostname: {{ argo_workflows_nodeSelector_hostname|default("") }}
   persistence:
     postgresql:
-      host: "{{ argo_workflows_credentials_postgresql.name }}"
+      host: "{{ argo_workflows_credentials_postgresql.name }}.{{ argo_workflows_credentials_postgresql.namespace }}"
       port: "{{ argo_workflows_credentials_postgresql.port }}"
       database: "{{ argo_workflows_credentials_postgresql.database_name }}"
       tableName: argo_workflows
