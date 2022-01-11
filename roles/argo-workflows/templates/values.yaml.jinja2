@@ -20,7 +20,7 @@ server:
 
 controller:
   nodeSelector:
-    kubernetes.io/hostname: "{{ argo_workflows_nodeSelector_hostname }}"
+    kubernetes.io/hostname: {{ argo_workflows_nodeSelector_hostname|default("") }}
   persistence:
     postgresql:
       host: "{{ argo_workflows_credentials_postgresql.name }}"
