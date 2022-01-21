@@ -6,11 +6,11 @@ persistence:
       size: 5Gi
     chartmuseum:
       storageClass: {{ harbor_persistence_chartmuseum_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteOnce
+      accessMode: ReadWriteMany
       size: 5Gi
     jobservice:
       storageClass: {{ harbor_persistence_jobservice_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteOnce
+      accessMode: ReadWriteMany
       size: 1Gi
     database:
       storageClass: {{ harbor_persistence_database_storage_class| default(harbor_persistence_storage_class) }}
@@ -27,7 +27,7 @@ persistence:
 
 expose:
   tls:
-    enabled: false
+    enabled: False
   ingress:
     hosts:
       core: {{ harbor_core_fqdn }}
