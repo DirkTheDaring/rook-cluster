@@ -4,4 +4,5 @@
 - import_tasks: deploy-argocd.yml
 - import_tasks: deploy-helm.yml
 - import_tasks: wait-for-namespace.yml
+- import_tasks: persistentvolumes.yml
 - import_tasks: ingressroute.yml

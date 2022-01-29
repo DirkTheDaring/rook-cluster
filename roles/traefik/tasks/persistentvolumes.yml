@@ -8,4 +8,4 @@
 - name: Create persistent volumes
   kubernetes.core.k8s: 
     template: persistentvolume.yaml.jinja2
-  when: traefik_persistence_storage_class == "nfs-static"
+  when: traefik_nfs_static_enable

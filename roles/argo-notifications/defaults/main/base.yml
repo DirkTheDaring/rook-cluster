@@ -44,5 +44,4 @@ argo_notifications_github_project_version: "" #  "" means pick latest
 #argo_notifications_github_project_version: '~^'
 
 # Kubernetes
-argo_notifications_application_node_selector_hostname: prod1-node-mn35
-
+argo_notifications_application_node_selector_hostname: ""

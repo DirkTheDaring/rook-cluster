@@ -8,8 +8,12 @@
   set_fact:
     rook_release_url: "https://raw.githubusercontent.com/rook/rook/{{ 'release-' + rook_csi_release_tag if rook_csi_release_tag != 'master' else 'master' }}"
     snapshotclasses:
-    - cluster/examples/kubernetes/ceph/csi/cephfs/snapshotclass.yaml
-    - cluster/examples/kubernetes/ceph/csi/rbd/snapshotclass.yaml
+    # pre 1.8.0
+    #- cluster/examples/kubernetes/ceph/csi/cephfs/snapshotclass.yaml
+    #- cluster/examples/kubernetes/ceph/csi/rbd/snapshotclass.yaml
+    # From 1.8.0
+    - deploy/examples/csi/cephfs/snapshotclass.yaml
+    - deploy/examples/csi/rbd/snapshotclass.yaml
 
 - name: Create directory for rook_csi_tmp_dir2
   ansible.builtin.file:

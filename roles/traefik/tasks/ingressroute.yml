@@ -10,6 +10,7 @@
     - -o 
     - custom-columns=NAME:metadata.name
   register: traefik_ingressroute
+  ignore_errors: true
 
 - name: create ingressroute if it does not exist
   kubernetes.core.k8s:

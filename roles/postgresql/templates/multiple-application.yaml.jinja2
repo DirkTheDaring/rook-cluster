@@ -2,7 +2,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   namespace: {{ postgresql_argocd_namespace }}
-  name:      {{ item.namespace + '-' + item.name if item.name == postgresql_helm_chart_name else item.namespace + "-" + item.name + "-" + postgresql_helm_chart_name  }}
+  #name:      {{ item.namespace + '-' + item.name if item.name == postgresql_helm_chart_name else item.namespace + "-" + item.name + "-" + postgresql_helm_chart_name  }}
+  #name:      {{ item.namespace + '-' + item.name + i|string }}
+  name:      {{ item.name + i|string if i > 0 else item.name }}
 spec:
   destination:
     server:    {{ postgresql_argocd_destination_server }}

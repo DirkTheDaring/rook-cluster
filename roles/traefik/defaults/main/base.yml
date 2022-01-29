@@ -56,4 +56,5 @@ traefik_ports: []
 #- name: jnlp
 #  value: "50000"
 
-traefik_additional_parameters: []
+traefik_values_additional_arguments: []
+traefik_values_env: []
