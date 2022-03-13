@@ -4,9 +4,13 @@
       argv:
       -  bash
       - -c
-      - "kubectl -n {{ rook_namespace }} get job export-vars-for-external --no-headers || exit 0"
+      - "kubectl -n {{ rook_namespace }} get job export-vars-for-external --no-headers -o custom-columns=NAME:metadata.name || exit 0"
     register: rook_job
 
+  - name: report rook_job result
+    debug:
+      msg: "{{ rook_job }}"
+ 
   - name: Create job and wait for completion - can take very long
     kubernetes.core.k8s:
       template: export-job.yaml.jinja2
@@ -35,5 +39,6 @@
   - ansible.builtin.copy:
       content: "{{ rook_export_result.stdout | from_json | to_nice_json }}\n"
       dest:    "{{ rook_credentials_dir }}/config.json"
+    when: rook_job.stdout != ""
 
   when: rook_ceph_server
