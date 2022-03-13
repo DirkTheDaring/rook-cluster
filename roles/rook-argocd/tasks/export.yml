@@ -39,6 +39,6 @@
   - ansible.builtin.copy:
       content: "{{ rook_export_result.stdout | from_json | to_nice_json }}\n"
       dest:    "{{ rook_credentials_dir }}/config.json"
-    when: rook_job.stdout != ""
+    when: rook_job.stdout == ""
 
   when: rook_ceph_server
