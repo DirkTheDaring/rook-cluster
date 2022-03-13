@@ -1,4 +1,11 @@
 - block:
+  - name: Check if job exists
+    ansible.builtin.command:
+      argv:
+      -  bash
+      - -c
+      - "kubectl -n {{ rook_namespace }} get job export-vars-for-external --no-headers || exit 0"
+    register: rook_job
 
   - name: Create job and wait for completion - can take very long
     kubernetes.core.k8s:
@@ -8,6 +15,7 @@
         type:   Complete
         status: True
       wait_timeout: 7200 # seconds
+    when: rook_job.stdout == ""
 
   - name: read variable section of export
     ansible.builtin.command:
