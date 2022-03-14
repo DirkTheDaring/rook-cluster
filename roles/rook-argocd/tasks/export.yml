@@ -1,10 +1,11 @@
 - block:
+  # kubectl -n rook-ceph get job export-vars-for-external --no-headers --ignore-not-found -o custom-columns=NAME:metadata.name
   - name: Check if job exists
     ansible.builtin.command:
       argv:
       -  bash
       - -c
-      - "kubectl -n {{ rook_namespace }} get job export-vars-for-external --no-headers -o custom-columns=NAME:metadata.name || exit 0"
+      - "kubectl -n {{ rook_namespace }} get job export-vars-for-external --no-headers --ignore-not-found -o custom-columns=NAME:metadata.name"
     register: rook_job
 
   - name: report rook_job result
@@ -36,7 +37,8 @@
       state: directory
       mode: '0700'
 
-  - ansible.builtin.copy:
+  - name: Create config.json 
+    ansible.builtin.copy:
       content: "{{ rook_export_result.stdout | from_json | to_nice_json }}\n"
       dest:    "{{ rook_credentials_dir }}/config.json"
     when: rook_job.stdout == ""
