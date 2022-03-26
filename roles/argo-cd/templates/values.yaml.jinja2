@@ -29,6 +29,10 @@ server:
   config:
     url: https://{{ argocd_fqdn }}
 
+configs:
+  secret:
+    gitlabSecret: {{ argocd_gitlab_secret }}
+
 {% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
 dex:
   nodeSelector:

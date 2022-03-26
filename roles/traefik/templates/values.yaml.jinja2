@@ -40,7 +40,7 @@ ingressClass:
 
 persistence:
   enabled: 'true'
-  accessMode: ReadWriteOnce
+  accessMode: ReadWriteMany
   size: 128Mi
   storageClass: {{ traefik_persistence_storage_class }}
 

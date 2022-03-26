@@ -14,23 +14,19 @@
     - app.kubernetes.io/name=argocd-server
 
 - name: wait until pods are visible
-  ansible.builtin.command: 
+  ansible.builtin.command:
     argv: 
     - bash
     - -c
     - 'while [ -z "$(kubectl -n {{ argocd_namespace }} get pod -l {{ item }} --no-headers -o custom-columns=NAME:metadata.name)" ]; do sleep 3; done'
   loop: "{{ argocd_label_list }}"
 
+  # Replaced kubectl wait, because it failed sometimes
+  # kubectl -n argocd get pod -l app.kubernetes.io/name=argocd-server --no-headers -o 'custom-columns=NAME:status.conditions[0].type
 - name: wait until all argocd pods are ready
-  ansible.builtin.command: 
+  ansible.builtin.command:
     argv:
-    - kubectl
-    - wait
-    - -n 
-    - "{{ argocd_namespace }}"
-    - --timeout=600s
-    - --for=condition=Ready
-    - pod
-    - -l
-    - "{{ item }}"
+    - bash
+    - -c
+    - while [ "$(kubectl -n {{ argocd_namespace }} get pod -l {{ item }} --no-headers -o 'custom-columns=NAME:status.conditions[0].type')" != "Initialized" ]; do sleep 3; done
   loop: "{{ argocd_label_list }}"

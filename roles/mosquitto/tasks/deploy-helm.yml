@@ -17,8 +17,8 @@
       chart_version:     "{{ helm_chart_version }}"
       release_namespace: "{{ mosquitto_namespace }}"
       release_name:      "{{ mosquitto_helm_chart_name }}"
-      create_namespace:  true
+      create_namespace:  True
       values:            "{{ mosquitto_values }}"
-      update_repo_cache: yes
+      update_repo_cache: True
 
   when: mosquitto_deployment == "helm"

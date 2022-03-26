@@ -116,7 +116,7 @@ def prune_none_value_only_leaves(_dict):
     return _dict
 
 
-# prune path which contain None Objects and if they leave empty dicts remove them too
+# prune path which contain None Objects and if they leave empty parent dicts remove them too
 def __prune_none_value_with_pathes(_dict, preserve_existing_empty_dict=False):
     if isinstance(_dict, dict):
         for key, value in list(_dict.items()):

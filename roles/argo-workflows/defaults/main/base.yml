@@ -41,7 +41,7 @@ argo_workflows_force_string_dict:
 argo_workflows_values: {}
 argo_workflows_sso_client_secret: "none"
 
-#argo_workflows_nodeSelector_hostname: prod1-node-mn35
+#argo_workflows_nodeSelector_hostname: ""
 argo_workflows_credentials_s3_json:         "{{ playbook_dir }}/credentials/minio/buckets/default.json"
 argo_workflows_credentials_postgresql_json: "{{ playbook_dir }}/credentials/postgresql/databases/argo-workflows-postgresql.json"
 

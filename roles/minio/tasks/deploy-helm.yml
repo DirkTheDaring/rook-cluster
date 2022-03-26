@@ -17,8 +17,8 @@
       chart_version:     "{{ helm_chart_version }}"
       release_namespace: "{{ minio_namespace }}"
       release_name:      "{{ minio_helm_chart_name }}"
-      create_namespace:  true
+      create_namespace:  True
       values:            "{{ minio_values }}"
-      update_repo_cache: yes
+      update_repo_cache: True
 
   when: minio_deployment == "helm"

@@ -8,7 +8,7 @@ argocd_deployment:    "argocd"
 
 # Kubernetes
 argocd_namespace:    "argo-cd"
-#argocd_node_selector_hostname: prod1-node-mn35
+#argocd_node_selector_hostname: ""
 
 # Argocd
 argocd_argocd_project:            "default"
@@ -51,7 +51,7 @@ argocd_sso_list: []
 #  - https://argo-workflows.office.kaupon.de/oauth2/callback
 #  secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
 
-#argocd_node_selector_hostname: prod1-node-mn35
+#argocd_node_selector_hostname: ""
 
 # Ldap
 argocd_ldap_profile: "activedirectory"
@@ -62,4 +62,8 @@ argocd_ldap_bind_dn:       ""
 argocd_ldap_bind_password: ""
 argocd_ldap_insecure_no_ssl: "false"
 argocd_ldap_insecure_tls:  "false"
+
+# Secrets for git repositories
+argocd_gitlab_secret: ""
+argocd_github_secret: ""
 

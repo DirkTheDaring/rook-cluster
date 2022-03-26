@@ -18,11 +18,11 @@ persistence:
       size: 1Gi
     redis:
       storageClass: {{ harbor_persistence_redis_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteOnce
+      accessMode: ReadWriteMany
       size: 1Gi
     trivy:
       storageClass: {{ harbor_persistence_trivy_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode:   ReadWriteOnce
+      accessMode: ReadWriteMany
       size: 5Gi
 
 expose:

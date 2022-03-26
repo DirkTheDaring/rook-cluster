@@ -17,8 +17,8 @@
       chart_version:     "{{ helm_chart_version }}"
       release_namespace: "{{ metallb_namespace }}"
       release_name:      "{{ metallb_helm_chart_name }}"
-      create_namespace:  true
+      create_namespace:  True
       values:            "{{ metallb_values }}"
-      update_repo_cache: yes
+      update_repo_cache: True
 
   when: metallb_deployment == "helm"
