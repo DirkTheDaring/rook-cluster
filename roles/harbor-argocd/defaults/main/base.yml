@@ -39,7 +39,7 @@ harbor_force_string_dict:
   path_regex_list:
   - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
 #  - '^env\['
-#harbor_nodeSelector_hostname: "hostname"
+harbor_nodeSelector_hostname: ""
 
 harbor_persistence_storage_class: nfs-client
 #harbor_persistence_database_storage_class: nfs-client
