@@ -53,7 +53,7 @@
       url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external-management.yaml"
     when:
     - rook_version_major|int == 1
-    - rook_version_minor|int == 8
+    - rook_version_minor|int >= 8
 
   - set_fact:
       #rook_export_variables: "{{ lookup('file', rook_credentials_dir + '/server-config.sh' ) }}"

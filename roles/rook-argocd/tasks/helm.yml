@@ -14,7 +14,7 @@
   - name: Deploy helm chart
     kubernetes.core.helm:
       chart_ref:         "{{ rook_helm_repo_name }}/{{ rook_helm_chart_name }}"
-      chart_version:     "{{ rook_helm_chart_version }}"
+      chart_version:     "{{ helm_chart_version }}" # yes no prefix rook_ !
       release_namespace: "{{ rook_namespace }}"
       release_name:      "{{ rook_chart_release_name | default('rook-ceph') }}"
       create_namespace:  true

@@ -14,14 +14,20 @@ check_ansible_min_version()
   local VERSION_ARRAY=($(echo $VERSION|sed 's/\./ /g'))
   local MIN_VERSION_ARRAY=($(echo $MIN_VERSION|sed 's/\./ /g'))
   #  at least mininum version of ansible, otherwise endless troubles with collections!
-  OK=0
-  if  [      ${VERSION_ARRAY[0]} -ge ${MIN_VERSION_ARRAY[0]} ]\
-        && [ ${VERSION_ARRAY[1]} -ge ${MIN_VERSION_ARRAY[1]} ]\
-        && [ ${VERSION_ARRAY[2]} -ge ${MIN_VERSION_ARRAY[2]} ]; then
-     OK=1
+  if [ ${VERSION_ARRAY[0]} -gt ${MIN_VERSION_ARRAY[0]} ]; then
+      OK=1
+  else
+      if [ ${VERSION_ARRAY[1]} -gt ${MIN_VERSION_ARRAY[1]} ]; then
+          OK=1
+      else
+          if [ ${VERSION_ARRAY[2]} -ge ${MIN_VERSION_ARRAY[2]} ]; then
+            OK=1
+         else
+            OK=0
+          fi
+      fi
   fi
-
-  if [ $OK == 0 ]; then
+  if [ $OK -eq 0 ]; then
     echo "install at least ansible version $MIN_VERSION, current: $VERSION"
     echo "e.g. pip install -U ansible"
     echo "# make sure that you then your path set and also removed any other ansible"
