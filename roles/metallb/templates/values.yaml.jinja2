@@ -5,7 +5,7 @@ configInline:
     addresses:
     - "{{ metallb_pool_address }}"
     auto-assign: false
-    # only servicess which have the following annotation
-    # can get an address from the pool:
+    # only services can get an address from the pool
+    # which have the following annotation:
     #
     # metallb.universe.tf/address-pool: loadbalanced
