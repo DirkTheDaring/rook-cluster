@@ -4,3 +4,8 @@ configInline:
     protocol: layer2
     addresses:
     - "{{ metallb_pool_address }}"
+    auto-assign: false
+    # only servicess which have the following annotation
+    # can get an address from the pool:
+    #
+    # metallb.universe.tf/address-pool: loadbalanced
