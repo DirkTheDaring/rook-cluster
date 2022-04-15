@@ -13,9 +13,8 @@ ingress:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.tls: "true"
 
-extraEnv:
-- name:  "MINIO_DOMAIN"
-  value: "{{ minio_api_fqdn }}"
+extraEnvVars: {{ extraEnvVars }}
+
 
 apiIngress:
   enabled: true

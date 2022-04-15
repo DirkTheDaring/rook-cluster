@@ -1,0 +1,3 @@
+extraEnvVars:
+- name:  "MINIO_DOMAIN"
+  value: "{{ minio_api_fqdn }}"
