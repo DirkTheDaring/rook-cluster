@@ -1,14 +1,16 @@
 operatorNamespace: rook-ceph
 cephClusterSpec:
+  dataDirHostPath: {{ rook_ceph_cluster_data_dir_host_path }}
   dashboard:
     ssl: false
   network:
     provider: "host"
   storage:
     useAllDevices: false
-    deviceFilter:  "vd[c-z]"
+    deviceFilter:  "{{ storage_device_filter }}"
     config:
-      metadataDevice: "vdb"
+      metadataDevice: "{{ storage_config_metadata_device }}"
+
   placement:
     mon:
       nodeAffinity:

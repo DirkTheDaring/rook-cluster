@@ -60,3 +60,10 @@ rook_storage_root_credentials_dir: "{{ playbook_dir }}/credentials"
 # Deployment argocd or helm
 #rook_deployment: "argocd"
 rook_deployment: "helm"
+
+rook_ceph_cluster_data_dir_host_path: "/var/lib/rook"
+storage_device_filter: "vd[c-z]"
+storage_config_metadata_device: "vdb"
+
+#storage_device_filter: "vd[d-z]"
+#storage_config_metadata_device: "vdc"
