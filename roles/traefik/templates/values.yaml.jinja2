@@ -44,6 +44,10 @@ persistence:
   size: 128Mi
   storageClass: {{ traefik_persistence_storage_class }}
 
+affinity:     {{ traefik_affinity }}
+nodeSelector: {{ traefik_node_selector }}
+tolerations:  {{ traefik_tolerations }}
+
 image:
   name:  {{ '"' + traefik_image_name + '"' if traefik_image_name is defined and traefik_image_name | length }}
   tag:   {{ '"' + traefik_image_tag + '"'  if traefik_image_tag  is defined and traefik_image_tag  | length }}
@@ -58,4 +62,3 @@ env:
 - name:  "{{ item.name }}"
   value: "{{ item.value }}"
 {% endfor %}
-

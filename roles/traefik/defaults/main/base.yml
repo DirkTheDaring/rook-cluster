@@ -58,3 +58,19 @@ traefik_ports: []
 
 traefik_values_additional_arguments: []
 traefik_values_env: []
+
+traefik_node_selector: {}
+
+traefik_affinity: {}
+#  nodeAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#      nodeSelectorTerms:
+#      - matchExpressions:
+#        - key:      node-role.kubernetes.io/master
+#          operator: Exists
+
+traefik_tolerations: []
+#traefik_tolerations:
+#- key:       "node-role.kubernetes.io/master"
+#  operator:  "Exists"
+#  effect:    "NoSchedule"
