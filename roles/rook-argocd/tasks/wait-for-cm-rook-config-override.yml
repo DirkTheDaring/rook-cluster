@@ -13,6 +13,10 @@
 - debug:
     msg: "rook_ceph_cluster_network: {{ rook_ceph_cluster_network }}"
 
+ # bdev_enable_discard: Enables async discard on devices. This option will enable/disable both bdev-enable-discard and bdev-async-discard options in ceph configuration
+ # https://opendev.org/openstack/charm-ceph-osd/commit/56495eecbac9652f1340b91c188d84ef18d1dac0
+ # https://github.com/rook/rook/issues/6964
+
 - name: Patch configmap rook-config-override if we have secondary network device for the storage
   kubernetes.core.k8s:
     state: patched
@@ -29,4 +33,6 @@
           cluster network = {{ rook_ceph_cluster_network }} # 172.16.1.0/24 # routes hearbeat,object replication and recoveredy
           public addr = ""
           cluster addr = ""
+          bdev_enable_discard = true
+          bdev_async_discard = true
   when: rook_ceph_server and rook_ceph_public_network|length and rook_ceph_cluster_network|length
