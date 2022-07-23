@@ -10,7 +10,8 @@
 - import_tasks: cluster-argocd.yml  # only runs for server if rook_deployment == "argocd"
 - import_tasks: cluster-helm.yml    # only runs for server if rook_deployment == "helm"
 - import_tasks: ingress.yml         # only runs for server
-- import_tasks: wait-for-pod-rados-gw.yml # # only runs for serve 
+- import_tasks: wait-for-cm-rook-config-override.yml # only runs for server
+- import_tasks: wait-for-pod-rados-gw.yml # # only runs for server
 - import_tasks: export.yml          # only runs for server
 - import_tasks: credentials.yml     # only runs for server
 

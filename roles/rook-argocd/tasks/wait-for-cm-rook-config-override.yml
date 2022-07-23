@@ -1,0 +1,32 @@
+- name: wait until configmap rook-config-override appears
+  ansible.builtin.command:
+    argv:
+    - bash
+    - -c
+    - "while [ -z \"$(kubectl -n {{ rook_namespace }} get cm rook-config-override --no-headers -o custom-columns=name:metadata.name)\"  ]; do sleep 3;done"
+  when: rook_ceph_server
+
+# FIXME  patch this configmap
+
+- debug:
+    msg: "rook_ceph_public_network: {{ rook_ceph_public_network }}"
+- debug:
+    msg: "rook_ceph_cluster_network: {{ rook_ceph_cluster_network }}"
+
+- name: Patch configmap rook-config-override if we have secondary network device for the storage
+  kubernetes.core.k8s:
+    state: patched
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+         namespace: "{{ rook_namespace }}"
+         name: rook-config-override
+      data:
+        config: |
+          [global]
+          public network =  {{ rook_ceph_public_network  }} # 10.243.180.0/23
+          cluster network = {{ rook_ceph_cluster_network }} # 172.16.1.0/24 # routes hearbeat,object replication and recoveredy
+          public addr = ""
+          cluster addr = ""
+  when: rook_ceph_server and rook_ceph_public_network|length and rook_ceph_cluster_network|length

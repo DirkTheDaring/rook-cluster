@@ -67,3 +67,6 @@ storage_config_metadata_device: "vdb"
 
 #storage_device_filter: "vd[d-z]"
 #storage_config_metadata_device: "vdc"
+
+rook_ceph_public_network: ""
+rook_ceph_cluster_network: ""
