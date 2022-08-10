@@ -22,13 +22,13 @@
       state: directory
       mode: '0755'
 
-    # dangerous heuristic, but for now no better idea
-  - name: Extract major.minor version
-    set_fact:
-      rook_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"
-      rook_version_major: "{{ helm_chart_version[1:].split('.')[0] | int }}"
-      rook_version_minor: "{{ helm_chart_version[1:].split('.')[1] | int }}"
-    when: rook_basic_version is not defined
+#    # dangerous heuristic, but for now no better idea
+#  - name: Extract major.minor version
+#    set_fact:
+#      rook_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"
+#      rook_version_major: "{{ helm_chart_version[1:].split('.')[0] | int }}"
+#      rook_version_minor: "{{ helm_chart_version[1:].split('.')[1] | int }}"
+#    when: rook_basic_version is not defined
 
   - debug:
       msg: "rook_basic_version: {{ rook_basic_version }}"
@@ -47,17 +47,35 @@
     - rook_version_major|int == 1
     - rook_version_minor|int <= 7
 
-  - name: Set urls for version >= 1.8
+  - name: Set urls for version == 1.8
     set_fact:
       url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
       url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external-management.yaml"
     when:
     - rook_version_major|int == 1
-    - rook_version_minor|int >= 8
+    - rook_version_minor|int == 8
+
+  - name: Set urls for version >= 1.9
+    set_fact:
+      url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
+      url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external.yaml"
+    when:
+    - rook_version_major|int == 1
+    - rook_version_minor|int >= 9
 
   - set_fact:
-      #rook_export_variables: "{{ lookup('file', rook_credentials_dir + '/server-config.sh' ) }}"
       rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config.json' ) }}"
+    when:
+    - rook_version_major|int == 1
+    - rook_version_minor|int <= 8
+
+  - set_fact:
+      rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config-1.9.json' ) }}"
+    when:
+    - rook_version_major|int == 1
+    - rook_version_minor|int >= 9
+
+  - set_fact:
       url_list:
       - "{{ url1 }}"
       - "{{ url2 }}"
@@ -74,6 +92,18 @@
       src:  "client-cluster-create.sh.jinja2"
       dest: "{{ rook_build_dir }}/client-cluster-create.sh"
       mode: '0755'
+    when:
+    - rook_version_major|int == 1
+    - rook_version_minor|int <= 8
+
+  - name: Create script client-cluster-create-1.9.sh
+    ansible.builtin.template:
+      src:  "client-cluster-create-1.9.sh.jinja2"
+      dest: "{{ rook_build_dir }}/client-cluster-create.sh"
+      mode: '0755'
+    when:
+    - rook_version_major|int == 1
+    - rook_version_minor|int >= 9
 
   - name: test if secrets rgw-admin-ops-user and rook-ceph-mon already exist
     ansible.builtin.command:
@@ -82,6 +112,9 @@
       - -c
       - "kubectl get --namespace {{ rook_namespace }} secret rgw-admin-ops-user rook-ceph-mon -o custom-columns=name:metadata.name --no-headers 2>/dev/null ; exit 0"
     register: rook_ceph_secret
+
+  - fail:
+     msg: "intentional"
 
   - name: Run script if secret does not exist
     ansible.builtin.command:

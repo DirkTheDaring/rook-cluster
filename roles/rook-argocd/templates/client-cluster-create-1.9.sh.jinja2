@@ -1,0 +1,56 @@
+#!/usr/bin/bash
+set -e
+DIRNAME=$(dirname "$0")
+cd "$DIRNAME"
+
+
+sed -i 's/rook-ceph-external/{{ rook_namespace }}/g' "{{ url2 | basename }}"
+kubectl -n {{ rook_namespace }} apply -f "{{ url2 | basename }}"
+
+export NAMESPACE={{ rook_namespace }}
+
+{% for item in rook_export_variables -%}
+{% if item.name == "rook-ceph-mon-endpoints" %}
+export ROOK_EXTERNAL_CEPH_MON_DATA={{item.data.data}}
+{% elif item.name == "rook-ceph-mon" %}
+export ROOK_EXTERNAL_FSID={{ item.data.fsid }}
+{% elif item.name == "rook-ceph-operator-creds" %}
+export ROOK_EXTERNAL_USERNAME={{ item.data.userID }}
+export ROOK_EXTERNAL_USER_SECRET={{ item.data.userKey }}
+{% elif item.name == "monitoring-endpoint" %}
+export MONITORING_ENDPOINT={{ item.data.MonitoringEndpoint }}
+export MONITORING_ENDPOINT_PORT={{ item.data.MonitoringPort }}
+{% elif item.name == "rook-csi-rbd-node" %}
+export CSI_RBD_NODE_SECRET={{ item.data.userKey }}
+export CSI_RBD_NODE_SECRET_NAME={{ item.data.userID }}
+{% elif item.name == "rook-csi-rbd-provisioner" %}
+export CSI_RBD_PROVISIONER_SECRET={{ item.data.userKey }}
+export CSI_RBD_PROVISIONER_SECRET_NAME={{ item.data.userID }}
+{% elif item.name == "rook-csi-cephfs-provisioner" %}
+export CSI_CEPHFS_PROVISIONER_SECRET={{ item.data.adminKey }}
+export CSI_CEPHFS_PROVISIONER_SECRET_NAME={{ item.data.adminID }}
+{% elif item.name == "rook-csi-cephfs-node" %}
+export CSI_CEPHFS_NODE_SECRET={{ item.data.adminKey }}
+export CSI_CEPHFS_NODE_SECRET_NAME={{ item.data.adminID }}
+{% elif item.name == "rook-ceph-dashboard-link" %}
+export ROOK_EXTERNAL_DASHBOARD_LINK={{ item.data.userKey }}
+{% elif item.name == "ceph-rbd" %}
+export RBD_POOL_NAME={{ item.data.pool }}
+export RGW_POOL_PREFIX=default
+{% elif item.name == "cephfs" %}
+export CEPHFS_POOL_NAME={{ item.data.pool }}
+export CEPHFS_METADATA_POOL_NAME={{ item.data.fsName }}-metadata
+# CEPHFS_FS_NAME variable triggers creation of storage-class cephfs, when non-zero
+# As the helm chart already creates an storageclasss of the same name skip it
+#export CEPHFS_FS_NAME=ceph-filesystem
+#export CEPHFS_FS_NAME={{ item.data.fsName }}
+{% else %}
+# UNKNOWN: {{ item.name }}={{item.data}}
+{% endif %}
+{% endfor -%}
+
+# import-exernal-cluster.sh
+bash -x "{{ url1 | basename }}"
+
+#kubectl -n {{ rook_namespace }} patch secret rook-ceph-mon --type=json -p='[{"op": "remove", "path": "/data/ceph-secret"}]'
+#kubectl -n {{ rook_namespace }} patch secret rook-ceph-mon --type=json -p='[{"op": "remove", "path": "/data/ceph-username"}]'
