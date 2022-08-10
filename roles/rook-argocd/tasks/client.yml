@@ -1,6 +1,6 @@
 # Fixme we should really make sure that files are downloaded again
 # if there is a new version
-- name: create tmpdir
+- name: Create tmpdir
   block:
   - name: Create temporary build directory
     ansible.builtin.tempfile:
@@ -12,7 +12,7 @@
   when: rook_build_dir is not defined
 
 - block:
-  - name: build dir
+  - name: Build dir
     debug:
       msg: "rook_build_dir: {{ rook_build_dir }}"
 
@@ -22,8 +22,8 @@
       state: directory
       mode: '0755'
 
-    # dangerous heuristic, but fore now no better source
-  - name: extract major.minor version
+    # dangerous heuristic, but for now no better idea
+  - name: Extract major.minor version
     set_fact:
       rook_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"
       rook_version_major: "{{ helm_chart_version[1:].split('.')[0] | int }}"
@@ -39,7 +39,7 @@
   - debug:
       msg: "rook_build_dir: {{ rook_build_dir }}"
 
-  - name: Set urls for version <= 1.8
+  - name: Set urls for version <= 1.7
     set_fact:
       url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/import-external-cluster.sh"
       url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/cluster-external-management.yaml"
@@ -69,7 +69,7 @@
       mode: '0644'
     loop: "{{ url_list }}"
 
-  - name: create script
+  - name: Create script client-cluster-create.sh
     ansible.builtin.template:
       src:  "client-cluster-create.sh.jinja2"
       dest: "{{ rook_build_dir }}/client-cluster-create.sh"
@@ -83,7 +83,7 @@
       - "kubectl get --namespace {{ rook_namespace }} secret rgw-admin-ops-user rook-ceph-mon -o custom-columns=name:metadata.name --no-headers 2>/dev/null ; exit 0"
     register: rook_ceph_secret
 
-  - name: run script if secret does not exist
+  - name: Run script if secret does not exist
     ansible.builtin.command:
       argv:
       -  bash
@@ -92,14 +92,14 @@
     when: rook_ceph_secret.stdout == ""
 
     # otherwise any subsquent kubectl -n <namespace> will get a 404 from kubernetes
-  - name: wait until namespace appears
+  - name: Wait until namespace appears
     ansible.builtin.command:
       argv:
       -  bash
       - -c
       - "while true; do kubectl get namespace {{ rook_namespace }} && break; sleep 3; done"
 
-  - name: wait until rook-ceph-operator appears
+  - name: Wait until rook-ceph-operator appears
     ansible.builtin.command:
       argv:
       -  bash
@@ -110,7 +110,7 @@
           sleep 10
         done
 
-  - name: wait until rook-ceph-operator becomes ready
+  - name: Wait until rook-ceph-operator becomes ready
     ansible.builtin.command:
       argv:
       - kubectl

@@ -6,8 +6,6 @@
     - "while [ -z \"$(kubectl -n {{ rook_namespace }} get cm rook-config-override --no-headers -o custom-columns=name:metadata.name)\"  ]; do sleep 3;done"
   when: rook_ceph_server
 
-# FIXME  patch this configmap
-
 - debug:
     msg: "rook_ceph_public_network: {{ rook_ceph_public_network }}"
 - debug:
@@ -16,6 +14,8 @@
  # bdev_enable_discard: Enables async discard on devices. This option will enable/disable both bdev-enable-discard and bdev-async-discard options in ceph configuration
  # https://opendev.org/openstack/charm-ceph-osd/commit/56495eecbac9652f1340b91c188d84ef18d1dac0
  # https://github.com/rook/rook/issues/6964
+ # Even Proxmox has a comment on this
+ # https://forum.proxmox.com/threads/trim-discard-with-ceph-rbd.77756/
 
 - name: Patch configmap rook-config-override if we have secondary network device for the storage
   kubernetes.core.k8s:
@@ -36,3 +36,4 @@
           bdev_enable_discard = true
           bdev_async_discard = true
   when: rook_ceph_server and rook_ceph_public_network|length and rook_ceph_cluster_network|length
+
