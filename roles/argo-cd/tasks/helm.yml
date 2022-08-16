@@ -11,9 +11,12 @@
     argocd_values_yaml: "{{ lookup('template', 'ldap-values.yaml.jinja2') }}"
   when: argocd_ldap_server != ""
 
-- copy:
+- name: Serialize to /tmp/argocd-values.yaml
+  copy:
     content: "{{ argocd_values_yaml }}"
     dest: "/tmp/argocd-values.yaml"
+    mode: '0664'
+  when: ansible_verbosity > 2
 
 #- fail:
 #   msg: intended
