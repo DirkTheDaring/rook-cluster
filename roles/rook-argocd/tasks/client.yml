@@ -22,14 +22,6 @@
       state: directory
       mode: '0755'
 
-#    # dangerous heuristic, but for now no better idea
-#  - name: Extract major.minor version
-#    set_fact:
-#      rook_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"
-#      rook_version_major: "{{ helm_chart_version[1:].split('.')[0] | int }}"
-#      rook_version_minor: "{{ helm_chart_version[1:].split('.')[1] | int }}"
-#    when: rook_basic_version is not defined
-
   - debug:
       msg: "rook_basic_version: {{ rook_basic_version }}"
   - debug:
@@ -46,6 +38,7 @@
     when:
     - rook_version_major|int == 1
     - rook_version_minor|int <= 7
+    #- helm_chart_version[1:] is version("1.8.0", '<')
 
   - name: Set urls for version == 1.8
     set_fact:
@@ -54,6 +47,8 @@
     when:
     - rook_version_major|int == 1
     - rook_version_minor|int == 8
+    #- helm_chart_version[1:] is version("1.8.0", '>=')
+    #- helm_chart_version[1:] is version("1.9.0", '<' )
 
   - name: Set urls for version >= 1.9
     set_fact:
@@ -62,18 +57,21 @@
     when:
     - rook_version_major|int == 1
     - rook_version_minor|int >= 9
+    #- helm_chart_version[1:] is version("1.9.0", '>=')
 
   - set_fact:
       rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config.json' ) }}"
     when:
     - rook_version_major|int == 1
     - rook_version_minor|int <= 8
+    #- helm_chart_version[1:] is version("1.9.0", '<' )
 
   - set_fact:
       rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config-1.9.json' ) }}"
     when:
     - rook_version_major|int == 1
     - rook_version_minor|int >= 9
+    #- helm_chart_version[1:] is version("1.9.0", '>=' )
 
   - set_fact:
       url_list:
@@ -95,6 +93,7 @@
     when:
     - rook_version_major|int == 1
     - rook_version_minor|int <= 8
+    #- helm_chart_version[1:] is version("1.9.0", '<' )
 
   - name: Create script client-cluster-create-1.9.sh
     ansible.builtin.template:
@@ -104,6 +103,7 @@
     when:
     - rook_version_major|int == 1
     - rook_version_minor|int >= 9
+    #- helm_chart_version[1:] is version("1.9.0", '>=' )
 
   - name: test if secrets rgw-admin-ops-user and rook-ceph-mon already exist
     ansible.builtin.command:
