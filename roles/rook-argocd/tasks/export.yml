@@ -48,9 +48,7 @@
     - rook_job.stdout == ""
   when:
   - rook_ceph_server
-  - rook_version_major|int == 1
-  - rook_version_minor|int <= 8
-  #- helm_chart_version[1:] is version("1.9.0", '<' )
+  - helm_chart_version[1:] is version("1.9.0", '<' )
 
 - block:
   - debug:
@@ -113,7 +111,5 @@
       dest:    "{{ rook_credentials_dir }}/config-1.9.json"
   when:
   - rook_ceph_server
-  - rook_version_major|int == 1
-  - rook_version_minor|int >= 9
-  #- helm_chart_version[1:] is version("1.9.0", '>=' )
+  - helm_chart_version[1:] is version("1.9.0", '>=' )
 

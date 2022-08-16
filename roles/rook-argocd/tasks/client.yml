@@ -36,42 +36,32 @@
       url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/import-external-cluster.sh"
       url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/cluster-external-management.yaml"
     when:
-    - rook_version_major|int == 1
-    - rook_version_minor|int <= 7
-    #- helm_chart_version[1:] is version("1.8.0", '<')
+    - helm_chart_version[1:] is version("1.8.0", '<')
 
   - name: Set urls for version == 1.8
     set_fact:
       url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
       url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external-management.yaml"
     when:
-    - rook_version_major|int == 1
-    - rook_version_minor|int == 8
-    #- helm_chart_version[1:] is version("1.8.0", '>=')
-    #- helm_chart_version[1:] is version("1.9.0", '<' )
+    - helm_chart_version[1:] is version("1.8.0", '>=')
+    - helm_chart_version[1:] is version("1.9.0", '<' )
 
   - name: Set urls for version >= 1.9
     set_fact:
       url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
       url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external.yaml"
     when:
-    - rook_version_major|int == 1
-    - rook_version_minor|int >= 9
-    #- helm_chart_version[1:] is version("1.9.0", '>=')
+    - helm_chart_version[1:] is version("1.9.0", '>=')
 
   - set_fact:
       rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config.json' ) }}"
     when:
-    - rook_version_major|int == 1
-    - rook_version_minor|int <= 8
-    #- helm_chart_version[1:] is version("1.9.0", '<' )
+    - helm_chart_version[1:] is version("1.9.0", '<' )
 
   - set_fact:
       rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config-1.9.json' ) }}"
     when:
-    - rook_version_major|int == 1
-    - rook_version_minor|int >= 9
-    #- helm_chart_version[1:] is version("1.9.0", '>=' )
+    - helm_chart_version[1:] is version("1.9.0", '>=' )
 
   - set_fact:
       url_list:
@@ -91,9 +81,7 @@
       dest: "{{ rook_build_dir }}/client-cluster-create.sh"
       mode: '0755'
     when:
-    - rook_version_major|int == 1
-    - rook_version_minor|int <= 8
-    #- helm_chart_version[1:] is version("1.9.0", '<' )
+    - helm_chart_version[1:] is version("1.9.0", '<' )
 
   - name: Create script client-cluster-create-1.9.sh
     ansible.builtin.template:
@@ -101,9 +89,7 @@
       dest: "{{ rook_build_dir }}/client-cluster-create.sh"
       mode: '0755'
     when:
-    - rook_version_major|int == 1
-    - rook_version_minor|int >= 9
-    #- helm_chart_version[1:] is version("1.9.0", '>=' )
+    - helm_chart_version[1:] is version("1.9.0", '>=' )
 
   - name: test if secrets rgw-admin-ops-user and rook-ceph-mon already exist
     ansible.builtin.command:
