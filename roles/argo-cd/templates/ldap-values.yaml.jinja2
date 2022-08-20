@@ -103,7 +103,7 @@ server:
       staticClients:
 {% for item in argocd_sso_list %}
       - name: {{ item.name }}
-        id:   argocd-repo-creds-{{ item.id }}
+        id:   {{ item.id }}
         redirectURIs:
 {% for url in item.redirectURIs %}
         - {{ url }}
@@ -121,7 +121,7 @@ dex:
   - name: {{ item.secretEnv }}
     valueFrom:
       secretKeyRef:
-        name: argocd-repo-creds-{{ item.id }}
+        name: {{ item.id }}
         key:  client-secret
 {% endfor %}
 
