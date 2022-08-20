@@ -1,5 +1,11 @@
 #
 # https://artifacthub.io/packages/helm/bitnami/minio?modal=security-report
+# https://github.com/bitnami/charts/tree/master/bitnami/minio
+#
+image:
+  repository: {{ minio_image_name | default('')  }}
+  tag: {{ minio_image_tag | default('') }}
+  debug: {{ minio_debug | default('') }}
 
 {% if 'aws_access_key_id' in minio_credentials %}
 auth:
@@ -15,16 +21,23 @@ ingress:
 
 extraEnvVars: {{ extraEnvVars }}
 
-
 apiIngress:
   enabled: true
   hostname: "{{ minio_api_fqdn }}"
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
+    traefik.ingress.kubernetes.io/router.tls.domains.0.main: "{{ minio_api_fqdn }}"
+    traefik.ingress.kubernetes.io/router.tls.domains.0.sans: "*.{{ minio_api_fqdn }}"
   extraHosts:
   - name: "*.{{ minio_api_fqdn }}"
     path: "/"
 
 persistence:
   storageClass: "{{ minio_persistence_storage_class }}"
+  # According to docs ReadWritMany
+  accessModes: [ "ReadWriteMany" ]
+
+provisioning:
+  {{ provisioning | to_nice_yaml(indent=2, width=4096)| indent( width=2) }}
