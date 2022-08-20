@@ -7,5 +7,5 @@
 - import_tasks: wait-for-namespace.yml
 - import_tasks: wait-for-single-pod.yml
 - import_tasks: wait-for-service-available.yml
-- import_tasks: buckets.yml
+#- import_tasks: buckets.yml
 - import_tasks: credentials.yml

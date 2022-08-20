@@ -13,7 +13,9 @@
     - --namespace
     - "{{ minio_namespace }}"
     - get 
-    - pods
+    - pod
+    - -l
+    - app.kubernetes.io/name=minio,job-name!=minio-provisioning
     - -o
     - custom-columns=name:metadata.name
     - --no-headers 
