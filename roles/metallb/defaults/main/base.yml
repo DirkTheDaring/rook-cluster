@@ -41,3 +41,5 @@ metallb_force_string_dict:
 
 # Metallb Pool
 metallb_pool_address:  "192.168.0.0/16"
+
+metallb_psp_enabled: false

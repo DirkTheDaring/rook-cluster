@@ -9,3 +9,6 @@ configInline:
     # which have the following annotation:
     #
     # metallb.universe.tf/address-pool: loadbalanced
+
+psp:
+  create: {{ metallb_psp_enabled }}
