@@ -1,0 +1,7 @@
+---
+# fqdn  fully qualified domain name
+
+storage1_fqdn: "{{ storage1_hostname }}{{ '' if storage1_subdomain == '' else '.' + storage1_subdomain }}.{{ storage1_domain }}"
+
+storage1_credentials_dir:         "{{ storage1_root_credentials_dir }}/storage1"
+storage1_storage_credentials_dir: "{{ storage1_storage_root_credentials_dir }}/storage1"

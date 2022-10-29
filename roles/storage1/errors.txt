@@ -1,0 +1,19 @@
+export ROOK_EXTERNAL_FSID=
+unable to get monitor info from DNS SRV with service name: ceph-mon
+[errno 2] RADOS object not found (error connecting to the cluster)
+unable to get monitor info from DNS SRV with service name: ceph-mon
+2021-10-10T08:53:11.726+0000 7f954a464700 -1 failed for service _ceph-mon._tcp
+2021-10-10T08:53:11.726+0000 7f954a464700 -1 monclient: get_monmap_and_config cannot identify monitors to contact
+[errno 2] RADOS object not found (error connecting to the cluster)
+export ROOK_EXTERNAL_ADMIN_SECRET=
+unable to get monitor info from DNS SRV with service name: ceph-mon
+2021-10-10T08:53:11.893+0000 7f38ae7df340 -1 failed for service _ceph-mon._tcp
+2021-10-10T08:53:11.893+0000 7f38ae7df340 -1 monclient: get_monmap_and_config cannot identify monitors to contact
+failed to fetch mon config (--no-mon-config to skip)
+export RGW_ADMIN_OPS_USER_ACCESS_KEY=
+unable to get monitor info from DNS SRV with service name: ceph-mon
+2021-10-10T08:53:11.960+0000 7f9449b02340 -1 failed for service _ceph-mon._tcp
+2021-10-10T08:53:11.960+0000 7f9449b02340 -1 monclient: get_monmap_and_config cannot identify monitors to contact
+failed to fetch mon config (--no-mon-config to skip)
+export RGW_ADMIN_OPS_USER_SECRET_KEY=
+export ROOK_EXTERNAL_CEPH_MON_DATA=

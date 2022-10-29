@@ -1,0 +1,39 @@
+- name: wait until configmap rook-config-override appears
+  ansible.builtin.command:
+    argv:
+    - bash
+    - -c
+    - "while [ -z \"$(kubectl -n {{ storage1_namespace }} get cm rook-config-override --no-headers -o custom-columns=name:metadata.name)\"  ]; do sleep 3;done"
+  when: storage1_ceph_server
+
+- debug:
+    msg: "storage1_ceph_public_network: {{ storage1_ceph_public_network }}"
+- debug:
+    msg: "storage1_ceph_cluster_network: {{ storage1_ceph_cluster_network }}"
+
+ # bdev_enable_discard: Enables async discard on devices. This option will enable/disable both bdev-enable-discard and bdev-async-discard options in ceph configuration
+ # https://opendev.org/openstack/charm-ceph-osd/commit/56495eecbac9652f1340b91c188d84ef18d1dac0
+ # https://github.com/rook/rook/issues/6964
+ # Even Proxmox has a comment on this
+ # https://forum.proxmox.com/threads/trim-discard-with-ceph-rbd.77756/
+
+- name: Patch configmap rook-config-override if we have secondary network device for the storage
+  kubernetes.core.k8s:
+    state: patched
+    definition:
+      apiVersion: v1
+      kind: ConfigMap
+      metadata:
+         namespace: "{{ storage1_namespace }}"
+         name: rook-config-override
+      data:
+        config: |
+          [global]
+          public network =  {{ storage1_ceph_public_network  }} # 10.243.180.0/23
+          cluster network = {{ storage1_ceph_cluster_network }} # 172.16.1.0/24 # routes hearbeat,object replication and recoveredy
+          public addr = ""
+          cluster addr = ""
+          bdev_enable_discard = true
+          bdev_async_discard = true
+  when: storage1_ceph_server and storage1_ceph_public_network|length and storage1_ceph_cluster_network|length
+

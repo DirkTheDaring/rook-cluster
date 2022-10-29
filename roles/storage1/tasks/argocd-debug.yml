@@ -1,0 +1,24 @@
+- block:
+  - set_fact:
+      storage1_application:         "{{ lookup('template', 'application.yaml.jinja2')         | from_yaml }}"
+      storage1_cluster_application: "{{ lookup('template', 'cluster-application.yaml.jinja2') | from_yaml }}"
+      storage1_cluster_export:      "{{ lookup('template', 'export-job.yaml.jinja2')          }}"
+
+  - name: show templating results
+    debug:
+      msg: "{{ storage1_application }}"
+
+  - name: show templating results
+    debug:
+      msg: "{{ storage1_cluster_application }}"
+  - copy:
+      content: "{{ storage1_cluster_export }}"
+      dest: /tmp/x
+
+  - debug:
+      msg: "storage1_ceph_server: {{ storage1_ceph_server }}"
+  - fail:
+      msg: intended
+  when: false
+
+

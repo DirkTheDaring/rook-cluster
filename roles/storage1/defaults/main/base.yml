@@ -1,0 +1,74 @@
+# DNS
+storage1_domain:       "example.com"
+storage1_subdomain:    ""
+storage1_hostname:     "storage1"
+
+# Deployment Method: argocd, helm
+storage1_deployment:    "argocd"
+
+# Kubernetes
+storage1_namespace:    "storage1"
+
+# Argocd
+storage1_argocd_project:            "default"
+storage1_argocd_namespace:          "argo-cd"
+storage1_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+storage1_helm_release_name:  storage1
+
+storage1_helm_repo_name:     rook-release
+storage1_helm_repo_url:      https://charts.rook.io/release
+storage1_helm_chart_name:    rook-ceph
+storage1_helm_chart_version: ""        # empty strings means pick latest
+#storage1_helm_chart_version: "~^1\.10\."    # pick by regular expression
+#storage1_helm_chart_version: "1.10.3" # set absolute version
+
+# Github Repository
+storage1_releases_url:      "https://api.github.com/repos/rook/rook/releases"
+storage1_releases_jmespath: "[].tag_name"
+#storage1_release: "~^v1\.10\." # pick first match of regular expression
+#storage1_release: "v1.10.3"
+
+# Configuration Database
+storage1_root_credentials_dir: "{{ playbook_dir }}/credentials"
+storage1_force_string_dict:
+#  path_list:
+#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+#  - '^env\['
+storage1_chart_cluster_name:         "rook-release/rook-ceph-cluster"
+storage1_chart_cluster_release_name: "rook-ceph-cluster"
+
+storage1_default_storage_class: ""
+#storage1_default_storage_class: "rook-cephfs-delete"
+
+# CSI
+storage1_csi_enabled: true
+
+# rook server or rook client (== to another rook server, or "external")
+storage1_ceph_server: true
+
+# server settings
+storage1_build_dir: "{{ playbook_dir }}/build"
+storage1_ceph_mon_max_pg_per_osd: 568
+storage1_ceph_quirk: false
+
+storage1_storage_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+# Deployment argocd or helm
+#storage1_deployment: "argocd"
+storage1_deployment: "helm"
+
+storage1_ceph_cluster_data_dir_host_path: "/var/lib/rook"
+storage1_storage_device_filter: "vd[c-z]"
+storage1_storage_config_metadata_device: "sda"
+
+#storage_device_filter: "vd[d-z]"
+#storage_config_metadata_device: "vdc"
+
+storage1_ceph_public_network: ""
+storage1_ceph_cluster_network: ""
+
+storage1_cluster_id: "storage1"

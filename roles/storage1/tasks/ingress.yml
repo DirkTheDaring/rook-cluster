@@ -1,0 +1,4 @@
+- name: create ingress
+  kubernetes.core.k8s:
+    template: ingress.yaml.jinja2
+  when: storage1_ceph_server

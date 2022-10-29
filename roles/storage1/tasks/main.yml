@@ -1,0 +1,21 @@
+- import_tasks: helm-chart-version.yml
+- import_tasks: set-version.yml
+- import_tasks: release-version.yml
+
+- import_tasks: argocd-debug.yml   # if storage1_deployment == "argocd"
+- import_tasks: argocd.yml         # if storage1_deployment == "argocd"
+- import_tasks: helm.yml
+- import_tasks: wait-for-namespace.yml
+- import_tasks: wait-for-pod-by-label.yml
+
+- import_tasks: cluster-argocd.yml  # only runs for server if storage1_deployment == "argocd"
+- import_tasks: cluster-helm.yml    # only runs for server if storage1_deployment == "helm"
+- import_tasks: ingress.yml         # only runs for server
+- import_tasks: wait-for-cm-rook-config-override.yml # only runs for server
+- import_tasks: wait-for-pod-rados-gw.yml # # only runs for server
+
+- import_tasks: export.yml          # only runs for server
+- import_tasks: credentials.yml     # only runs for server
+
+- import_tasks: client.yml           # only client
+- import_tasks: storageclass.yml

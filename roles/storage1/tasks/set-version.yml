@@ -1,0 +1,25 @@
+# dangerous heuristic, but for now no better idea
+- name: Extract major.minor version
+  set_fact:
+    storage1_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"
+    storage1_version_major: "{{ helm_chart_version[1:].split('.')[0] | int }}"
+    storage1_version_minor: "{{ helm_chart_version[1:].split('.')[1] | int }}"
+  when: storage1_basic_version is not defined
+
+- name: Show Major.Minor Version 
+  debug:
+    msg: "storage1_basic_version: {{ storage1_basic_version }}"
+    verbosity: 1
+- name: Show Major Version
+  debug:
+    msg: "storage1_version_major: {{ storage1_version_major }}"
+    verbosity: 1
+- name: Show Minor Version
+  debug:
+    msg: "storage1_version_minor  {{ storage1_version_minor  }}"
+    verbosity: 1
+- name: Show storage1_build_dir 
+  debug:
+    msg: "storage1_build_dir: {{ storage1_build_dir }}"
+    verbosity: 1
+

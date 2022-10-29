@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ storage1_argocd_namespace }}
+  # we have already a running system which defaults to "rook-ceph". Therefore must not be changed
+  name:      rook-ceph
+spec:
+  destination:
+    server:    {{ storage1_argocd_destination_server }}
+    namespace: {{ storage1_namespace }}
+  project: {{ storage1_argocd_project }}
+  source:
+    repoURL:        {{ storage1_helm_repo_url }}
+    chart:          {{ storage1_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+#  storage1_application_params 
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
