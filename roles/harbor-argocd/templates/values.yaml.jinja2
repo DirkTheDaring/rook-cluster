@@ -9,9 +9,19 @@ persistence:
       accessMode: ReadWriteMany
       size: 5Gi
     jobservice:
+      # begin < 1.10
       storageClass: {{ harbor_persistence_jobservice_storage_class | default(harbor_persistence_storage_class) }}
       accessMode: ReadWriteMany
       size: 1Gi
+      # end  < 1.10
+      jobLog:
+        storageClass: {{ harbor_persistence_jobservice_storage_class | default(harbor_persistence_storage_class) }}
+        accessMode: ReadWriteOnce
+        size: 1Gi
+      scanDataExports:
+        storageClass: {{ harbor_persistence_jobservice_scan_data_storage_class | default(harbor_persistence_storage_class) }}
+        accessMode: ReadWriteOnce
+        size: 1Gi
     database:
       storageClass: {{ harbor_persistence_database_storage_class| default(harbor_persistence_storage_class) }}
       accessMode: ReadWriteOnce
