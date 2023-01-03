@@ -20,4 +20,7 @@ storageClass:
 leaderElection:
   enabled: {{ nfs.leader_election.enabled if 'enabled' in nfs.leader_election }}
 {% endif %}
+{% if 'tolerations' in nfs %}
+tolerations: {{ nfs.tolerations }}
+{% endif %}
 
