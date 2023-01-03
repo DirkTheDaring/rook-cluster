@@ -35,3 +35,12 @@
   debug:
     msg: '{{ helm_chart_version }}'
     verbosity: 1
+
+- name: metallb helm chart version
+  set_fact:
+    metallb_helm_chart_version_canonical: "{{ helm_chart_version }}"
+
+- name: dump fact helm_chart_version_canonical
+  debug:
+    msg: '{{ metallb_helm_chart_version_canonical }}'
+    verbosity: 1

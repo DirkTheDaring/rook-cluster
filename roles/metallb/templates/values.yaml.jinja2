@@ -1,3 +1,5 @@
+# {{ metallb_helm_chart_version_canonical }}
+{% if metallb_helm_chart_version_canonical is version("1.13.0", '>=' ) %}
 configInline:
   address-pools:
   - name:     loadbalanced
@@ -12,3 +14,7 @@ configInline:
 
 psp:
   create: {{ metallb_psp_enabled }}
+{% else %}
+xxx:
+  test
+{% endif %}

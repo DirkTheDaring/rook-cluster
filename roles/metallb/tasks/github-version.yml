@@ -13,3 +13,4 @@
   debug:
     msg: '{{ github_project_version }}'
     verbosity: 1
+

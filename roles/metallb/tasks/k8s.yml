@@ -1,0 +1,11 @@
+- set_fact:
+    file_list:
+    - ipaddresspool.yaml.jinja2
+    - l2advertisement.yaml.jinja2
+  when: metallb_helm_chart_version_canonical is version("1.13.0", '<' ) 
+
+- name: apply operator
+  kubernetes.core.k8s:
+    template: "{{ item }}"
+  loop: "{{ file_list }}"
+  when: metallb_helm_chart_version_canonical is version("1.13.0", '<' ) 
