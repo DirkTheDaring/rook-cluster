@@ -59,9 +59,9 @@ extraVolumeMounts:
 auth:
   adminUser:          {{ keycloak_config.username if 'username' in keycloak_config }}
   adminPassword:      {{ keycloak_config.password if 'password' in keycloak_config }}
-  managementUser:     {{ keycloak_management_config.username if 'username' in keycloak_management_config }}
-  managementPassword: {{ keycloak_management_config.password if 'password' in keycloak_management_config }}
-postgresql:
-  postgresqlUsername: {{ keycloak_postgresql_config.username if 'username' in keycloak_postgresql_config }}
-  postgresqlPassword: {{ keycloak_postgresql_config.password if 'password' in keycloak_postgresql_config }}
 
+postgresql:
+  auth:
+    postgresPassword: {{ keycloak_postgresql_config.admin_username if 'admin_username' in keycloak_postgresql_config }} 
+    username: {{ keycloak_postgresql_config.username if 'username' in keycloak_postgresql_config }}
+    password: {{ keycloak_postgresql_config.password if 'password' in keycloak_postgresql_config }}
