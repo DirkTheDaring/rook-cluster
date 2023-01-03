@@ -96,11 +96,11 @@ def project_version(config):
         regex = version[1:]
     elif version != "":
         return version
- 
+
     project_name = config[GITHUB_PROJECT_NAME]
     prefix = "https://api.github.com/repos/"
     if project_name.startswith(prefix):
-        array = project_name[len(prefix):].split("/") 
+        array = project_name[len(prefix):].split("/")
         if len(array) > 1:
             project_name = array[0] + "/" + array[1]
         else:
@@ -126,15 +126,18 @@ def project_version(config):
         repos=json.load(fp);
 
     versions=[]
+    # strip addeded names, as we found an occation in v0.13.7 of metallb which
+    # has a leading space
+
     if regex != "":
         regexc = re.compile(regex)
         for repo in repos:
             name = repo['name']
             if regexc.match(name):
-                 versions.append(name)
+                 versions.append(name.strip())
     else:
         for repo in repos:
-            versions.append(repo['name'])
+            versions.append(repo['name'].strip())
 
     if len(versions) == 0:
         return ""
