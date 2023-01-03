@@ -5,15 +5,17 @@
       name:     "{{ rook_helm_repo_name }}"
       repo_url: "{{ rook_helm_repo_url }}"
 
+  - name: Create values.yaml content if verbosity > 2
+    ansible.builtin.template:
+      src:  "cluster-values.yaml.jinja2"
+      dest: "/tmp/rook-cluster-values.yaml"
+      mode: '0664'
+    when: ansible_verbosity > 2
+
   - name: render values.yaml
     set_fact:
       rook_cluster_values_yaml: "{{ lookup('template', 'cluster-values.yaml.jinja2') }}"
 
-#  - name: copy values.yaml for debugging
-#    copy:
-#      content: "{{ rook_cluster_values_yaml }}"
-#      dest: "/tmp/rook-cluster-values.yaml"
-#    when: false
 
   - name: Deploy helm chart
     kubernetes.core.helm:

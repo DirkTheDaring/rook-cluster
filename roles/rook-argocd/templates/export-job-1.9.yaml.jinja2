@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: export-vars-for-external
-  namespace: rook-ceph # namespace:cluster
+  namespace: {{ rook_namespace }} # namespace:cluster
   labels:
     app: export-vars-for-external
 spec:
@@ -43,7 +43,30 @@ spec:
             - |
               set -e
               curl -o /tmp/create-external-cluster-resources.py -sL https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/create-external-cluster-resources.py
-              python3 /tmp/create-external-cluster-resources.py --rbd-data-pool-name ceph-filesystem-data0 --format json 
+              JSON=$(python3 /tmp/create-external-cluster-resources.py --rbd-data-pool-name ceph-filesystem-data0 --format json)
+
+              ceph mgr module disable nfs
+              # Source: https://docs.ceph.com/en/latest/mgr/orchestrator/#configuring-the-orchestrator-cli
+              ceph mgr module enable rook
+              ceph orch set backend rook
+
+              MON_MAX_PG_PER_OSD_OLD=$(ceph config get mon mon_max_pg_per_osd)
+              if [ $MON_MAX_PG_PER_OSD_OLD -gt 250 ]; then
+                  MON_MAX_PG_PER_OSD_NEW=$MON_MAX_PG_PER_OSD_OLD
+                  #if [ -n "rook_ceph_mon_max_pg_per_osd" ]; then
+                  #fi
+                  ceph config set mon mon_max_pg_per_osd $MON_MAX_PG_PER_OSD_NEW
+                  MON_MAX_PG_PER_OSD_NEW=$(ceph config get mon mon_max_pg_per_osd)
+                  echo "- mon_max_pg_per_osd: $MON_MAX_PG_PER_OSD_OLD"
+                  echo "+ mon_max_pg_per_osd: $MON_MAX_PG_PER_OSD_NEW"
+              fi
+              # All after ###autogen will be parsed as json
+              echo "--- json output starts after this line"
+              echo $JSON|jq
+              #JSON1=$(echo $JSON | jq '.[]|select(.kind=="Secret")|select(.data.userID)|select(.data.userID!="ceph-dashboard-link")|(.data.userID): .data.userKey }| jq -s add')
+              #JSON2=$(echo $JSON | jq '.[]|select(.kind=="Secret")|select(.data.adminID)|{ (.data.adminID): .data.adminKey }| jq -s add)'
+              #echo $JSON1 $JSON2|jq -s add
+
       volumes:
         - name: mon-endpoint-volume
           configMap:

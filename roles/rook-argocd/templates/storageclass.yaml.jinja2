@@ -7,16 +7,16 @@ metadata:
     {{ item.annotations | to_yaml(indent=4) }}
 {% endif  %}
 parameters:
-  clusterID: rook-ceph
+  clusterID: {{ rook_cluster_id }}
   csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
-  csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+  csi.storage.k8s.io/controller-expand-secret-namespace: {{ rook_namespace }}
   csi.storage.k8s.io/fstype: ext4
   csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
-  csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+  csi.storage.k8s.io/node-stage-secret-namespace: {{ rook_namespace }}
   csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
-  csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+  csi.storage.k8s.io/provisioner-secret-namespace: {{ rook_namespace }}
   fsName: ceph-filesystem
   pool: ceph-filesystem-data0
-provisioner: rook-ceph.cephfs.csi.ceph.com
+provisioner: {{ rook_cluster_id }}.cephfs.csi.ceph.com
 reclaimPolicy: {{ item.reclaimPolicy }}
 volumeBindingMode: Immediate

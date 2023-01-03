@@ -5,11 +5,16 @@
       name:     "{{ rook_helm_repo_name }}"
       repo_url: "{{ rook_helm_repo_url }}"
 
+  - name: Create values.yaml content if verbosity > 2
+    ansible.builtin.template:
+      src:  "values.yaml.jinja2"
+      dest: "/tmp/rook-values.yaml"
+      mode: '0664'
+    when: ansible_verbosity > 2
 
   - name: render values.yaml
     set_fact:
       rook_values_yaml: "{{ lookup('template', 'values.yaml.jinja2') }}"
-
 
   - name: Deploy helm chart
     kubernetes.core.helm:

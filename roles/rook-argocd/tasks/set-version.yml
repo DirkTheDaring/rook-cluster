@@ -1,4 +1,4 @@
-  # dangerous heuristic, but for now no better idea
+# dangerous heuristic, but for now no better idea
 - name: Extract major.minor version
   set_fact:
     rook_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"

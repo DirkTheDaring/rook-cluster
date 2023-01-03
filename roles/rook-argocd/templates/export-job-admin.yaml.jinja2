@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: export-admin
-  namespace: rook-ceph # namespace:cluster
+  namespace: {{ rook_namespace }} # namespace:cluster
   labels:
     app:  export-admin
 spec:

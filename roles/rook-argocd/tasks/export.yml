@@ -1,5 +1,5 @@
 - block:
-  # kubectl -n rook-ceph get job export-vars-for-external --no-headers --ignore-not-found -o custom-columns=NAME:metadata.name
+  # kubectl -n {{ rook_namespace }} get job export-vars-for-external --no-headers --ignore-not-found -o custom-columns=NAME:metadata.name
   - name: Check if job exists
     ansible.builtin.command:
       argv:
@@ -38,7 +38,7 @@
       argv:
       -  bash
       - -c
-      - "kubectl -n {{ rook_namespace }} get  pod -l job-name=export-vars-for-external -o custom-columns=NAME:metadata.name --no-headers | xargs kubectl -n {{ rook_namespace }} logs | awk '{ if ( f==1) {print }} /^### AUTOGEN/ { f=1 }'"
+      - "kubectl -n {{ rook_namespace }} get  pod -l job-name=export-vars-for-external -o custom-columns=NAME:metadata.name --no-headers | xargs kubectl -n {{ rook_namespace }} logs | awk '{ if ( f==1) {print }} /^--- json/ { f=1 }'"
     register: rook_export_result
   - name: Create config.json in rook_credentials_dir
     ansible.builtin.copy:
@@ -102,7 +102,7 @@
       argv:
       -  bash
       - -c
-      - "kubectl -n {{ rook_namespace }} get  pod -l job-name=export-vars-for-external -o custom-columns=NAME:metadata.name --no-headers | xargs kubectl -n {{ rook_namespace }} logs"
+      - "kubectl -n {{ rook_namespace }} get  pod -l job-name=export-vars-for-external -o custom-columns=NAME:metadata.name --no-headers | xargs kubectl -n {{ rook_namespace }} logs| awk '{ if ( f==1) {print }} /^--- json/ { f=1 }'"
     register: rook_export_result
 
   - name: Create config.json in rook_credentials_dir

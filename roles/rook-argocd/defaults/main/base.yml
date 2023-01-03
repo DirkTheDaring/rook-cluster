@@ -62,11 +62,13 @@ rook_storage_root_credentials_dir: "{{ playbook_dir }}/credentials"
 rook_deployment: "helm"
 
 rook_ceph_cluster_data_dir_host_path: "/var/lib/rook"
-storage_device_filter: "vd[c-z]"
-storage_config_metadata_device: "vdb"
+rook_storage_device_filter: "vd[c-z]"
+rook_storage_config_metadata_device: "sda"
 
 #storage_device_filter: "vd[d-z]"
 #storage_config_metadata_device: "vdc"
 
 rook_ceph_public_network: ""
 rook_ceph_cluster_network: ""
+
+rook_cluster_id: "rook"
