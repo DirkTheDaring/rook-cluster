@@ -9,9 +9,9 @@ velero_fqdn:                  "{{ velero_hostname }}{{ '' if velero_subdomain ==
 # https://hub.docker.com/r/velero/velero/tags?page=1&ordering=last_updated
 velero_values_image_tag: ""
 # https://hub.docker.com/r/velero/velero-plugin-for-aws/tags?page=1&ordering=last_updated
-velero_init_container_aws_image: ""
+velero_init_container_aws_image: "velero/velero-plugin-for-aws:v1.5.2"
 # https://hub.docker.com/r/velero/velero-plugin-for-csi/tags?page=1&ordering=last_updated
-velero_init_container_csi_image: ""
+velero_init_container_csi_image: "velero/velero-plugin-for-csi:v0.3.2"
 velero_configuration_backup_storage_location_bucket: prod1
 velero_configuration_backup_storage_location_config_region: minio
 velero_configuration_backup_storage_location_config_s3_url:        https://minio-api.{{ velero_domain }}
