@@ -18,5 +18,5 @@ velero_configuration_backup_storage_location_config_s3_url:        https://minio
 velero_configuration_backup_storage_location_config_s3_public_url: https://minio-api.{{ velero_domain }}
 velero_configuration_log_level: debug
 # https://hub.docker.com/r/velero/velero-restic-restore-helper/tags?page=1&ordering=last_updated
-velero_config_maps_restic_restore_action_config_data_image: ""
+velero_config_maps_restic_restore_action_config_data_image: "velero/velero-restore-helper:v1.10.0"
 velero_kubectl_image_tag: ""
