@@ -13,12 +13,12 @@ image:
   pullPolicy: IfNotPresent
   repository: velero/velero
   # https://hub.docker.com/r/velero/velero/tags?page=1&ordering=last_updated
-  tag: "{{ velero_values_image_tag }}"
+  tag: {{ velero_values_image_tag }}
 
 initContainers:
   - name: velero-plugin-for-aws
     # https://hub.docker.com/r/velero/velero-plugin-for-aws/tags?page=1&ordering=last_updated
-    image: "{{ velero_init_container_aws_image }}"
+    image: {{ velero_init_container_aws_image }}
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - mountPath: /target
@@ -26,7 +26,7 @@ initContainers:
 
   - name: velero-plugin-for-csi
     # https://hub.docker.com/r/velero/velero-plugin-for-csi/tags?page=1&ordering=last_updated
-    image: "{{ velero_init_container_csi_image }}"
+    image: {{ velero_init_container_csi_image }}
     imagePullPolicy: IfNotPresent
     volumeMounts:
       - mountPath: /target
@@ -52,16 +52,16 @@ credentials:
   extraEnvVars: {}
 snapshotsEnabled: true
 configMaps:
-  restic-restore-action-config:
+  fs-restore-action-config:
     labels:
       velero.io/plugin-config: ""
-      velero.io/restic: RestoreItemAction
+      velero.io/pod-volume-restore: RestoreItemAction
     data:
       # https://hub.docker.com/r/velero/velero-restic-restore-helper/tags?page=1&ordering=last_updated
-      image: "{{ velero_config_maps_restic_restore_action_config_data_image }}"
+      image: {{ velero_config_maps_restic_restore_action_config_data_image }}
 
-deployRestic: true
+deployNodeAgent: true
 kubectl:
   image:
-    tag: "{{ velero_kubectl_image_tag }}"
+    tag: {{ velero_kubectl_image_tag }}
 
