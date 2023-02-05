@@ -1,8 +1,11 @@
 # https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+csi:
+  enabled: "true"
 injector:
   image:
     repository: "hashicorp/vault-k8s"
     tag: "0.13.1"
+
 server:
   ingress:
     annotations:
@@ -36,6 +39,22 @@ server:
   auditStorage:
     enabled: "true"
     storageClass: "{{ vault_auditStorage_storage_class }}"
+
+  readinessProbe:
+    enabled: true
+    path: /v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204
+
+#  postStart:
+#    - /bin/sh
+#    - -ec
+#    - >
+#      sleep 5;
+#      echo "path \"/*\" { capabilities = [\"create\", \"read\", \"update\", \"delete\", \"list\",\"sudo\"]}" | vault policy write  vault-admin -;
+#      vault auth enable -tls-skip-verify -path prod1-admin kubernetes ;
+#      vault write -tls-skip-verify auth/prod1-admin/config kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443" token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt issuer="https://kubernetes.default.svc.cluster.local";
+#      vault write -tls-skip-verify auth/prod1-admin/role/vault-admin bound_service_account_names=default bound_service_account_namespaces=vault-admin policies=vault-admin ttl=1h
+  
+
 ui:
   enabled: "true"
   serviceType: "ClusterIP"

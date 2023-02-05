@@ -6,6 +6,7 @@ metadata:
   annotations: 
     {{ item.annotations | to_yaml(indent=4) }}
 {% endif  %}
+
 parameters:
   clusterID: {{ rook_cluster_id }}
   csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
@@ -20,3 +21,4 @@ parameters:
 provisioner: {{ rook_cluster_id }}.cephfs.csi.ceph.com
 reclaimPolicy: {{ item.reclaimPolicy }}
 volumeBindingMode: Immediate
+allowVolumeExpansion: true

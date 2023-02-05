@@ -23,9 +23,9 @@ spec:
       - name:  cephClusterSpec.storage.useAllDevices
         value: "false"
       - name:  cephClusterSpec.storage.deviceFilter
-        value: "vd[c-z]"
+        value: "vd[d-z]"
       - name:  cephClusterSpec.storage.config.metadataDevice
-        value: "vdb"
+        value: "vdc"
       - name:  cephClusterSpec.placement.mon.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].key
         value: node-role.kubernetes.io/ceph-monitor
       - name:  cephClusterSpec.placement.mon.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.nodeSelectorTerms[0].matchExpressions[0].operator

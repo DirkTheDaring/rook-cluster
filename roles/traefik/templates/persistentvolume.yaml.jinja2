@@ -10,7 +10,7 @@ metadata:
 
 spec:
   accessModes:
-  - ReadWriteMany
+  - {{ traefik_persistent_volume_access_modes |default('ReadWriteMany') }}
   capacity:
     storage: 128Mi
   claimRef:

@@ -35,5 +35,16 @@
           cluster addr = ""
           bdev_enable_discard = true
           bdev_async_discard = true
+          # https://red-hat-storage.github.io/ocs-training/training/ocs4/ocs4-additionalfeatures-override.html
+          # mon_osd_full_ratio = .85
+          # mon_osd_backfillfull_ratio = .80
+          # mon_osd_nearfull_ratio = .75
+          # mon_max_pg_per_osd = 600
+          mon_max_pg_per_osd = 512
+          #[osd]
+          #osd_pool_default_min_size = 1
+          #osd_pool_default_size = 2
+          #osd_memory_target_cgroup_limit_ratio = 0.5
+
   when: storage1_ceph_server and storage1_ceph_public_network|length and storage1_ceph_cluster_network|length
 

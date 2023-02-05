@@ -4,7 +4,7 @@ rook_subdomain:    ""
 rook_hostname:     "rook"
 
 # Deployment Method: argocd, helm
-rook_deployment:    "argocd"
+rook_deployment:    "helm"
 
 # Kubernetes
 rook_namespace:    "rook-ceph"
@@ -57,10 +57,6 @@ rook_ceph_quirk: false
 
 rook_storage_root_credentials_dir: "{{ playbook_dir }}/credentials"
 
-# Deployment argocd or helm
-#rook_deployment: "argocd"
-rook_deployment: "helm"
-
 rook_ceph_cluster_data_dir_host_path: "/var/lib/rook"
 rook_storage_device_filter: "vd[c-z]"
 rook_storage_config_metadata_device: "sda"
@@ -71,4 +67,4 @@ rook_storage_config_metadata_device: "sda"
 rook_ceph_public_network: ""
 rook_ceph_cluster_network: ""
 
-rook_cluster_id: "rook"
+rook_cluster_id: "rook-ceph"
