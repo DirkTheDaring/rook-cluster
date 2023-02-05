@@ -1,3 +1,14 @@
+# Traefik has an issue with persistent volumes
+# https://github.com/traefik/traefik-helm-chart/issues/164
+# It seems it is required to use
+# persistence:
+#   annotations: {
+#    "pv.beta.kubernetes.io/gid": "65532"
+#   }
+# Explanation
+# https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+# Storage configured with a group ID (GID) allows writing only by Pods using the same GID. Mismatched or missing GIDs cause permission denied errors. To reduce the need for coordination with users, an administrator can annotate a PersistentVolume with a GID. Then the GID is automatically added to any Pod that uses the PersistentVolume.
+
 deployment:
   initContainers:
   - name:  set-volume-permissions
@@ -5,7 +16,7 @@ deployment:
     command:
     - sh
     - -c
-    - chmod 700 /data;chown 65532.65532 /data
+    - chmod 700 /data;chown 65532.65532 /data; if [ -f /data/acme.json ]; then chmod 0600 /data/acme.json; fi
     volumeMounts:
     - name: data
       mountPath: /data
@@ -40,7 +51,7 @@ ingressClass:
 
 persistence:
   enabled: 'true'
-  accessMode: ReadWriteMany
+  accessMode: {{ traefik_persistent_volume_access_modes |default('ReadWriteMany') }}
   size: 128Mi
   storageClass: {{ traefik_persistence_storage_class }}
 
