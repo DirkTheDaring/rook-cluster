@@ -8,7 +8,7 @@ spec:
   - websecure
   routes:
   - kind: Rule
-    match: Host(`{{ traefik_fqdn }}`)
+    match: Host(`{{ traefik_fqdn }}`) {{ ('|| Host(`' + traefik_fqdn2 + '`)') if traefik_fqdn2 is defined and traefik_fqdn2|length }}
 #    middlewares:
 #    - name: traefik-dashboard-http-auth
     services:
@@ -23,4 +23,9 @@ spec:
 {% if traefik_subdomain != "" %}
         - "{{ traefik_subdomain}}.{{traefik_domain }}"
         - "*.{{ traefik_subdomain}}.{{traefik_domain }}"
+{% endif %}
+{% if traefik_domains_additional is defined %}
+{% for item in traefik_domains_additional %}
+        - "{{ item }}"
+{% endfor %}
 {% endif %}
