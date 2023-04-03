@@ -3,6 +3,7 @@
 - import_tasks: config.yml
 - import_tasks: deploy-prepare.yml
 - import_tasks: deploy-argocd.yml
+- import_tasks: deploy-helm.yml
 - import_tasks: wait-for-namespace.yml
 #- import_tasks: wait-for-argocd-application.yml
 - import_tasks: storage.yml
