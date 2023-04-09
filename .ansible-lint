@@ -1,0 +1,15 @@
+---
+skip_list:
+  - no-changed-when
+#  - yaml[line-length]
+#  - jinja[spacing]
+#  - yaml[comments]
+  - yaml[colons]
+
+#warn_list:
+#  - no-changed-when
+
+exclude_paths:
+  - roles/rook/templates/
+  - roles/rook/bin/
+  - collections
