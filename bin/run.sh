@@ -62,7 +62,7 @@ export KUBECONFIG
 check_ansible_min_version "$ANSIBLE_MIN_VERSION"
 
 #ansible-galaxy collection install --force -r collections/requirements.yml 
-ansible-galaxy collection install -r collections/requirements.yml 
+ansible-galaxy collection install -r config/collections-requirements.yml
 
 INVENTORY_DIR=inventory/$CONFIG_NAME/$CONFIG_STAGE
 if [ ! -d "$INVENTORY_DIR" ]; then
