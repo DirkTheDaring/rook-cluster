@@ -1,38 +1,39 @@
-#- name: look storage class
-#  debug:
-#    msg: "{{ lookup('file', 'storageclass.yaml.jina2') }}"
+# - name: look storage class
+#   debug:
+#     msg: "{{ lookup('file', 'storageclass.yaml.jina2') }}"
 
-- block:
-  - name: create storage classes for cephfs
-    kubernetes.core.k8s:
-      template: storageclass.yaml.jinja2
-    loop:
-    - name:          rook-cephfs-delete
-      reclaimPolicy: Delete
-    - name:          rook-cephfs-retain
-      reclaimPolicy: Retain
-
-  - name: create storage classes for rbd
-    kubernetes.core.k8s:
-      template: rbd-storageclass.yaml.jinja2
-    loop:
-    - name:          rook-rbd-delete
-      reclaimPolicy: Delete
-      parameters:
-        pool: ceph-blockpool
-    - name:          rook-rbd-retain
-      reclaimPolicy: Retain
-      parameters:
-        pool: ceph-blockpool
-
-  # kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
-  - name: apply default storage class if set
-    kubernetes.core.k8s:
-      kind: StorageClass
-      name: "{{ rook_default_storage_class }}"
-      definition:
-        metadata:
-          annotations:
-            storageclass.kubernetes.io/is-default-class: "true"
-    when: rook_default_storage_class is defined and rook_default_storage_class != ""
+- name: Block
   when: not rook_ceph_server
+  block:
+    - name: Create storage classes for cephfs
+      kubernetes.core.k8s:
+        template: storageclass.yaml.jinja2
+      loop:
+        - name:          rook-cephfs-delete
+          reclaimPolicy: Delete
+        - name:          rook-cephfs-retain
+          reclaimPolicy: Retain
+
+    - name: Create storage classes for rbd
+      kubernetes.core.k8s:
+        template: rbd-storageclass.yaml.jinja2
+      loop:
+        - name:          rook-rbd-delete
+          reclaimPolicy: Delete
+          parameters:
+            pool: ceph-blockpool
+        - name:          rook-rbd-retain
+          reclaimPolicy: Retain
+          parameters:
+            pool: ceph-blockpool
+
+    # kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+    - name: Apply default storage class if set
+      kubernetes.core.k8s:
+        kind: StorageClass
+        name: "{{ rook_default_storage_class }}"
+        definition:
+          metadata:
+            annotations:
+              storageclass.kubernetes.io/is-default-class: "true"
+      when: rook_default_storage_class is defined and rook_default_storage_class != ""

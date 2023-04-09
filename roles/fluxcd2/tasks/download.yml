@@ -1,0 +1,32 @@
+- name: Block
+  when: fluxcd_need_download
+  block:
+    - name: Create download directory
+      ansible.builtin.file:
+        path:    "{{ fluxcd_download_dir }}"
+        mode:    '0755'
+        state:   directory
+        recurse: true
+
+    - name: Download file
+      ansible.builtin.get_url:
+        url:  "{{ fluxcd_bin_url }}"
+        dest: "{{ fluxcd_download_dir }}/{{ fluxcd_bin_filename }}"
+        mode: '0644'
+      register: get_url_result
+
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ get_url_result }}"
+
+    - name: Create target directoy
+      ansible.builtin.file:
+        path:    "{{ ansible_user_dir }}/bin"
+        mode:    '0755'
+        state:   directory
+        recurse: true
+
+    - name: Do untar
+      ansible.builtin.unarchive:
+        src:  "{{ get_url_result.dest }}"
+        dest: "{{ ansible_user_dir }}/bin"

@@ -1,23 +1,23 @@
-#- name: Template a file
-#  ansible.builtin.template:
-#    src: "oidc.json.jinja2"
-#    dest: /tmp/oidc.json
+# - name: Template a file
+#   ansible.builtin.template:
+#     src: "oidc.json.jinja2"
+#     dest: /tmp/oidc.json
 
   # make the CONFIG_OVERWRITE_JSON must contain json as STRING, so that this is a "one line variable" patch
   # sequence from_json (1) | to_json  (2) | to_json (3)
   # (1) to_json convert dictionary (which comes from template) to json string (string may contain newlines, which are removed in the process)
   # (2) from_json make it a json string a again (without newlines)
-  # (3) to_json make the json a string for json 
+  # (3) to_json make the json a string for json
 
-- name: generate json
-  set_fact:
+- name: Generate json
+  ansible.builtin.set_fact:
     patch:
       data:
         CONFIG_OVERWRITE_JSON: "{{ lookup('template', 'oidc.json.jinja2') | to_json | from_json | to_json }}"
 
-- name: Patch configmap 
+- name: Patch configmap
   ansible.builtin.command:
-      argv:
+    argv:
       - kubectl
       - --namespace
       - "{{ harbor_namespace }}"
@@ -29,14 +29,14 @@
       - '{{ patch | to_json }}'
   register: patch
 
-- name: Patch configmap 
+- name: Patch configmap
   ansible.builtin.command:
-      argv:
+    argv:
       - kubectl
       - --namespace
       - "{{ harbor_namespace }}"
       - delete
       - pod
-      - -l 
+      - -l
       - app=harbor,component=core
   when: patch.stdout == "configmap/harbor-core patched"

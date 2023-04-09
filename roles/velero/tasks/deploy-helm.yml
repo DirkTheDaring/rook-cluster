@@ -1,19 +1,17 @@
-- name: deploy with helm
-  block:
-
-  - name: Add chart repo
-    kubernetes.core.helm_repository:
-      name:     "{{ velero_helm_repo_name }}"
-      repo_url: "{{ velero_helm_repo_url }}"
-
-  - name: Deploy helm chart
-    kubernetes.core.helm:
-      chart_ref:         "{{ velero_helm_repo_name }}/{{ velero_helm_chart_name }}"
-      chart_version:     "{{ helm_chart_version }}"
-      release_namespace: "{{ velero_namespace }}"
-      release_name:      "{{ velero_helm_chart_name }}"
-      create_namespace:  True
-      values:            "{{ velero_values }}"
-      update_repo_cache: True
-
+- name: Deploy with helm
   when: velero_deployment == "helm"
+  block:
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ velero_helm_repo_name }}"
+        repo_url: "{{ velero_helm_repo_url }}"
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ velero_helm_repo_name }}/{{ velero_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ velero_namespace }}"
+        release_name:      "{{ velero_helm_chart_name }}"
+        create_namespace:  true
+        release_values:    "{{ velero_values }}"
+        update_repo_cache: true

@@ -19,7 +19,13 @@ initContainers:
   # You cannot use a $ in argo, which limits sh scripts severely: https://github.com/argoproj/argo-cd/issues/6878. 
   # Also the -alias flag must be set in the script, as otherwise the import tool always uses the same name for alias
   # which fails on second import with alias already exists - yes these are junk names, but hey without $ no script processing
+{% if true %}
+  # kubernetes >= 1.26 # one backslash
+  - cp -ar /opt/bitnami/java/lib/security/. /srv; cd /srv; find /usr/local/share/ca-certificates/ -name *.pem -exec keytool -keystore cacerts -storepass changeit -noprompt -import -alias {} -file {} \; ; ls -l /srv
+{% else %}
+  # kubernetes < 1.26  # two backslashes
   - cp -ar /opt/bitnami/java/lib/security/. /srv; cd /srv; find /usr/local/share/ca-certificates/ -name *.pem -exec keytool -keystore cacerts -storepass changeit -noprompt -import -alias {} -file {} \\; ; ls -l /srv
+{% endif %}
   image: docker.io/bitnami/keycloak:15.0.2-debian-10-r94
   imagePullPolicy: IfNotPresent
   name: keycloak-phase-0

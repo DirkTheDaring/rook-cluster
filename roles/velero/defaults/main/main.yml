@@ -1,4 +1,3 @@
-
 velero_credentials_dir: "{{ velero_root_credentials_dir }}/velero"
 
 # Import configuration

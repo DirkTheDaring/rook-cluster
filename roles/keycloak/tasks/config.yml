@@ -4,8 +4,8 @@
   register: keycloak_config_file
 
 - name: Load File
-  set_fact:
-    keycloak_config: "{{ lookup('file', keycloak_credentials_dir + '/web.json' ) if keycloak_config_file.stat.exists else '{}' | from_json }}"
+  ansible.builtin.set_fact:
+    keycloak_config: "{{ lookup('file', keycloak_credentials_dir + '/web.json') if keycloak_config_file.stat.exists else '{}' | from_json }}"
 
 - name: Check if file exists
   ansible.builtin.stat:
@@ -13,8 +13,9 @@
   register: keycloak_postgresql_config_file
 
 - name: Load File
-  set_fact:
-    keycloak_postgresql_config: "{{ lookup('file', keycloak_credentials_dir + '/config.json' ) if keycloak_postgresql_config_file.stat.exists else '{}' | from_json }}"
+  ansible.builtin.set_fact:
+    keycloak_postgresql_config: >
+      {{ lookup('file', keycloak_credentials_dir + '/config.json') if keycloak_postgresql_config_file.stat.exists else '{}' | from_json }}
 
 - name: Check if file exists
   ansible.builtin.stat:
@@ -22,5 +23,6 @@
   register: keycloak_management_config_file
 
 - name: Load File
-  set_fact:
-    keycloak_management_config: "{{ lookup('file', keycloak_credentials_dir + '/management.json' ) if keycloak_management_config_file.stat.exists else '{}' | from_json }}"
+  ansible.builtin.set_fact:
+    keycloak_management_config: >
+      {{ lookup('file', keycloak_credentials_dir + '/management.json') if keycloak_management_config_file.stat.exists else '{}' | from_json }}

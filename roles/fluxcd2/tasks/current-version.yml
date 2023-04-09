@@ -1,0 +1,41 @@
+- name: Check if file exists
+  ansible.builtin.stat:
+    path: "{{ fluxcd_bin_dir }}/flux"
+  register: fluxcd_st
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "{{ fluxcd_st }}"
+
+- name: Get the current version
+  ansible.builtin.command: "{{ fluxcd_bin_dir }}/flux --version"
+  register: fluxcd_result
+  when: fluxcd_st.stat.exists
+
+- name: Set fact
+  ansible.builtin.set_fact:
+    fluxcd_version_current:  "{{ fluxcd_result.stdout_lines[0].split(' ')[2] }}"
+  when: fluxcd_st.stat.exists
+
+- name: Set fact
+  ansible.builtin.set_fact:
+    fluxcd_need_download: true
+  when: not fluxcd_st.stat.exists
+
+- name: Set fact
+  ansible.builtin.set_fact:
+    fluxcd_need_download: "{{ fluxcd_version_canonical != fluxcd_version_current }}"
+  when: fluxcd_st.stat.exists
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "{{ fluxcd_result }}"
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "{{ fluxcd_version_current }}"
+  when: fluxcd_st.stat.exists
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "{{ fluxcd_need_download }}"

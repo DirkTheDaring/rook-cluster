@@ -1,2 +1,1 @@
 postgresql_credentials_dir: "{{ postgresql_root_credentials_dir }}/postgresql"
-

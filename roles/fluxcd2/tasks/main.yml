@@ -1,0 +1,10 @@
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Facts
+  ansible.builtin.import_tasks: facts.yml
+- name: Get curent version
+  ansible.builtin.import_tasks: current-version.yml
+- name: Download
+  ansible.builtin.import_tasks: download.yml
+- name: Setup
+  ansible.builtin.import_tasks: setup.yml

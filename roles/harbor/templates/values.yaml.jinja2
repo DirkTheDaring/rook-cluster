@@ -51,37 +51,37 @@ externalURL: https://{{ harbor_core_fqdn }}
 
 nginx:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 portal:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 core:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 jobservice:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 registry:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 chartmuseum:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 trivy:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 notary:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 signer:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 database:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 redis:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 exporter:
   nodeSelector:
-    kubernetes.io/hostname: {{ harbor_nodeSelector_hostname }}
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}

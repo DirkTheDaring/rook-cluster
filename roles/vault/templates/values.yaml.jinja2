@@ -36,11 +36,11 @@ server:
 
         service_registration "kubernetes" {}
   dataStorage:
-    storageClass: "{{ vault_dataStorage_storage_class }}"
+    storageClass: "{{ vault_data_storage_storage_class }}"
 
   auditStorage:
     enabled: "true"
-    storageClass: "{{ vault_auditStorage_storage_class }}"
+    storageClass: "{{ vault_audit_storage_storage_class }}"
 
   readinessProbe:
     enabled: true

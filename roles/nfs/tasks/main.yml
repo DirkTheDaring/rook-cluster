@@ -1,4 +1,8 @@
-- import_tasks: github-version.yml
-- import_tasks: helm-chart-version.yml
-- import_tasks: helm.yml
-- import_tasks: wait-for-namespace.yml
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Get helm version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Apply helm
+  ansible.builtin.import_tasks: helm.yml
+- name: Wait for namespace
+  ansible.builtin.import_tasks: wait-for-namespace.yml

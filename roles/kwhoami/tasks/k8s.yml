@@ -1,11 +1,12 @@
-- set_fact:
+- name: Set fact
+  ansible.builtin.set_fact:
     kwhoami_file_list:
-    - namespace.yaml.jinja2
-    - deployment.yaml.jinja2
-    - service.yaml.jinja2
-    - ingress.yaml.jinja2
+      - namespace.yaml.jinja2
+      - deployment.yaml.jinja2
+      - service.yaml.jinja2
+      - ingress.yaml.jinja2
 
-- name: apply operator
+- name: Apply operator
   kubernetes.core.k8s:
     template: "{{ item }}"
   loop: "{{ kwhoami_file_list }}"

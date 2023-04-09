@@ -1,10 +1,20 @@
-- import_tasks: github-version.yml
-- import_tasks: helm-chart-version.yml
-- import_tasks: persistentvolumes.yml
-- import_tasks: deploy-prepare.yml
-- import_tasks: deploy-argocd.yml
-- import_tasks: deploy-helm.yml
-- import_tasks: wait-for-namespace.yml
-- import_tasks: init.yml
-- import_tasks: ldap.yml
-- import_tasks: ingress.yml
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Get helm chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Persistent Volumes
+  ansible.builtin.import_tasks: persistentvolumes.yml
+- name: Prepare deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
+- name: Deploy with argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml
+- name: Deploy with helm
+  ansible.builtin.import_tasks: deploy-helm.yml
+- name: Wait for namespace
+  ansible.builtin.import_tasks: wait-for-namespace.yml
+- name: Init
+  ansible.builtin.import_tasks: init.yml
+- name: Ldap
+  ansible.builtin.import_tasks: ldap.yml
+- name: Ingress
+  ansible.builtin.import_tasks: ingress.yml

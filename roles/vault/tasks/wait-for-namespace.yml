@@ -4,6 +4,6 @@
 - name: Wait until namespace appears
   ansible.builtin.command:
     argv:
-    -  bash
-    - -c
-    - "while true; do kubectl get namespace {{ vault_namespace }} && break; sleep 3; done"
+      - bash
+      - -c
+      - "while true; do kubectl get namespace {{ vault_namespace }} && break; sleep 3; done"

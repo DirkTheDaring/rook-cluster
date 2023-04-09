@@ -1,4 +1,4 @@
-- name: create ingress
+- name: Create ingress
   kubernetes.core.k8s:
     template: ingress.yaml.jinja2
   when: rook_ceph_server

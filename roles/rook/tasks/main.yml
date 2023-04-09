@@ -1,21 +1,38 @@
-- import_tasks: helm-chart-version.yml
-- import_tasks: set-version.yml
-- import_tasks: release-version.yml
+- name: Get helm chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Set version
+  ansible.builtin.import_tasks: set-version.yml
+- name: Release version
+  ansible.builtin.import_tasks: release-version.yml
 
-- import_tasks: argocd-debug.yml   # if rook_deployment == "argocd"
-- import_tasks: argocd.yml         # if rook_deployment == "argocd"
-- import_tasks: helm.yml
-- import_tasks: wait-for-namespace.yml
-- import_tasks: wait-for-pod-by-label.yml
+- name: Argocd Debug
+  ansible.builtin.import_tasks: argocd-debug.yml   # if rook_deployment == "argocd"
+- name: Argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml         # if rook_deployment == "argocd"
+- name: Deploy Helm
+  ansible.builtin.import_tasks: deploy-helm.yml
+- name: Wait for Namespace
+  ansible.builtin.import_tasks: wait-for-namespace.yml
+- name: Wait for pod
+  ansible.builtin.import_tasks: wait-for-pod-by-label.yml
 
-- import_tasks: cluster-argocd.yml  # only runs for server if rook_deployment == "argocd"
-- import_tasks: cluster-helm.yml    # only runs for server if rook_deployment == "helm"
-- import_tasks: ingress.yml         # only runs for server
-- import_tasks: wait-for-cm-rook-config-override.yml # only runs for server
-- import_tasks: wait-for-pod-rados-gw.yml # # only runs for server
+- name: Cluster Argocd
+  ansible.builtin.import_tasks: cluster-deploy-argocd.yml  # only runs for server if rook_deployment == "argocd"
+- name: Cluster Helm
+  ansible.builtin.import_tasks: cluster-deploy-helm.yml    # only runs for server if rook_deployment == "helm"
+- name: Ingress
+  ansible.builtin.import_tasks: ingress.yml         # only runs for server
+- name: Wait for cm config ovver ride
+  ansible.builtin.import_tasks: wait-for-cm-rook-config-override.yml # only runs for server
+- name: Wait for rados pod
+  ansible.builtin.import_tasks: wait-for-pod-rados-gw.yml # # only runs for server
 
-- import_tasks: export.yml          # only runs for server
-- import_tasks: credentials.yml     # only runs for server
+- name: Export
+  ansible.builtin.import_tasks: export.yml          # only runs for server
+- name: Credentials
+  ansible.builtin.import_tasks: credentials.yml     # only runs for server
 
-- import_tasks: client.yml           # only client
-- import_tasks: storageclass.yml
+- name: Client
+  ansible.builtin.import_tasks: client.yml           # only client
+- name: Storage class
+  ansible.builtin.import_tasks: storageclass.yml

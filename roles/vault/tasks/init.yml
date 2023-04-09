@@ -1,38 +1,99 @@
-- name: wait until pod vault-0 appears
-  ansible.builtin.command: 
+- name: Wait until pod vault-0 appears
+  ansible.builtin.command:
     argv:
-    - bash
-    - -c
-    - "while [ -z \"$(kubectl -n {{ vault_namespace }} get pod vault-0 --no-headers -o custom-columns=name:metadata.name)\" ]; do sleep 3;done"
+      - bash
+      - -c
+      - "while [ -z \"$(kubectl -n {{ vault_namespace }} get pod vault-0 --no-headers -o custom-columns=name:metadata.name)\" ]; do sleep 3;done"
 
-- name: wait until pod vault-0 becomes ready
-  ansible.builtin.command: 
+- name: Wait until pod vault-0 becomes ready
+  ansible.builtin.command:
     argv:
-    - bash
-    - -c
-    - "while [ \"$(kubectl -n {{ vault_namespace }} get pod vault-0 -o custom-columns=phase:status.phase --no-headers)\" != \"Running\" ]; do sleep 3; done"
+      - bash
+      - -c
+      - "while [ \"$(kubectl -n {{ vault_namespace }} get pod vault-0 -o custom-columns=phase:status.phase --no-headers)\" != \"Running\" ]; do sleep 3; done"
 
-- name: test if vault-0 already initialized
-  ansible.builtin.command: 
+- name: Test if vault-0 already initialized
+  ansible.builtin.command:
     argv:
-    - kubectl
-    - --namespace
-    - "{{ vault_namespace }}"
-    - exec
-    - vault-0
-    - --
-    - sh
-    - -c 
-    - "vault status|awk '/^Initialized/ { print $2;}'"
+      - kubectl
+      - --namespace
+      - "{{ vault_namespace }}"
+      - exec
+      - vault-0
+      - --
+      - sh
+      - -c
+      - "vault status|awk '/^Initialized/ { print $2;}'"
   register: is_vault_initialized
 
-- debug:
+- name: Debug
+  ansible.builtin.debug:
     msg: "is_vault_initalized: {{ is_vault_initialized.stdout }}"
 
-- block:
-  - name: operator init vault 
-    ansible.builtin.command: 
-      argv:
+- name: Block
+  when: is_vault_initialized.stdout == "false"
+  block:
+    - name: Operator init vault
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - --namespace
+          - "{{ vault_namespace }}"
+          - exec
+          - vault-0
+          - --
+          - vault
+          - operator
+          - init
+          - -format=json
+      register: vault_operator_init_result
+
+    - name: Set fact
+      ansible.builtin.set_fact:
+        vault_credentials: "{{ vault_operator_init_result.stdout | from_json }}"
+
+    - name: Create a directory
+      ansible.builtin.file:
+        path: "{{ vault_credentials_dir }}"
+        state: directory
+        mode: '0700'
+
+    - name: Save operator init result to disk
+      ansible.builtin.copy:
+        content: "{{ vault_credentials | to_nice_json }}"
+        dest:    "{{ vault_credentials_dir }}/config.json"
+        mode: '0644'
+
+- name: Test if vault is sealed
+  ansible.builtin.command:
+    argv:
+      - kubectl
+      - --namespace
+      - "{{ vault_namespace }}"
+      - exec
+      - vault-0
+      - --
+      - sh
+      - -c
+      - "vault status|awk '/^Sealed/ { print $2;}'"
+  register: is_vault_sealed
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "is_vault_sealed: {{ is_vault_sealed.stdout }}"
+
+- name: Set fact
+  ansible.builtin.set_fact:
+    vault_credentials: "{{ lookup('file', vault_credentials_dir + '/config.json') | from_json }}"
+  when: "'skipped' in vault_operator_init_result and vault_operator_init_result.skipped"
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "vault_credentials: {{ vault_credentials }}"
+
+- name: Unseal
+  ansible.builtin.command:
+    argv:
       - kubectl
       - --namespace
       - "{{ vault_namespace }}"
@@ -41,82 +102,28 @@
       - --
       - vault
       - operator
-      - init
-      - -format=json
-    register: vault_operator_init_result
-
-  - set_fact:
-      vault_credentials: "{{ vault_operator_init_result.stdout | from_json }}"
-
-  - name: Create a directory
-    ansible.builtin.file:
-      path: "{{ vault_credentials_dir }}"
-      state: directory
-      mode: '0700'
-  
-  - name: save operator init result to disk
-    copy: 
-     content: "{{ vault_credentials | to_nice_json }}"
-     dest:    "{{ vault_credentials_dir }}/config.json"
-
-  when: is_vault_initialized.stdout == "false"
-
-- name: test if vault is sealed
-  ansible.builtin.command: 
-    argv:
-    - kubectl
-    - --namespace
-    - "{{ vault_namespace }}"
-    - exec
-    - vault-0
-    - --
-    - sh
-    - -c 
-    - "vault status|awk '/^Sealed/ { print $2;}'"
-  register: is_vault_sealed
-
-- debug:
-    msg: "is_vault_sealed: {{ is_vault_sealed.stdout }}"
-
-- set_fact:
-    vault_credentials: "{{ lookup('file', vault_credentials_dir + '/config.json' ) | from_json }}"
-  when: "'skipped' in vault_operator_init_result and vault_operator_init_result.skipped"
-
-- debug:
-    msg: "vault_credentials: {{ vault_credentials }}"
-
-- name: unseal
-  ansible.builtin.command: 
-    argv:
-    - kubectl
-    - --namespace
-    - "{{ vault_namespace }}"
-    - exec
-    - vault-0
-    - --
-    - vault
-    - operator
-    - unseal
-    - "{{ item }}"
-  loop: 
-  - "{{ vault_credentials.unseal_keys_hex[0] }}"
-  - "{{ vault_credentials.unseal_keys_hex[1] }}"
-  - "{{ vault_credentials.unseal_keys_hex[2] }}"
+      - unseal
+      - "{{ item }}"
+  loop:
+    - "{{ vault_credentials.unseal_keys_hex[0] }}"
+    - "{{ vault_credentials.unseal_keys_hex[1] }}"
+    - "{{ vault_credentials.unseal_keys_hex[2] }}"
   when: is_vault_sealed.stdout == "true"
 
   # kubectl -n vault-system get pod vault-0 -o custom-columns=name:metadata.labels.vault-sealed  --no-headers
-- name: wait until pod vault-0 label changes to unsealed
+- name: Wait until pod vault-0 label changes to unsealed
   ansible.builtin.command:
     argv:
-    - bash
-    - -c
-    - "while [ $(kubectl -n {{ vault_namespace }} get pod vault-0 -o custom-columns=name:metadata.labels.vault-sealed --no-headers) == \"true\" ]; do sleep 3; done"
+      - bash
+      - -c
+      - >
+        while [ $(kubectl -n {{ vault_namespace }} get pod vault-0
+        -o custom-columns=name:metadata.labels.vault-sealed --no-headers) == \"true\" ]; do sleep 3; done
 
-- name: initialize remaining vault pods
-  include_tasks: init-inner.yml
+- name: Initialize remaining vault pods
+  ansible.builtin.include_tasks: init-inner.yml
   loop:
-  - vault-1
-  - vault-2
+    - vault-1
+    - vault-2
   loop_control:
     loop_var: outer_item
-

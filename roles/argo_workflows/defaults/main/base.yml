@@ -21,27 +21,26 @@ argo_workflows_helm_repo_name:     argo-workflows
 argo_workflows_helm_repo_url:      https://argoproj.github.io/argo-helm
 argo_workflows_helm_chart_name:    argo-workflows
 argo_workflows_helm_chart_version: ""        # empty strings means pick latest
-#argo_workflows_helm_chart_version: "~^0\.9\."    # pick by regular expression
-#argo_workflows_helm_chart_version: "0.9.4" # set absolute version
+# argo_workflows_helm_chart_version: "~^0\.9\."    # pick by regular expression
+# argo_workflows_helm_chart_version: "0.9.4" # set absolute version
 
 # Github Repository
 argo_workflows_releases_url:      "https://api.github.com/repos/argoproj/argo-workflows/releases"
 argo_workflows_releases_jmespath: "[].tag_name"
-#argo_workflows_release: "~^v1\.7\." # pick first match of regular expression
-#argo_workflows_release: "v1.7.1"
+# argo_workflows_release: "~^v1\.7\." # pick first match of regular expression
+# argo_workflows_release: "v1.7.1"
 
 # Configuration Database
 argo_workflows_root_credentials_dir: "{{ playbook_dir }}/credentials"
 argo_workflows_force_string_dict:
-#  path_list:
-#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
-  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
-#  - '^env\['
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['
 argo_workflows_values: {}
 argo_workflows_sso_client_secret: "none"
 
-#argo_workflows_nodeSelector_hostname: ""
+# argo_workflows_nodeSelector_hostname: ""
 argo_workflows_credentials_s3_json:         "{{ playbook_dir }}/credentials/minio/buckets/default.json"
 argo_workflows_credentials_postgresql_json: "{{ playbook_dir }}/credentials/postgresql/databases/argo-workflows-postgresql.json"
-

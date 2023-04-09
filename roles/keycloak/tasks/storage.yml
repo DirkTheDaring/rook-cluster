@@ -1,8 +1,7 @@
-- name: create persistent volume
+- name: Create persistent volume
   kubernetes.core.k8s:
     template: pv.yaml.jinja2
 
-- name: create persistent volume claim
+- name: Create persistent volume claim
   kubernetes.core.k8s:
     template: pvc.yaml.jinja2
-

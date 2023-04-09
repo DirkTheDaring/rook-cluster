@@ -1,8 +1,16 @@
-- import_tasks: github-version.yml
-- import_tasks: helm-chart-version.yml
-- import_tasks: set-version.yml
-- import_tasks: deploy-prepare.yml
-- import_tasks: deploy-argocd.yml
-- import_tasks: deploy-helm.yml
-- import_tasks: wait-for-pod-by-label.yml
-- import_tasks: k8s.yml
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Get helm chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Set Version
+  ansible.builtin.import_tasks: set-version.yml
+- name: Prepare deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
+- name: Deploy with argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml
+- name: Deploy with helm
+  ansible.builtin.import_tasks: deploy-helm.yml
+- name: Wait for pod by label
+  ansible.builtin.import_tasks: wait-for-pod-by-label.yml
+- name: K8s
+  ansible.builtin.import_tasks: k8s.yml

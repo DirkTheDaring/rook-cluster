@@ -1,9 +1,9 @@
-#- copy:
-#    content: "{{ lookup('template', 'values.yaml.jinja2') }}"
-#    dest: "/tmp/{{ nfs.name }}-values.yaml"
-#  loop: "{{ nfs_subdir_external_provisioners }}"
-#  loop_control:
-#    loop_var: nfs 
+# - copy:
+#     content: "{{ lookup('template', 'values.yaml.jinja2') }}"
+#     dest: "/tmp/{{ nfs.name }}-values.yaml"
+#   loop: "{{ nfs_subdir_external_provisioners }}"
+#   loop_control:
+#     loop_var: nfs
 
 - name: Deploy with helm
   kubernetes.core.helm:
@@ -12,8 +12,8 @@
     release_namespace: "{{ nfs.namespace }}"
     release_name:      "{{ nfs.release_name }}"
     create_namespace:  true
-    values:            "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
-    update_repo_cache: yes
+    release_values:    "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
+    update_repo_cache: true
   when: not nfs_subdir_external_provisioner_argocd
   loop: "{{ nfs_subdir_external_provisioners }}"
   loop_control:

@@ -1,18 +1,18 @@
-- name: test if ingressroute already exists
-  ansible.builtin.command: 
+- name: Test if ingressroute already exists
+  ansible.builtin.command:
     argv:
-    - kubectl
-    - --namespace
-    - "{{ traefik_namespace }}"
-    - get
-    - ingressroute
-    - --no-headers
-    - -o 
-    - custom-columns=NAME:metadata.name
+      - kubectl
+      - --namespace
+      - "{{ traefik_namespace }}"
+      - get
+      - ingressroute
+      - --no-headers
+      - -o
+      - custom-columns=NAME:metadata.name
   register: traefik_ingressroute
   ignore_errors: true
 
-- name: create ingressroute if it does not exist
+- name: Create ingressroute if it does not exist
   kubernetes.core.k8s:
     template: ingressroute.yaml.jinja2
   when: traefik_ingressroute.stdout == ""

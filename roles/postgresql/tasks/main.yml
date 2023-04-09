@@ -1,5 +1,10 @@
-#- import_tasks: github-version.yml  # No releases on github
-- import_tasks: helm-chart-version.yml
-- import_tasks: deploy-argocd-multiple.yml
-- import_tasks: deploy-helm-multiple.yml
-- import_tasks: credentials.yml
+# - name: Get Github version
+#   ansible.builtin.import_tasks: github-version.yml  # No releases on github
+- name: Get helm chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Deploy with argocd
+  ansible.builtin.import_tasks: deploy-argocd-multiple.yml
+- name: Deploy with helm
+  ansible.builtin.import_tasks: deploy-helm-multiple.yml
+- name: Credentials
+  ansible.builtin.import_tasks: credentials.yml

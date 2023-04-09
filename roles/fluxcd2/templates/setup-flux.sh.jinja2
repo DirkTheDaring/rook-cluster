@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -ex 
+{% if fluxcd_gitlab_token is defined and fluxcd_gitlab_token|length %}
+export GITLAB_TOKEN={{ fluxcd_gitlab_token }}
+{{ ansible_user_dir }}/bin/flux bootstrap gitlab\
+  --hostname={{ fluxcd_hostname }}\
+  --owner={{ fluxcd_owner }}\
+  --repository={{ fluxcd_repository }}\
+  --branch={{ fluxcd_branch }}\
+  --private={{ fluxcd_private|lower }}\
+  --path={{ fluxcd_path }}\
+  --network-policy={{ fluxcd_network_policy|lower }}\
+  --personal\
+  --token-auth
+{% elif fluxcd_github_token is defined and fluxcd_github_token|length %}
+export GITHUB_TOKEN={{ fluxcd_github_token }}
+{{ ansible_user_dir }}/bin/flux bootstrap github\
+  --hostname={{ fluxcd_hostname }}\
+  --ssh-hostname={{ fluxcd_ssh_hostname }}\
+  --owner={{ fluxcd_owner }}\
+  --repository={{ fluxcd_repository }}\
+  --branch={{ fluxcd_branch }}\
+  --path={{ fluxcd_path }}\
+  --network-policy={{ fluxcd_network_policy|lower }}
+{% endif %}

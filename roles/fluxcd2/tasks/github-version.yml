@@ -1,0 +1,24 @@
+- name: Get latest version from github
+  github.project.version:
+    name:    "{{ fluxcd_github_project_name }}"
+    version: "{{ fluxcd_github_project_version }}"
+  register: result
+
+- name: Dump result
+  ansible.builtin.debug:
+    msg: '{{ result }}'
+    verbosity: 2
+
+- name: Dump fact github_project_version
+  ansible.builtin.debug:
+    msg: '{{ github_project_version }}'
+    verbosity: 1
+
+- name: Flux version canonical
+  ansible.builtin.set_fact:
+    fluxcd_version_canonical: "{{ github_project_version[1:] }}"
+
+- name: Dump fact fluxcd_version_canonical
+  ansible.builtin.debug:
+    msg: '{{ fluxcd_version_canonical }}'
+    verbosity: 1

@@ -21,27 +21,27 @@ vault_helm_repo_name:     vault
 vault_helm_repo_url:      https://helm.releases.hashicorp.com
 vault_helm_chart_name:    vault
 vault_helm_chart_version: ""        # empty strings means pick latest
-#vault_helm_chart_version: "~^0\.18\."    # pick by regular expression
-#vault_helm_chart_version: "0.18.0" # set absolute version
+# vault_helm_chart_version: "~^0\.18\."    # pick by regular expression
+# vault_helm_chart_version: "0.18.0" # set absolute version
 
 # Github Repository
 vault_releases_url:      "https://api.github.com/repos/hashicorp/vault/releases"
 vault_releases_jmespath: "[].tag_name"
-#vault_release: "~^v1\.9\." # pick first match of regular expression
-#vault_release: "v1.9.2"
+# vault_release: "~^v1\.9\." # pick first match of regular expression
+# vault_release: "v1.9.2"
 
 # Configuration Database
 vault_root_credentials_dir: "{{ playbook_dir }}/credentials"
 vault_force_string_dict:
-#  path_list:
-#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  #  path_list:
+  #  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
-  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
-#  - '^env\['
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['
 
 # S3 Credentials
-#vault_aws_access_key_id:     vmnlz3dWjY
-#vault_aws_secret_access_key: QBpFGKS7y0FpyFiN7SZ8gw08oiPVKlWhJfNMV5mZ
+# vault_aws_access_key_id:     vmnlz3dWjY
+# vault_aws_secret_access_key: QBpFGKS7y0FpyFiN7SZ8gw08oiPVKlWhJfNMV5mZ
 
 # LDAP
 vault_ldap_binddn:       "cn=binduser,dc=dot,dc=com"
@@ -59,8 +59,8 @@ vault_ldap_groupfilter: "(&(objectClass=group)(member={{ '{{.UserDN}}' }}))"
 vault_ldap_groupattr:   cn
 
 # Persistence
-vault_dataStorage_storage_class:  rook-cephfs-retain
-vault_auditStorage_storage_class: rook-cephfs-retain
+vault_data_storage_storage_class:  rook-cephfs-retain
+vault_audit_storage_storage_class: rook-cephfs-retain
 
 vault_nfs_enabled: false
 vault_nfs_server:  127.0.0.1

@@ -1,4 +1,3 @@
-
 traefik_forward_auth_credentials_dir: "{{ traefik_forward_auth_root_credentials_dir }}/traefik-forward-auth"
-
+# yamllint disable-line
 traefik_forward_auth_fqdn:                  "{{ traefik_forward_auth_hostname }}{{ '' if traefik_forward_auth_subdomain == '' else '.' + traefik_forward_auth_subdomain }}.{{ traefik_forward_auth_domain }}"

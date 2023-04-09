@@ -1,15 +1,15 @@
-- name: create bucket
-  ansible.builtin.command: 
+- name: Create bucket
+  ansible.builtin.command:
     argv:
-    - kubectl
-    - --namespace
-    - "{{ minio_namespace }}"
-    - exec 
-    - -t
-    - "{{ minio_pod_name.stdout }}"
-    - --
-    - bash
-    - -c
-    - "[ -d '/data/{{ item }}' ] && exit 0; mc mb local/{{ item }}"
+      - kubectl
+      - --namespace
+      - "{{ minio_namespace }}"
+      - exec
+      - -t
+      - "{{ minio_pod_name.stdout }}"
+      - --
+      - bash
+      - -c
+      - "[ -d '/data/{{ item }}' ] && exit 0; mc mb local/{{ item }}"
 
   loop: "{{ minio_bucket_names }}"

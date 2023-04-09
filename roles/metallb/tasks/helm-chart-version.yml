@@ -1,24 +1,24 @@
-#- name: metallb_helm_repo_name
-#  debug:
-#    msg: 'metallb_helm_repo_name: {{ metallb_helm_repo_name }}'
-#    verbosity: 2
+# - name: metallb_helm_repo_name
+#   debug:
+#     msg: 'metallb_helm_repo_name: {{ metallb_helm_repo_name }}'
+#     verbosity: 2
 #
-#- name: metallb_helm_repo_url
-#  debug:
-#    msg: 'metallb_helm_repo_url: {{ metallb_helm_repo_url }}'
-#    verbosity: 2
+# - name: metallb_helm_repo_url
+#   debug:
+#     msg: 'metallb_helm_repo_url: {{ metallb_helm_repo_url }}'
+#     verbosity: 2
 #
-#- name: metallb_helm_chart_name
-#  debug:
-#    msg: 'metallb_helm_chart_name: {{ metallb_helm_chart_name }}'
-#    verbosity: 2
+# - name: metallb_helm_chart_name
+#   debug:
+#     msg: 'metallb_helm_chart_name: {{ metallb_helm_chart_name }}'
+#     verbosity: 2
 #
-#- name: metallb_helm_chart_version
-#  debug:
-#    msg: 'metallb_helm_chart_version: {{ metallb_helm_chart_version}}'
-#    verbosity: 2
+# - name: metallb_helm_chart_version
+#   debug:
+#     msg: 'metallb_helm_chart_version: {{ metallb_helm_chart_version}}'
+#     verbosity: 2
 
-- name: get latest helm chart version
+- name: Get latest helm chart version
   helm.chart.version:
     repo_name:  "{{ metallb_helm_repo_name }}"
     repo_url:   "{{ metallb_helm_repo_url }}"
@@ -26,21 +26,21 @@
     version:    "{{ metallb_helm_chart_version | default('') }}"
   register: result
 
-- name: dump result
-  debug:
+- name: Dump result
+  ansible.builtin.debug:
     msg: '{{ result }}'
     verbosity: 2
 
-- name: dump fact helm_chart_version
-  debug:
+- name: Dump fact helm_chart_version
+  ansible.builtin.debug:
     msg: '{{ helm_chart_version }}'
     verbosity: 1
 
-- name: metallb helm chart version
-  set_fact:
+- name: Metallb helm chart version
+  ansible.builtin.set_fact:
     metallb_helm_chart_version_canonical: "{{ helm_chart_version }}"
 
-- name: dump fact helm_chart_version_canonical
-  debug:
+- name: Dump fact helm_chart_version_canonical
+  ansible.builtin.debug:
     msg: '{{ metallb_helm_chart_version_canonical }}'
     verbosity: 1

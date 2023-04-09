@@ -3,23 +3,22 @@
     name:     "{{ argocd_helm_repo_name }}"
     repo_url: "{{ argocd_helm_repo_url }}"
 
-- set_fact:
+- name: Set fact
+  ansible.builtin.set_fact:
     argocd_values_yaml: "{{ lookup('template', 'values.yaml.jinja2') }}"
   when: argocd_ldap_server == ""
 
-- set_fact:
+- name: Set fact
+  ansible.builtin.set_fact:
     argocd_values_yaml: "{{ lookup('template', 'ldap-values.yaml.jinja2') }}"
   when: argocd_ldap_server != ""
 
 - name: Serialize to /tmp/argocd-values.yaml
-  copy:
+  ansible.builtin.copy:
     content: "{{ argocd_values_yaml }}"
     dest: "/tmp/argocd-values.yaml"
     mode: '0664'
   when: ansible_verbosity > 2
-
-#- fail:
-#   msg: intended
 
 - name: Deploy helm for argocd
   kubernetes.core.helm:
@@ -28,6 +27,5 @@
     release_namespace: "{{ argocd_namespace }}"
     release_name:      "{{ argocd_chart_release_name | default('argocd') }}"
     create_namespace:  true
-    values:            "{{ argocd_values_yaml | from_yaml }}"
-    update_repo_cache: yes
-
+    release_values:    "{{ argocd_values_yaml | from_yaml }}"
+    update_repo_cache: true

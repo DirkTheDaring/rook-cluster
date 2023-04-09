@@ -1,10 +1,11 @@
-- set_fact:
-    argo_workflows_credentials_s3:         "{{ lookup('file', argo_workflows_credentials_s3_json ) | from_json }}"
-    argo_workflows_credentials_postgresql: "{{ lookup('file', argo_workflows_credentials_postgresql_json ) | from_json }}"
+- name: Set fact
+  ansible.builtin.set_fact:
+    argo_workflows_credentials_s3:         "{{ lookup('file', argo_workflows_credentials_s3_json) | from_json }}"
+    argo_workflows_credentials_postgresql: "{{ lookup('file', argo_workflows_credentials_postgresql_json) | from_json }}"
 
-- debug:
+- name: Debug
+  ansible.builtin.debug:
     msg: "{{ item }}"
   loop:
-  - "{{ argo_workflows_credentials_s3 }}"
-  - "{{ argo_workflows_credentials_postgresql }}"
-
+    - "{{ argo_workflows_credentials_s3 }}"
+    - "{{ argo_workflows_credentials_postgresql }}"

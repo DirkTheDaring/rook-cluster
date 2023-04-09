@@ -1,0 +1,15 @@
+- name: Block
+  when: rook_ceph_server and rook_deployment == "argocd"
+  block:
+    - name: Create application for cluster
+      kubernetes.core.k8s:
+        template: cluster-application.yaml.jinja2
+
+#    - name: wait until application status turns to synced in argocd
+#      ansible.builtin.command:
+#        argv:
+#          - bash
+#          - -c
+#          - >
+#            while [[ \"$(kubectl -n {{ rook_argocd_namespace }} get application rook-ceph
+#            -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done

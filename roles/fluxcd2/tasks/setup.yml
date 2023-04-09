@@ -1,0 +1,5 @@
+- name: Create setup script
+  ansible.builtin.template:
+    src:   setup-flux.sh.jinja2
+    dest:  "{{ playbook_dir }}/setup-flux.sh"
+    mode:  '0755'

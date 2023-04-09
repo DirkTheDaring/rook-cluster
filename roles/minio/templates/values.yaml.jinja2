@@ -19,7 +19,7 @@ ingress:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.tls: "true"
 
-extraEnvVars: {{ extraEnvVars }}
+extraEnvVars: {{ extra_env_vars }}
 
 apiIngress:
   enabled: true

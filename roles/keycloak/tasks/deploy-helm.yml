@@ -1,19 +1,17 @@
-- name: deploy with helm
-  block:
-
-  - name: Add chart repo
-    kubernetes.core.helm_repository:
-      name:     "{{ keycloak_helm_repo_name }}"
-      repo_url: "{{ keycloak_helm_repo_url }}"
-
-  - name: Deploy helm chart
-    kubernetes.core.helm:
-      chart_ref:         "{{ keycloak_helm_repo_name }}/{{ keycloak_helm_chart_name }}"
-      chart_version:     "{{ helm_chart_version }}"
-      release_namespace: "{{ keycloak_namespace }}"
-      release_name:      "{{ keycloak_helm_chart_name }}"
-      create_namespace:  True
-      values:            "{{ keycloak_values }}"
-      update_repo_cache: True
-
+- name: Deploy with helm
   when: keycloak_deployment == "helm"
+  block:
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ keycloak_helm_repo_name }}"
+        repo_url: "{{ keycloak_helm_repo_url }}"
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ keycloak_helm_repo_name }}/{{ keycloak_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ keycloak_namespace }}"
+        release_name:      "{{ keycloak_helm_chart_name }}"
+        create_namespace:  true
+        release_values:    "{{ keycloak_values }}"
+        update_repo_cache: true

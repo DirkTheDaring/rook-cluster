@@ -1,151 +1,161 @@
 # Fixme we should really make sure that files are downloaded again
 # if there is a new version
 - name: Create tmpdir
-  block:
-  - name: Create temporary build directory
-    ansible.builtin.tempfile:
-      state: directory
-      suffix: build
-    register: tmpdir
-  - set_fact:
-      rook_build_dir: "{{ tmpdir.path }}"
   when: rook_build_dir is not defined
+  block:
+    - name: Create temporary build directory
+      ansible.builtin.tempfile:
+        state: directory
+        suffix: build
+      register: tmpdir
+    - name: Set fact
+      ansible.builtin.set_fact:
+        rook_build_dir: "{{ tmpdir.path }}"
 
-- block:
-  - name: Build dir
-    debug:
-      msg: "rook_build_dir: {{ rook_build_dir }}"
-
-  - name: Create a directory if it does not exist
-    ansible.builtin.file:
-      path:  "{{ rook_build_dir }}"
-      state: directory
-      mode: '0755'
-
-  - debug:
-      msg: "rook_basic_version: {{ rook_basic_version }}"
-  - debug:
-      msg: "rook_version_major: {{ rook_version_major }}"
-  - debug:
-      msg: "rook_version_minor  {{ rook_version_minor  }}"
-  - debug:
-      msg: "rook_build_dir: {{ rook_build_dir }}"
-
-  - name: Set urls for version <= 1.7
-    set_fact:
-      url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/import-external-cluster.sh"
-      url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/cluster-external-management.yaml"
-    when:
-    - helm_chart_version[1:] is version("1.8.0", '<')
-
-  - name: Set urls for version == 1.8
-    set_fact:
-      url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
-      url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external-management.yaml"
-    when:
-    - helm_chart_version[1:] is version("1.8.0", '>=')
-    - helm_chart_version[1:] is version("1.9.0", '<' )
-
-  - name: Set urls for version >= 1.9
-    set_fact:
-      url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
-      url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external.yaml"
-    when:
-    - helm_chart_version[1:] is version("1.9.0", '>=')
-
-  - set_fact:
-      rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config.json' ) }}"
-    when:
-    - helm_chart_version[1:] is version("1.9.0", '<' )
-
-  - set_fact:
-      rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config-1.9.json' ) }}"
-    when:
-    - helm_chart_version[1:] is version("1.9.0", '>=' )
-
-  - set_fact:
-      url_list:
-      - "{{ url1 }}"
-      - "{{ url2 }}"
-
-  - name: Download config files
-    get_url:
-      url:  "{{ item }}"
-      dest: "{{ rook_build_dir }}/{{ item | basename }}"
-      mode: '0644'
-    loop: "{{ url_list }}"
-
-  - name: Create script client-cluster-create.sh
-    ansible.builtin.template:
-      src:  "client-cluster-create.sh.jinja2"
-      dest: "{{ rook_build_dir }}/client-cluster-create.sh"
-      mode: '0755'
-    when:
-    - helm_chart_version[1:] is version("1.9.0", '<' )
-
-  - name: Create script client-cluster-create-1.9.sh
-    ansible.builtin.template:
-      src:  "client-cluster-create-1.9.sh.jinja2"
-      dest: "{{ rook_build_dir }}/client-cluster-create.sh"
-      mode: '0755'
-    when:
-    - helm_chart_version[1:] is version("1.9.0", '>=' )
-
-  - name: test if secrets rgw-admin-ops-user and rook-ceph-mon already exist
-    ansible.builtin.command:
-      argv:
-      - bash
-      - -c
-      - "kubectl get --namespace {{ rook_namespace }} secret rgw-admin-ops-user rook-ceph-mon -o custom-columns=name:metadata.name --no-headers 2>/dev/null ; exit 0"
-    register: rook_ceph_secret
-
-    #- fail:
-    # msg: "intentional"
-
-  - name: Run script if secret does not exist
-    ansible.builtin.command:
-      argv:
-      -  bash
-      - -c
-      - "{{ rook_build_dir }}/client-cluster-create.sh"
-    when: rook_ceph_secret.stdout == ""
-
-    # otherwise any subsquent kubectl -n <namespace> will get a 404 from kubernetes
-  - name: Wait until namespace appears
-    ansible.builtin.command:
-      argv:
-      -  bash
-      - -c
-      - "while true; do kubectl get namespace {{ rook_namespace }} && break; sleep 3; done"
-
-  - name: Wait until rook-ceph-operator appears
-    ansible.builtin.command:
-      argv:
-      -  bash
-      - -c
-      - >
-        while [ -z "$(kubectl -n {{ rook_namespace }} get pods -l app=rook-ceph-operator --output=jsonpath='{.items[*].metadata.name}')" ]; do
-          echo rook-ceph-operator not found
-          sleep 10
-        done
-
-  - name: Wait until rook-ceph-operator becomes ready
-    ansible.builtin.command:
-      argv:
-      - kubectl
-      - wait
-      - -n
-      - "{{ rook_namespace }}"
-      - --timeout=600s
-      - --for=condition=Ready
-      - pod
-      - -l
-      - app=rook-ceph-operator
-
-  - name: Recursively remove directory
-    ansible.builtin.file:
-      path:  "{{ tmpdir.path }}"
-      state: absent
-    when: tmpdir is defined and 'path' in tmpdir
-
+- name: Block
   when: not rook_ceph_server
+  block:
+    - name: Build dir
+      ansible.builtin.debug:
+        msg: "rook_build_dir: {{ rook_build_dir }}"
+
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path:  "{{ rook_build_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "rook_basic_version: {{ rook_basic_version }}"
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "rook_version_major: {{ rook_version_major }}"
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "rook_version_minor  {{ rook_version_minor }}"
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "rook_build_dir: {{ rook_build_dir }}"
+
+    - name: Set urls for version <= 1.7
+      ansible.builtin.set_fact:
+        url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/import-external-cluster.sh"
+        url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/cluster/examples/kubernetes/ceph/cluster-external-management.yaml"
+      when:
+        - helm_chart_version[1:] is version("1.8.0", '<')
+
+    - name: Set urls for version == 1.8
+      ansible.builtin.set_fact:
+        url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
+        url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external-management.yaml"
+      when:
+        - helm_chart_version[1:] is version("1.8.0", '>=')
+        - helm_chart_version[1:] is version("1.9.0", '<' )
+
+    - name: Set urls for version >= 1.9
+      ansible.builtin.set_fact:
+        url1: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/import-external-cluster.sh"
+        url2: "https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/cluster-external.yaml"
+      when:
+        - helm_chart_version[1:] is version("1.9.0", '>=')
+
+    - name: Set fact
+      ansible.builtin.set_fact:
+        rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config.json') }}"
+      when:
+        - helm_chart_version[1:] is version("1.9.0", '<' )
+
+    - name: Set fact
+      ansible.builtin.set_fact:
+        rook_export_variables: "{{ lookup('file', rook_storage_credentials_dir + '/config-1.9.json') }}"
+      when:
+        - helm_chart_version[1:] is version("1.9.0", '>=' )
+
+    - name: Set fact
+      ansible.builtin.set_fact:
+        url_list:
+          - "{{ url1 }}"
+          - "{{ url2 }}"
+
+    - name: Download config files
+      ansible.builtin.get_url:
+        url:  "{{ item }}"
+        dest: "{{ rook_build_dir }}/{{ item | basename }}"
+        mode: '0644'
+      loop: "{{ url_list }}"
+
+    - name: Create script client-cluster-create.sh
+      ansible.builtin.template:
+        src:  "client-cluster-create.sh.jinja2"
+        dest: "{{ rook_build_dir }}/client-cluster-create.sh"
+        mode: '0755'
+      when:
+        - helm_chart_version[1:] is version("1.9.0", '<' )
+
+    - name: Create script client-cluster-create-1.9.sh
+      ansible.builtin.template:
+        src:  "client-cluster-create-1.9.sh.jinja2"
+        dest: "{{ rook_build_dir }}/client-cluster-create.sh"
+        mode: '0755'
+      when:
+        - helm_chart_version[1:] is version("1.9.0", '>=' )
+
+    - name: Test if secrets rgw-admin-ops-user and rook-ceph-mon already exist
+      ansible.builtin.command:
+        argv:
+          - bash
+          - -c
+          - >
+            kubectl get --namespace {{ rook_namespace }} secret rgw-admin-ops-user rook-ceph-mon
+            -o custom-columns=name:metadata.name --no-headers 2>/dev/null ; exit 0
+      register: rook_ceph_secret
+
+      # - fail:
+      #    msg: "intentional"
+
+    - name: Run script if secret does not exist
+      ansible.builtin.command:
+        argv:
+          - bash
+          - -c
+          - "{{ rook_build_dir }}/client-cluster-create.sh"
+      when: rook_ceph_secret.stdout == ""
+
+      # otherwise any subsquent kubectl -n <namespace> will get a 404 from kubernetes
+    - name: Wait until namespace appears
+      ansible.builtin.command:
+        argv:
+          - bash
+          - -c
+          - "while true; do kubectl get namespace {{ rook_namespace }} && break; sleep 3; done"
+
+    - name: Wait until rook-ceph-operator appears
+      ansible.builtin.command:
+        argv:
+          - bash
+          - -c
+          - >
+            while [ -z "$(kubectl -n {{ rook_namespace }} get pods -l app=rook-ceph-operator --output=jsonpath='{.items[*].metadata.name}')" ]; do
+              echo rook-ceph-operator not found
+              sleep 10
+            done
+
+    - name: Wait until rook-ceph-operator becomes ready
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - wait
+          - -n
+          - "{{ rook_namespace }}"
+          - --timeout=600s
+          - --for=condition=Ready
+          - pod
+          - -l
+          - app=rook-ceph-operator
+
+    - name: Recursively remove directory
+      ansible.builtin.file:
+        path:  "{{ tmpdir.path }}"
+        state: absent
+      when: tmpdir is defined and 'path' in tmpdir

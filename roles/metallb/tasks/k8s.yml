@@ -1,11 +1,12 @@
-- set_fact:
+- name: Set fact
+  ansible.builtin.set_fact:
     file_list:
-    - ipaddresspool.yaml.jinja2
-    - l2advertisement.yaml.jinja2
-  when: metallb_helm_chart_version_canonical is version("1.13.0", '<' ) 
+      - ipaddresspool.yaml.jinja2
+      - l2advertisement.yaml.jinja2
+  when: metallb_helm_chart_version_canonical is version("1.13.0", '<' )
 
-- name: apply operator
+- name: Apply operator
   kubernetes.core.k8s:
     template: "{{ item }}"
   loop: "{{ file_list }}"
-  when: metallb_helm_chart_version_canonical is version("1.13.0", '<' ) 
+  when: metallb_helm_chart_version_canonical is version("1.13.0", '<' )

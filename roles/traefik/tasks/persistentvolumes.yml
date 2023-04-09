@@ -1,11 +1,11 @@
-#- set_fact:
-#    traefik_persistent_volumes: "{{ lookup('template', 'persistentvolume.yaml.jinja2') }}"
-#- name: save operator init result to disk
-#  copy: 
-#   content: "{{ traefik_persistent_volumes }}"
-#   dest:    "/tmp/pv-traefik.yaml"
+# - set_fact:
+#     traefik_persistent_volumes: "{{ lookup('template', 'persistentvolume.yaml.jinja2') }}"
+# - name: save operator init result to disk
+#   copy:
+#    content: "{{ traefik_persistent_volumes }}"
+#    dest:    "/tmp/pv-traefik.yaml"
 
 - name: Create persistent volumes
-  kubernetes.core.k8s: 
+  kubernetes.core.k8s:
     template: persistentvolume.yaml.jinja2
   when: traefik_nfs_static_enable

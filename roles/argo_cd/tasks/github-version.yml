@@ -1,15 +1,15 @@
 - name: Get latest version from github
   github.project.version:
-    name:    "{{ argocd_github_project_name    | default(argocd_releases_url) }}"
-    version: "{{ argocd_github_project_version | default(argocd_release       | default('')) }}"
+    name:    "{{ argocd_github_project_name | default(argocd_releases_url) }}"
+    version: "{{ argocd_github_project_version | default(argocd_release | default('')) }}"
   register: result
 
 - name: Dump result
-  debug:
+  ansible.builtin.debug:
     msg: '{{ result }}'
     verbosity: 2
 
-- name: Dump fact github_project_version 
-  debug:
+- name: Dump fact github_project_version
+  ansible.builtin.debug:
     msg: '{{ github_project_version }}'
     verbosity: 1

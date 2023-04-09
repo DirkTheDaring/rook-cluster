@@ -1,86 +1,96 @@
-- name: wait until pod vault-... becomes ready
-  ansible.builtin.command: 
+- name: Wait until pod vault-... becomes ready
+  ansible.builtin.command:
     argv:
-    - bash
-    - -c
-    - "while [ \"$(kubectl -n {{ vault_namespace }} get pod {{ outer_item }} -o custom-columns=phase:status.phase --no-headers)\" != \"Running\" ]; do sleep 3; done"
+      - bash
+      - -c
+      - >
+        while [ \"$(kubectl -n {{ vault_namespace }} get pod {{ outer_item }}
+        -o custom-columns=phase:status.phase --no-headers)\" != \"Running\" ]; do sleep 3; done
 
-- name: test if vault already initialized
-  ansible.builtin.command: 
+- name: Test if vault already initialized
+  ansible.builtin.command:
     argv:
-    - kubectl
-    - --namespace
-    - "{{ vault_namespace }}"
-    - exec
-    - "{{ outer_item }}"
-    - --
-    - sh
-    - -c 
-    - "vault status|awk '/^Initialized/ { print $2;}'"
+      - kubectl
+      - --namespace
+      - "{{ vault_namespace }}"
+      - exec
+      - "{{ outer_item }}"
+      - --
+      - sh
+      - -c
+      - "vault status|awk '/^Initialized/ { print $2;}'"
 
   register: is_vault_initialized
 
-- block:
-    #kubectl -n vault-system exec -ti {{ outer_item }} -- vault operator raft join  -auto-join-scheme=http -auto-join-port=8200 http://vault-0.vault-internal:8200
-    # FAILS sometimes we retry at least 10 times (and sleep 3 seconds) 
-  - name: join vault-0 with raft
-    ansible.builtin.command:
-      argv:
-      - bash
-      - -c
-      - "for I in 0 1 2 3 4 5 6 7 8 9; do kubectl -n {{ vault_namespace }} exec {{ outer_item }} -- vault operator raft join  -auto-join-scheme=http -auto-join-port=8200 http://vault-0.vault-internal:8200 && break ; sleep 3;done"
-  
-  - name: test if vault is already initialized
-    ansible.builtin.command: 
-      argv:
-      - kubectl
-      - --namespace
-      - "{{ vault_namespace }}"
-      - exec
-      - "{{ outer_item }}"
-      - --
-      - sh
-      - -c 
-      - "while [ \"$(vault status|awk '/^Initialized/ { print $2;}')\" == \"false\" ]; do sleep 3; done"
-
-  - name: is vault is sealed
-    ansible.builtin.command: 
-      argv:
-      - kubectl
-      - --namespace
-      - "{{ vault_namespace }}"
-      - exec
-      - "{{ outer_item }}"
-      - --
-      - sh
-      - -c 
-      - "vault status|awk '/^Sealed/ { print $2;}'"
-    register: is_vault_sealed
-
-  - name: unseal vault
-    ansible.builtin.command: 
-      argv:
-      - kubectl
-      - --namespace
-      - "{{ vault_namespace }}"
-      - exec
-      - "{{ outer_item }}"
-      - --
-      - vault
-      - operator
-      - unseal
-      - "{{ item }}"
-    loop: 
-    - "{{ vault_credentials.unseal_keys_hex[0] }}"
-    - "{{ vault_credentials.unseal_keys_hex[1] }}"
-    - "{{ vault_credentials.unseal_keys_hex[2] }}"
-    when: is_vault_sealed.stdout == "true"
-
-  - name: wait until pod vault label changes to unsealed
-    ansible.builtin.command:
-      argv:
-      - bash
-      - -c
-      - "while [ $(kubectl -n {{ vault_namespace }} get pod {{ outer_item }} -o custom-columns=name:metadata.labels.vault-sealed --no-headers) == \"true\" ]; do sleep 3; done"
-
+- name: Block
   when: is_vault_initialized.stdout == "false"
+  block:
+      # kubectl -n vault-system exec -ti {{ outer_item }}
+      # -- vault operator raft join  -auto-join-scheme=http -auto-join-port=8200
+      # http://vault-0.vault-internal:8200
+      #
+      # FAILS sometimes we retry at least 10 times (and sleep 3 seconds)
+    - name: Join vault-0 with raft
+      ansible.builtin.command:
+        argv:
+          - bash
+          - -c
+          - >
+            for I in 0 1 2 3 4 5 6 7 8 9; do kubectl -n {{ vault_namespace }} exec {{ outer_item }}
+            -- vault operator raft join  -auto-join-scheme=http -auto-join-port=8200
+            http://vault-0.vault-internal:8200 && break ;sleep 3;done
+
+    - name: Test if vault is already initialized
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - --namespace
+          - "{{ vault_namespace }}"
+          - exec
+          - "{{ outer_item }}"
+          - --
+          - sh
+          - -c
+          - "while [ \"$(vault status|awk '/^Initialized/ { print $2;}')\" == \"false\" ]; do sleep 3; done"
+
+    - name: Is vault is sealed
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - --namespace
+          - "{{ vault_namespace }}"
+          - exec
+          - "{{ outer_item }}"
+          - --
+          - sh
+          - -c
+          - "vault status|awk '/^Sealed/ { print $2;}'"
+      register: is_vault_sealed
+
+    - name: Unseal vault
+      ansible.builtin.command:
+        argv:
+          - kubectl
+          - --namespace
+          - "{{ vault_namespace }}"
+          - exec
+          - "{{ outer_item }}"
+          - --
+          - vault
+          - operator
+          - unseal
+          - "{{ item }}"
+      loop:
+        - "{{ vault_credentials.unseal_keys_hex[0] }}"
+        - "{{ vault_credentials.unseal_keys_hex[1] }}"
+        - "{{ vault_credentials.unseal_keys_hex[2] }}"
+      when: is_vault_sealed.stdout == "true"
+
+    - name: Wait until pod vault label changes to unsealed
+      ansible.builtin.command:
+        argv:
+          - bash
+          - -c
+          - >
+            while [ $(kubectl -n {{ vault_namespace }} get pod {{ outer_item }}
+            -o custom-columns=name:metadata.labels.vault-sealed --no-headers) == \"true\" ]; do sleep 3; done

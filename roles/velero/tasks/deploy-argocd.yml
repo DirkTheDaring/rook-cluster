@@ -1,24 +1,22 @@
-- name: deploy argocd app
-  block:
-  - name: Transform from helm values to application params
-    set_fact:
-      velero_application_params: "{{ velero_values | chart_values_to_argo_parameters(velero_force_string_dict) }}"
-  
-#  - name: Write result to /tmp/velero-application.yaml
-#    ansible.builtin.copy:
-#      content: "{{ velero_application_params }}"
-#      dest: /tmp/velero-application-params.yaml
-#    when: ansible_verbosity > 2
-  
-  - name: Create /tmp/velero-application.yaml if verbosity > 2
-    ansible.builtin.template:
-      src:  "application.yaml.jinja2"
-      dest: "/tmp/velero-application.yaml"
-      mode: '0664'
-    when: ansible_verbosity > 2
-  
-  - name: Create argocd application
-    kubernetes.core.k8s:
-      template: application.yaml.jinja2
-
+- name: Deploy argocd app
   when: velero_deployment == "argocd"
+  block:
+    - name: Transform from helm values to application params
+      ansible.builtin.set_fact:
+        velero_application_params: "{{ velero_values | chart_values_to_argo_parameters(velero_force_string_dict) }}"
+    # - name: Write result to /tmp/velero-application.yaml
+    #   ansible.builtin.copy:
+    #     content: "{{ velero_application_params }}"
+    #     dest: /tmp/velero-application-params.yaml
+    #   when: ansible_verbosity > 2
+
+    - name: Create /tmp/velero-application.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "application.yaml.jinja2"
+        dest: "/tmp/velero-application.yaml"
+        mode: '0664'
+      when: ansible_verbosity > 2
+
+    - name: Create argocd application
+      kubernetes.core.k8s:
+        template: application.yaml.jinja2

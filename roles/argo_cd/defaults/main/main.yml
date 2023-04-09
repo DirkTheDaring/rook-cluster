@@ -5,9 +5,9 @@ argocd_credentials_dir: "{{ argocd_root_credentials_dir }}/argocd"
 
 
 # Helm Chart
-#argocd_chart_version:  ""    # "" means get latest version
-#argocd_chart_version: "~^3"  # "" means get select first element of patteer
-#argocd_release:           "~^."
+# argocd_chart_version:  ""    # "" means get latest version
+# argocd_chart_version: "~^3"  # "" means get select first element of patteer
+# argocd_release:           "~^."
 
 #  server:
 #    ingress:
@@ -18,4 +18,4 @@ argocd_credentials_dir: "{{ argocd_root_credentials_dir }}/argocd"
 #      hosts:
 #      - "{{ argocd_hostname }}"
 #
-#argocd_github_name: "argoproj/argo-cd"
+# argocd_github_name: "argoproj/argo-cd"

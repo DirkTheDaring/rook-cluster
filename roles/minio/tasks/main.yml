@@ -1,11 +1,21 @@
-- import_tasks: config.yml
-- import_tasks: github-version.yml
-- import_tasks: helm-chart-version.yml
-- import_tasks: deploy-prepare.yml
-- import_tasks: deploy-argocd.yml
-- import_tasks: deploy-helm.yml
-- import_tasks: wait-for-namespace.yml
-- import_tasks: wait-for-single-pod.yml
-- import_tasks: wait-for-service-available.yml
-#- import_tasks: buckets.yml
-- import_tasks: credentials.yml
+- name: Config
+  ansible.builtin.import_tasks: config.yml
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Get helm chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Prepare deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
+- name: Deploy with argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml
+- name: Deploy with helm
+  ansible.builtin.import_tasks: deploy-helm.yml
+- name: Wait for namespace
+  ansible.builtin.import_tasks: wait-for-namespace.yml
+- name: Wait for single pod
+  ansible.builtin.import_tasks: wait-for-single-pod.yml
+- name: Wait for service
+  ansible.builtin.import_tasks: wait-for-service-available.yml
+# - name:ansible.builtin.import_tasks: buckets.yml
+- name: Credentials
+  ansible.builtin.import_tasks: credentials.yml

@@ -1,24 +1,21 @@
-- name: deploy with helm
-  block:
-#  # Usually Taken from deploy-prepare step
-
-#  - name: render values.yaml
-#    set_fact:
-#      external_dns_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
-
-  - name: Add chart repo
-    kubernetes.core.helm_repository:
-      name:     "{{ external_dns_helm_repo_name }}"
-      repo_url: "{{ external_dns_helm_repo_url }}"
-
-  - name: Deploy helm chart
-    kubernetes.core.helm:
-      chart_ref:         "{{ external_dns_helm_repo_name }}/{{ external_dns_helm_chart_name }}"
-      chart_version:     "{{ helm_chart_version }}"
-      release_namespace: "{{ external_dns_namespace }}"
-      release_name:      "{{ external_dns_helm_chart_name }}"
-      create_namespace:  True
-      values:            "{{ external_dns_values }}"
-      update_repo_cache: True
-
+- name: Deploy with helm
   when: external_dns_deployment == "helm"
+  block:
+    - name: Render values.yaml
+      ansible.builtin.set_fact:
+        external_dns_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
+
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ external_dns_helm_repo_name }}"
+        repo_url: "{{ external_dns_helm_repo_url }}"
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ external_dns_helm_repo_name }}/{{ external_dns_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ external_dns_namespace }}"
+        release_name:      "{{ external_dns_helm_chart_name }}"
+        create_namespace:  true
+        release_values:    "{{ external_dns_values }}"
+        update_repo_cache: true

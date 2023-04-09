@@ -1,6 +1,6 @@
 name: argoproj/argo-cd
-#cache_time: 1 # in days
+# cache_time: 1 # in days
 version: '~^v[0-9]+\.[0-9]+\.[0-9]+$'
-#version: "v2.1.6"
-#version: "~^v2.0"
-#version: ""
+# version: "v2.1.6"
+# version: "~^v2.0"
+# version: ""

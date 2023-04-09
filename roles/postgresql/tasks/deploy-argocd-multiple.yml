@@ -1,42 +1,42 @@
 - name: Deploy with argocd
-  block:
-  - name: Render values.yaml
-    set_fact:
-      postgresql_values_yaml: "{{ lookup('template', 'multiple-values.yaml.jinja2') | from_yaml | prune_none_value | chart_values_to_argo_parameters({})}}"
-    loop: "{{ postgresql_databases }}"
-    register: postgresql_result
-
-  - name: Show content
-    debug:
-      msg: "{{ postgresql_result.results[i].ansible_facts.postgresql_values_yaml }}"
-    loop:  "{{ postgresql_databases }}"
-    loop_control:
-      index_var: i
-
-  - name: Create /tmp/postgresql-application.yaml if verbosity > 2
-    ansible.builtin.copy:
-      content:  "{{ postgresql_result.results[i].ansible_facts.postgresql_values_yaml }}"
-      dest:     "/tmp/postgresql-params{{ i }}.yaml"
-    loop:  "{{ postgresql_databases }}"
-    loop_control:
-      index_var: i
-    when: ansible_verbosity > 2
-
-  - name: Create /tmp/postgresql-application.yaml if verbosity > 2
-    ansible.builtin.template:
-      src:  "multiple-application.yaml.jinja2"
-      dest: "/tmp/postgresql-application{{ i }}.yaml"
-      mode: '0664'
-    loop:  "{{ postgresql_databases }}"
-    loop_control:
-      index_var: i
-    when: ansible_verbosity > 2
-
-  - name: Create argocd application
-    kubernetes.core.k8s:
-      template: "multiple-application.yaml.jinja2"
-    loop: "{{ postgresql_databases }}"
-    loop_control:
-      index_var: i
-
   when: postgresql_deployment == "argocd"
+  block:
+    - name: Render values.yaml
+      ansible.builtin.set_fact:
+        postgresql_values_yaml: "{{ lookup('template', 'multiple-values.yaml.jinja2') | from_yaml | prune_none_value | chart_values_to_argo_parameters({}) }}"
+      loop: "{{ postgresql_databases }}"
+      register: postgresql_result
+
+    - name: Show content
+      ansible.builtin.debug:
+        msg: "{{ postgresql_result.results[i].ansible_facts.postgresql_values_yaml }}"
+      loop:  "{{ postgresql_databases }}"
+      loop_control:
+        index_var: i
+
+    - name: Create /tmp/postgresql-application.yaml if verbosity > 2
+      ansible.builtin.copy:
+        content:  "{{ postgresql_result.results[i].ansible_facts.postgresql_values_yaml }}"
+        dest:     "/tmp/postgresql-params{{ i }}.yaml"
+        mode: '0644'
+      loop:  "{{ postgresql_databases }}"
+      loop_control:
+        index_var: i
+      when: ansible_verbosity > 2
+
+    - name: Create /tmp/postgresql-application.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "multiple-application.yaml.jinja2"
+        dest: "/tmp/postgresql-application{{ i }}.yaml"
+        mode: '0664'
+      loop:  "{{ postgresql_databases }}"
+      loop_control:
+        index_var: i
+      when: ansible_verbosity > 2
+
+    - name: Create argocd application
+      kubernetes.core.k8s:
+        template: "multiple-application.yaml.jinja2"
+      loop: "{{ postgresql_databases }}"
+      loop_control:
+        index_var: i

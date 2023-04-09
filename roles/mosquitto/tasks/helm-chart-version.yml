@@ -1,24 +1,24 @@
-#- name: mosquitto_helm_repo_name
-#  debug:
-#    msg: 'mosquitto_helm_repo_name: {{ mosquitto_helm_repo_name }}'
-#    verbosity: 2
+# - name: mosquitto_helm_repo_name
+#   debug:
+#     msg: 'mosquitto_helm_repo_name: {{ mosquitto_helm_repo_name }}'
+#     verbosity: 2
 #
-#- name: mosquitto_helm_repo_url
-#  debug:
-#    msg: 'mosquitto_helm_repo_url: {{ mosquitto_helm_repo_url }}'
-#    verbosity: 2
+# - name: mosquitto_helm_repo_url
+#   debug:
+#     msg: 'mosquitto_helm_repo_url: {{ mosquitto_helm_repo_url }}'
+#     verbosity: 2
 #
-#- name: mosquitto_helm_chart_name
-#  debug:
-#    msg: 'mosquitto_helm_chart_name: {{ mosquitto_helm_chart_name }}'
-#    verbosity: 2
+# - name: mosquitto_helm_chart_name
+#   debug:
+#     msg: 'mosquitto_helm_chart_name: {{ mosquitto_helm_chart_name }}'
+#     verbosity: 2
 #
-#- name: mosquitto_helm_chart_version
-#  debug:
-#    msg: 'mosquitto_helm_chart_version: {{ mosquitto_helm_chart_version}}'
-#    verbosity: 2
+# - name: mosquitto_helm_chart_version
+#   debug:
+#     msg: 'mosquitto_helm_chart_version: {{ mosquitto_helm_chart_version}}'
+#     verbosity: 2
 
-- name: get latest helm chart version
+- name: Get latest helm chart version
   helm.chart.version:
     repo_name:  "{{ mosquitto_helm_repo_name }}"
     repo_url:   "{{ mosquitto_helm_repo_url }}"
@@ -26,12 +26,12 @@
     version:    "{{ mosquitto_helm_chart_version | default('') }}"
   register: result
 
-- name: dump result
-  debug:
+- name: Dump result
+  ansible.builtin.debug:
     msg: '{{ result }}'
     verbosity: 2
 
-- name: dump fact helm_chart_version
-  debug:
+- name: Dump fact helm_chart_version
+  ansible.builtin.debug:
     msg: '{{ helm_chart_version }}'
     verbosity: 1

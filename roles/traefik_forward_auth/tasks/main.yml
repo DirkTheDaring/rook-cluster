@@ -1,1 +1,2 @@
-- import_tasks: multiple-operators.yml
+- name: Multiple operator
+  ansible.builtin.import_tasks: multiple-operators.yml

@@ -1,0 +1,14 @@
+- name: Set facts
+  ansible.builtin.set_fact:
+    # yamllint disable-line
+    fluxcd_bin_url: "https://github.com/{{ fluxcd_github_project_name }}/releases/download/v{{ fluxcd_version_canonical }}/flux_{{ fluxcd_version_canonical }}_{{ ansible_system | lower }}_{{ ansible_architecture | replace('x86_64', 'amd64') }}.tar.gz"
+    fluxcd_bin_filename: "flux_{{ fluxcd_version_canonical }}_{{ ansible_system | lower }}_{{ ansible_architecture | replace('x86_64', 'amd64') }}.tar.gz"
+- name: Debug
+  ansible.builtin.debug:
+    msg: "{{ fluxcd_bin_url }}"
+    verbosity: 1
+
+- name: Debug
+  ansible.builtin.debug:
+    msg: "{{ fluxcd_bin_filename }}"
+    verbosity: 1

@@ -1,32 +1,35 @@
-- name: wait until namespace appears
-  ansible.builtin.command: 
-    argv:
-    -  bash 
-    - -c 
-    - "while true; do kubectl get namespace {{ argocd_namespace }} && break; sleep 3; done"
-
-- set_fact:
-    argocd_label_list:
-    - app.kubernetes.io/name=argocd-application-controller
-    - app.kubernetes.io/name=argocd-dex-server
-    - app.kubernetes.io/name=argocd-redis
-    - app.kubernetes.io/name=argocd-repo-server
-    - app.kubernetes.io/name=argocd-server
-
-- name: wait until pods are visible
+- name: Wait until namespace appears
   ansible.builtin.command:
-    argv: 
-    - bash
-    - -c
-    - 'while [ -z "$(kubectl -n {{ argocd_namespace }} get pod -l {{ item }} --no-headers -o custom-columns=NAME:metadata.name)" ]; do sleep 3; done'
+    argv:
+      - bash
+      - -c
+      - "while true; do kubectl get namespace {{ argocd_namespace }} && break; sleep 3; done"
+
+- name: Set fact
+  ansible.builtin.set_fact:
+    argocd_label_list:
+      - app.kubernetes.io/name=argocd-application-controller
+      - app.kubernetes.io/name=argocd-dex-server
+      - app.kubernetes.io/name=argocd-redis
+      - app.kubernetes.io/name=argocd-repo-server
+      - app.kubernetes.io/name=argocd-server
+
+- name: Wait until pods are visible
+  ansible.builtin.command:
+    argv:
+      - bash
+      - -c
+      - 'while [ -z "$(kubectl -n {{ argocd_namespace }} get pod -l {{ item }} --no-headers -o custom-columns=NAME:metadata.name)" ]; do sleep 3; done'
   loop: "{{ argocd_label_list }}"
 
   # Replaced kubectl wait, because it failed sometimes
   # kubectl -n argocd get pod -l app.kubernetes.io/name=argocd-server --no-headers -o 'custom-columns=NAME:status.conditions[0].type
-- name: wait until all argocd pods are ready
+- name: Wait until all argocd pods are ready
   ansible.builtin.command:
     argv:
-    - bash
-    - -c
-    - while [ "$(kubectl -n {{ argocd_namespace }} get pod -l {{ item }} --no-headers -o 'custom-columns=NAME:status.conditions[0].type')" != "Initialized" ]; do sleep 3; done
+      - bash
+      - -c
+      - >
+        while [ "$(kubectl -n {{ argocd_namespace }} get pod -l {{ item }} --no-headers
+        -o 'custom-columns=NAME:status.conditions[0].type')" != "Initialized" ]; do sleep 3; done
   loop: "{{ argocd_label_list }}"

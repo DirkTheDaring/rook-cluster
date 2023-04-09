@@ -1,4 +1,6 @@
-- set_fact:
-    velero_credentials_s3: "{{ lookup('file', velero_credentials_s3_json ) | from_json }}"
-- debug:
+- name: Set fact
+  ansible.builtin.set_fact:
+    velero_credentials_s3: "{{ lookup('file', velero_credentials_s3_json) | from_json }}"
+- name: Debug
+  ansible.builtin.debug:
     msg: "{{ velero_credentials_s3 }}"

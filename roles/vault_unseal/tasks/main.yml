@@ -1,2 +1,4 @@
-- import_tasks: k8s.yml
-- import_tasks: config.yml
+- name: K8s
+  ansible.builtin.import_tasks: k8s.yml
+- name: Config
+  ansible.builtin.import_tasks: config.yml

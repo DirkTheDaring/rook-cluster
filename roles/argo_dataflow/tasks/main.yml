@@ -1,4 +1,7 @@
-- import_tasks: install-operator.yml
-- import_tasks: ingress.yml
-# no wait in the orig
-#- import_tasks: wait-for-namespace.yml
+- name: Install operator
+  ansible.builtin.import_tasks: install-operator.yml
+- name: Ingress
+  ansible.builtin.import_tasks: ingress.yml
+#  no wait in the orig
+# - name: wait for namespace
+#   ansible.builtin.import_tasks: wait-for-namespace.yml

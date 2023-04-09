@@ -14,7 +14,7 @@
     dest: "{{ tempfile.path }}"
     mode: '0664'
 
-- name: apply operator
+- name: Apply operator
   kubernetes.core.k8s:
     state: present
     src:   "{{ tempfile.path }}"
@@ -25,7 +25,7 @@
     dest: "{{ tempfile.path }}"
     mode: '0664'
 
-- name: apply operator
+- name: Apply operator
   kubernetes.core.k8s:
     state: present
     src:   "{{ tempfile.path }}"

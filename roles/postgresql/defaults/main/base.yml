@@ -21,14 +21,14 @@ postgresql_helm_repo_name:     bitnami
 postgresql_helm_repo_url:      https://charts.bitnami.com/bitnami
 postgresql_helm_chart_name:    postgresql
 postgresql_helm_chart_version: ""        # empty strings means pick latest
-#postgresql_helm_chart_version: "~^10\.14\."    # pick by regular expression
-#postgresql_helm_chart_version: "10.14.2" # set absolute version
+# postgresql_helm_chart_version: "~^10\.14\."    # pick by regular expression
+# postgresql_helm_chart_version: "10.14.2" # set absolute version
 
 # Github Repository
 postgresql_releases_url:      "https://github.com/postgres/postgres/releases"
 postgresql_releases_jmespath: "[].tag_name"
-#postgresql_release: "~^11\.14\." # pick first match of regular expression
-#postgresql_release: "11.14.0"
+# postgresql_release: "~^11\.14\." # pick first match of regular expression
+# postgresql_release: "11.14.0"
 
 # Configuration Database
 postgresql_root_credentials_dir: "{{ playbook_dir }}/credentials"
@@ -37,13 +37,13 @@ postgresql_root_credentials_dir: "{{ playbook_dir }}/credentials"
 postgresql_storage_class: ""
 postgresql_node_selector: {}
 
-#postgresql_root_credentials_dir: "{{ playbook_dir }}/credentials"
+# postgresql_root_credentials_dir: "{{ playbook_dir }}/credentials"
 
 postgresql_databases: []
-#- chart_version:      "10.13.8" 
-#  namespace:          argo-workflows
-#  # (name == dnsname) = databasename + "-postgresql"
-#  name:               argo-workflows-postgresql
-#  database_name:      argo-workflows
-#  database_username:  argo-workflows
-#  database_password:  argo-workflows
+# - chart_version:      "10.13.8"
+#   namespace:          argo-workflows
+#   # (name == dnsname) = databasename + "-postgresql"
+#   name:               argo-workflows-postgresql
+#   database_name:      argo-workflows
+#   database_username:  argo-workflows
+#   database_password:  argo-workflows

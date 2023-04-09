@@ -1,4 +1,3 @@
-
 whoami_credentials_dir: "{{ whoami_root_credentials_dir }}/whoami"
 
 whoami_fqdn:                  "{{ whoami_hostname }}{{ '' if whoami_subdomain == '' else '.' + whoami_subdomain }}.{{ whoami_domain }}"

@@ -3,23 +3,24 @@
 - name: Wait until pod with label app.kubernetes.io/component=controller appears
   ansible.builtin.command:
     argv:
-    -  bash
-    - -c
-    - >
-      while [ -z "$(kubectl -n {{ metallb_namespace }} get pods -l app.kubernetes.io/component=controller --output=jsonpath='{.items[*].metadata.name}')" ]; do
-        echo label app.kubernetes.io/component=controller not found
-        sleep 10
-      done
+      - bash
+      - -c
+      - >
+        while [ -z "$(kubectl -n {{ metallb_namespace }} get pods -l app.kubernetes.io/component=controller \
+                    --output=jsonpath='{.items[*].metadata.name}')" ]; do
+          echo label app.kubernetes.io/component=controller not found
+          sleep 10
+        done
 
 - name: Wait until pod with label app.kubernetes.io/component=controller becomes ready
   ansible.builtin.command:
     argv:
-    - kubectl
-    - wait
-    - -n
-    - "{{ metallb_namespace }}"
-    - --timeout=600s
-    - --for=condition=Ready
-    - pod
-    - -l
-    - app.kubernetes.io/component=controller
+      - kubectl
+      - wait
+      - -n
+      - "{{ metallb_namespace }}"
+      - --timeout=600s
+      - --for=condition=Ready
+      - pod
+      - -l
+      - app.kubernetes.io/component=controller

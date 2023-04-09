@@ -22,25 +22,25 @@ argo_events_helm_repo_name:     argo
 argo_events_helm_repo_url:      https://argoproj.github.io/argo-helm
 argo_events_helm_chart_name:    argo-events
 argo_events_helm_chart_version: ""        # empty strings means pick latest
-#argo_events_helm_chart_version: "~^2\.24\."    # pick by regular expression
-#argo_events_helm_chart_version: "2.24.0" # set absolute version
+# argo_events_helm_chart_version: "~^2\.24\."    # pick by regular expression
+# argo_events_helm_chart_version: "2.24.0" # set absolute version
 
 # Github Repository
 argo_events_releases_url:      "https://api.github.com/repos/argoproj/argo-events/releases"
 argo_events_releases_jmespath: "[].tag_name"
-#argo_events_release: "~^v1\.5\." # pick first match of regular expression
-#argo_events_release: "v1.5.5"
+# argo_events_release: "~^v1\.5\." # pick first match of regular expression
+# argo_events_release: "v1.5.5"
 
 # Configuration Database
 argo_events_root_credentials_dir: "{{ playbook_dir }}/credentials"
 # Github
 argo_events_github_project_name:    argoproj/argo-events
 argo_events_github_project_version: "" #  "" means pick latest
-#argo_events_github_project_version: "v1.5.3"
-#argo_events_github_project_version: '~^v[0-9]+\.[0-9]+\.[0-9]+$'
+# argo_events_github_project_version: "v1.5.3"
+# argo_events_github_project_version: '~^v[0-9]+\.[0-9]+\.[0-9]+$'
 argo_events_force_string_dict:
-#  path_list:
-#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
-  - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
-#  - '^env\['
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+   # - '^env\['

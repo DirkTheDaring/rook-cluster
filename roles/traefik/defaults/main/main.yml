@@ -1,4 +1,3 @@
-
 traefik_credentials_dir: "{{ traefik_root_credentials_dir }}/traefik"
 
 traefik_fqdn:                  "{{ traefik_hostname }}{{ '' if traefik_subdomain == '' else '.' + traefik_subdomain }}.{{ traefik_domain }}"

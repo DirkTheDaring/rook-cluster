@@ -1,17 +1,20 @@
-- name: wait until configmap rook-config-override appears
+- name: Wait until configmap rook-config-override appears
   ansible.builtin.command:
     argv:
-    - bash
-    - -c
-    - "while [ -z \"$(kubectl -n {{ rook_namespace }} get cm rook-config-override --no-headers -o custom-columns=name:metadata.name)\"  ]; do sleep 3;done"
+      - bash
+      - -c
+      - "while [ -z \"$(kubectl -n {{ rook_namespace }} get cm rook-config-override --no-headers -o custom-columns=name:metadata.name)\"  ]; do sleep 3;done"
   when: rook_ceph_server
 
-- debug:
+- name: Debug
+  ansible.builtin.debug:
     msg: "rook_ceph_public_network: {{ rook_ceph_public_network }}"
-- debug:
+- name: Debug
+  ansible.builtin.debug:
     msg: "rook_ceph_cluster_network: {{ rook_ceph_cluster_network }}"
 
- # bdev_enable_discard: Enables async discard on devices. This option will enable/disable both bdev-enable-discard and bdev-async-discard options in ceph configuration
+ # bdev_enable_discard: Enables async discard on devices. This option will enable/disable both bdev-enable-discard and bdev-async-discard options
+ # in ceph configuration
  # https://opendev.org/openstack/charm-ceph-osd/commit/56495eecbac9652f1340b91c188d84ef18d1dac0
  # https://github.com/rook/rook/issues/6964
  # Even Proxmox has a comment on this
@@ -24,16 +27,15 @@
       apiVersion: v1
       kind: ConfigMap
       metadata:
-         namespace: "{{ rook_namespace }}"
-         name: rook-config-override
+        namespace: "{{ rook_namespace }}"
+        name: rook-config-override
       data:
         config: |
           [global]
-          public network =  {{ rook_ceph_public_network  }} # 10.243.180.0/23
+          public network =  {{ rook_ceph_public_network }}  # 10.243.180.0/23
           cluster network = {{ rook_ceph_cluster_network }} # 172.16.1.0/24 # routes hearbeat,object replication and recoveredy
           public addr = ""
           cluster addr = ""
           bdev_enable_discard = true
           bdev_async_discard = true
   when: rook_ceph_server and rook_ceph_public_network|length and rook_ceph_cluster_network|length
-

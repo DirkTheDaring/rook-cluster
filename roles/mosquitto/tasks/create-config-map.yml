@@ -1,5 +1,5 @@
-- name: load confent
-  set_fact:
+- name: Load confent
+  ansible.builtin.set_fact:
     mosquitto_conf:  "{{ lookup('template', 'mosquitto.conf.jinja2') }}"
 
 - name: Create a k8s namespace
@@ -20,4 +20,3 @@
         name:      mosquitto-extra-config
       data:
         mosquitto.conf: "{{ mosquitto_conf }}"
-      

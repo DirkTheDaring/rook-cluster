@@ -1,4 +1,8 @@
-- import_tasks: github-version.yml
-- import_tasks: helm-chart-version.yml
-- import_tasks: deploy-prepare.yml
-- import_tasks: deploy-argocd.yml
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Get helm chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Prepare deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
+- name: Deploy with argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml

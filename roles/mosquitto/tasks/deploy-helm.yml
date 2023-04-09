@@ -1,24 +1,21 @@
-- name: deploy with helm
-  block:
-#  # Usually Taken from deploy-prepare step
-
-#  - name: render values.yaml
-#    set_fact:
-#      mosquitto_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
-
-  - name: Add chart repo
-    kubernetes.core.helm_repository:
-      name:     "{{ mosquitto_helm_repo_name }}"
-      repo_url: "{{ mosquitto_helm_repo_url }}"
-
-  - name: Deploy helm chart
-    kubernetes.core.helm:
-      chart_ref:         "{{ mosquitto_helm_repo_name }}/{{ mosquitto_helm_chart_name }}"
-      chart_version:     "{{ helm_chart_version }}"
-      release_namespace: "{{ mosquitto_namespace }}"
-      release_name:      "{{ mosquitto_helm_chart_name }}"
-      create_namespace:  True
-      values:            "{{ mosquitto_values }}"
-      update_repo_cache: True
-
+- name: Deploy with helm
   when: mosquitto_deployment == "helm"
+  block:
+    - name: Render values.yaml
+      ansible.builtin.set_fact:
+        mosquitto_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
+
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ mosquitto_helm_repo_name }}"
+        repo_url: "{{ mosquitto_helm_repo_url }}"
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ mosquitto_helm_repo_name }}/{{ mosquitto_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ mosquitto_namespace }}"
+        release_name:      "{{ mosquitto_helm_chart_name }}"
+        create_namespace:  true
+        release_values:    "{{ mosquitto_values }}"
+        update_repo_cache: true

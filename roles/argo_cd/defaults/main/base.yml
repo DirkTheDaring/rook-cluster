@@ -8,7 +8,7 @@ argocd_deployment:    "argocd"
 
 # Kubernetes
 argocd_namespace:    "argo-cd"
-#argocd_node_selector_hostname: ""
+# argocd_node_selector_hostname: ""
 
 # Argocd
 argocd_argocd_project:            "default"
@@ -22,14 +22,14 @@ argocd_helm_repo_name:     argocd
 argocd_helm_repo_url:      https://argoproj.github.io/argo-helm
 argocd_helm_chart_name:    argo-cd
 argocd_helm_chart_version: ""        # empty strings means pick latest
-#argocd_helm_chart_version: "~^2\.24\."    # pick by regular expression
-#argocd_helm_chart_version: "2.24.0" # set absolute version
+# argocd_helm_chart_version: "~^2\.24\."    # pick by regular expression
+# argocd_helm_chart_version: "2.24.0" # set absolute version
 
 # Github Repository
 argocd_releases_url:      "https://api.github.com/repos/argoproj/argo-cd/releases"
 argocd_releases_jmespath: "[].tag_name"
-#argocd_release: "~^v1\.7\." # pick first match of regular expression
-#argocd_release: "v1.7.1"
+# argocd_release: "~^v1\.7\." # pick first match of regular expression
+# argocd_release: "v1.7.1"
 
 # Configuration Database
 argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"
@@ -37,21 +37,21 @@ argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"
 argocd_values: {}
 
 argocd_policy_users: []
-#- name: "demosuser"
-#  role: "role:readonly"
+  #  - name: "demosuser"
+  #  role: "role:readonly"
 argocd_policy_groups: []
-#- name: "demogroup"
-#  role: "role:admin"
+  # - name: "demogroup"
+  #   role: "role:admin"
 
 argocd_sso_list: []
-#- name: Argo Workflow
-#  id:   argo-workflows-sso
-#  uid:  0e56402e-93cd-49ed-a84b-ce8254a192e9
-#  redirectURIs:
-#  - https://argo-workflows.office.kaupon.de/oauth2/callback
-#  secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
+  # - name: Argo Workflow
+  #   id:   argo-workflows-sso
+  #   uid:  0e56402e-93cd-49ed-a84b-ce8254a192e9
+  #   redirectURIs:
+  #   - https://argo-workflows.office.kaupon.de/oauth2/callback
+  #   secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
 
-#argocd_node_selector_hostname: ""
+# argocd_node_selector_hostname: ""
 
 # Ldap
 argocd_ldap_profile: "activedirectory"
@@ -66,4 +66,3 @@ argocd_ldap_insecure_tls:  "false"
 # Secrets for git repositories
 argocd_gitlab_secret: ""
 argocd_github_secret: ""
-

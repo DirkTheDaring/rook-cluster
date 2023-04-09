@@ -1,9 +1,18 @@
-- import_tasks: helm-chart-version.yml
-- import_tasks: github-version.yml
-- import_tasks: config.yml
-- import_tasks: namespace.yml
-- import_tasks: postgresql-secret.yml
-- import_tasks: s3-secret.yml
-- import_tasks: secret.yml
-- import_tasks: deploy-prepare.yml
-- import_tasks: deploy-argocd.yml
+- name: Get helm chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Get config
+  ansible.builtin.import_tasks: config.yml
+- name: Namespace
+  ansible.builtin.import_tasks: namespace.yml
+- name: Postgresql
+  ansible.builtin.import_tasks: postgresql-secret.yml
+- name: S3
+  ansible.builtin.import_tasks: s3-secret.yml
+- name: Secret
+  ansible.builtin.import_tasks: secret.yml
+- name: Prepare deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
+- name: Deploy with argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml

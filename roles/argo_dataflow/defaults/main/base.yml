@@ -17,13 +17,13 @@ argo_dataflow_argocd_destination_server: "https://kubernetes.default.svc"
 # Github Repository
 argo_dataflow_releases_url:      "https://api.github.com/repos/argoproj-labs/argo-dataflow/releases"
 argo_dataflow_releases_jmespath: "[].tag_name"
-#argo_dataflow_release: "~^v0\.8\." # pick first match of regular expression
-#argo_dataflow_release: "v0.8.0"
+# argo_dataflow_release: "~^v0\.8\." # pick first match of regular expression
+# argo_dataflow_release: "v0.8.0"
 
 # Configuration Database
 argo_dataflow_root_credentials_dir: "{{ playbook_dir }}/credentials"
 # https://github.com/argoproj-labs/argo-dataflow/blob/main/docs/QUICK_START.md
-#argo_dataflow_operator_url: https://raw.githubusercontent.com/argoproj-labs/argo-dataflow/main/config/quick-start.yaml
+# argo_dataflow_operator_url: https://raw.githubusercontent.com/argoproj-labs/argo-dataflow/main/config/quick-start.yaml
 
 # Kubernetes
 # https://github.com/argoproj-labs/argo-dataflow/blob/main/docs/QUICK_START.md

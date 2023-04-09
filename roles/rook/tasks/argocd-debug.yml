@@ -1,24 +1,29 @@
-- block:
-  - set_fact:
-      rook_application:         "{{ lookup('template', 'application.yaml.jinja2')         | from_yaml }}"
-      rook_cluster_application: "{{ lookup('template', 'cluster-application.yaml.jinja2') | from_yaml }}"
-      rook_cluster_export:      "{{ lookup('template', 'export-job.yaml.jinja2')          }}"
+- name: Block
+  when:
+    - ansible_verbosity > 2
+    - false
+  block:
+    - name: Set fact
+      ansible.builtin.set_fact:
+        rook_application:         "{{ lookup('template', 'application.yaml.jinja2') | from_yaml }}"
+        rook_cluster_application: "{{ lookup('template', 'cluster-application.yaml.jinja2') | from_yaml }}"
+        rook_cluster_export:      "{{ lookup('template', 'export-job.yaml.jinja2') }}"
 
-  - name: show templating results
-    debug:
-      msg: "{{ rook_application }}"
+    - name: Show templating results
+      ansible.builtin.debug:
+        msg: "{{ rook_application }}"
 
-  - name: show templating results
-    debug:
-      msg: "{{ rook_cluster_application }}"
-  - copy:
-      content: "{{ rook_cluster_export }}"
-      dest: /tmp/x
-
-  - debug:
-      msg: "rook_ceph_server: {{ rook_ceph_server }}"
-  - fail:
-      msg: intended
-  when: false
-
-
+    - name: Show templating results
+      ansible.builtin.debug:
+        msg: "{{ rook_cluster_application }}"
+    - name: Copy
+      ansible.builtin.copy:
+        content: "{{ rook_cluster_export }}"
+        dest: /tmp/x
+        mode: '0644'
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "rook_ceph_server: {{ rook_ceph_server }}"
+    - name: Fail
+      ansible.builtin.fail:
+        msg: intended
