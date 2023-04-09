@@ -1,3 +1,0 @@
-- import_tasks: github-version.yml
-- import_tasks: csi.yml
-- import_tasks: snapshotclass.yml
