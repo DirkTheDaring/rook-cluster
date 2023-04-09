@@ -1,4 +1,0 @@
-- name: create application
-  kubernetes.core.k8s:
-    template: application.yaml.jinja2
-  when: storage1_deployment == "argocd"
