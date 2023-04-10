@@ -4,7 +4,7 @@ keycloak_subdomain:    ""
 keycloak_hostname:     "keycloak"
 
 # Deployment Method: argocd, helm
-keycloak_deployment:    "argocd"
+keycloak_deployment:    "helm"
 
 # Kubernetes
 keycloak_namespace:    "keycloak"

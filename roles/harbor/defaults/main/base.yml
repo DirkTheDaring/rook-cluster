@@ -5,7 +5,7 @@ harbor_core_hostname: "harbor"
 harbor_notary_hostname: "notary"
 
 # Deployment Method: argocd, helm
-harbor_deployment:    "argocd"
+harbor_deployment:    "helm"
 
 # Kubernetes
 harbor_namespace:    "harbor"
@@ -34,8 +34,8 @@ harbor_releases_jmespath: "[].tag_name"
 # Configuration Database
 harbor_root_credentials_dir: "{{ playbook_dir }}/credentials"
 harbor_force_string_dict:
-#  path_list:
-#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['

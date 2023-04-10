@@ -4,7 +4,7 @@ external_dns_subdomain:    ""
 external_dns_hostname:     "external-dns"
 
 # Deployment Method: argocd, helm
-external_dns_deployment:    "argocd"
+external_dns_deployment:    "helm"
 
 # Kubernetes
 external_dns_namespace:    "external-dns"
@@ -33,8 +33,8 @@ external_dns_releases_jmespath: "[].tag_name"
 # Configuration Database
 external_dns_root_credentials_dir: "{{ playbook_dir }}/credentials"
 external_dns_force_string_dict:
-  #  path_list:
-  #  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['

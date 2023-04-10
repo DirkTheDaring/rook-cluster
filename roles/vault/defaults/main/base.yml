@@ -4,7 +4,7 @@ vault_subdomain:    ""
 vault_hostname:     "vault"
 
 # Deployment Method: argocd, helm
-vault_deployment:    "argocd"
+vault_deployment:    "helm"
 
 # Kubernetes
 vault_namespace:    "vault-system"
@@ -33,8 +33,8 @@ vault_releases_jmespath: "[].tag_name"
 # Configuration Database
 vault_root_credentials_dir: "{{ playbook_dir }}/credentials"
 vault_force_string_dict:
-  #  path_list:
-  #  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['

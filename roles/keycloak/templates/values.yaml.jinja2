@@ -1,4 +1,4 @@
-# Values which evaluate to "None" (because variable is an empty string), will be pruned 
+# Values which evaluate to "None" (because variable is an empty string), will be pruned
 # in a later step - as this makes troubles with helm charts (None can overrwrite your dict)
 #
 global:
@@ -16,7 +16,7 @@ initContainers:
 - command:
   - sh
   - -c
-  # You cannot use a $ in argo, which limits sh scripts severely: https://github.com/argoproj/argo-cd/issues/6878. 
+  # You cannot use a $ in argo, which limits sh scripts severely: https://github.com/argoproj/argo-cd/issues/6878.
   # Also the -alias flag must be set in the script, as otherwise the import tool always uses the same name for alias
   # which fails on second import with alias already exists - yes these are junk names, but hey without $ no script processing
 {% if true %}
@@ -68,6 +68,6 @@ auth:
 
 postgresql:
   auth:
-    postgresPassword: {{ keycloak_postgresql_config.admin_username if 'admin_username' in keycloak_postgresql_config }} 
+    postgresPassword: {{ keycloak_postgresql_config.admin_username if 'admin_username' in keycloak_postgresql_config }}
     username: {{ keycloak_postgresql_config.username if 'username' in keycloak_postgresql_config }}
     password: {{ keycloak_postgresql_config.password if 'password' in keycloak_postgresql_config }}

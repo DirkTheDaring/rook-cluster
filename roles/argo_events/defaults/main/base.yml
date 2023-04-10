@@ -4,7 +4,7 @@ argo_events_subdomain:    ""
 argo_events_hostname:     "argo-events"
 
 # Deployment Method: argocd, helm
-argo_events_deployment:    "argocd"
+argo_events_deployment:    "helm"
 
 # Kubernetes
 argo_events_namespace:    "argo-events"
@@ -43,4 +43,4 @@ argo_events_force_string_dict:
   #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
-   # - '^env\['
+    # - '^env\['

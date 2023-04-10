@@ -16,7 +16,7 @@ spec:
     name:      {{ item }}
   nfs:
     server: {{ vault_nfs_server }}
-    path:   {{ vault_nfs_path }}/{{ item }} 
+    path:   {{ vault_nfs_path }}/{{ item }}
   persistentVolumeReclaimPolicy: Retain
   storageClassName:              nfs-static
   volumeMode:                    Filesystem

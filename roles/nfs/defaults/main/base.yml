@@ -4,7 +4,7 @@ nfs_subdir_external_provisioner_subdomain:    ""
 nfs_subdir_external_provisioner_hostname:     "nfs-subdir-external-provisioner"
 
 # Deployment Method: argocd, helm
-nfs_subdir_external_provisioner_deployment:    "argocd"
+nfs_subdir_external_provisioner_deployment:    "helm"
 
 # Kubernetes
 nfs_subdir_external_provisioner_namespace:    "nfs-storage"

@@ -4,6 +4,7 @@
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
         velero_application_params: "{{ velero_values | chart_values_to_argo_parameters(velero_force_string_dict) }}"
+
     # - name: Write result to /tmp/velero-application.yaml
     #   ansible.builtin.copy:
     #     content: "{{ velero_application_params }}"

@@ -9,6 +9,6 @@ persistence:
 {% if postgresql_node_selector is defined and postgresql_node_selector is mapping %}
 primary:
   nodeSelector:
-    {{ postgresql_node_selector | to_yaml(indent=4) }} 
+    {{ postgresql_node_selector | to_yaml(indent=4) }}
 {% endif %}
 

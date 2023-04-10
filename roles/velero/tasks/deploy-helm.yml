@@ -1,6 +1,10 @@
 - name: Deploy with helm
   when: velero_deployment == "helm"
   block:
+    # - name: Render values.yaml
+    #   ansible.builtin.set_fact:
+    #     velero_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
+
     - name: Add chart repo
       kubernetes.core.helm_repository:
         name:     "{{ velero_helm_repo_name }}"
@@ -11,7 +15,7 @@
         chart_ref:         "{{ velero_helm_repo_name }}/{{ velero_helm_chart_name }}"
         chart_version:     "{{ helm_chart_version }}"
         release_namespace: "{{ velero_namespace }}"
-        release_name:      "{{ velero_helm_chart_name }}"
+        release_name:      "{{ velero_helm_release_name }}"
         create_namespace:  true
         release_values:    "{{ velero_values }}"
         update_repo_cache: true

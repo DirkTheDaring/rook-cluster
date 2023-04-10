@@ -56,7 +56,7 @@ spec:
               else
                 echo "*** rgw-admin-ops-user exists. setup external cluster resources skipped"
               fi
-    
+
               FLAG=0
               while true; do
                 if [ $FLAG == 1 ]; then sleep 10 else FLAG=1; fi
@@ -78,7 +78,7 @@ spec:
                 break
               done
 {% if rook_ceph_quirk %}
-              # FIX for error 
+              # FIX for error
               MON_MAX_PG_PER_OSD=$(ceph config get mon mon_max_pg_per_osd)
               echo "- mon_max_pg_per_osd: $MON_MAX_PG_PER_OSD"
               ceph config set mon mon_max_pg_per_osd {{ rook_ceph_mon_max_pg_per_osd | default('568') }}
@@ -86,7 +86,7 @@ spec:
               echo "+ mon_max_pg_per_osd: $MON_MAX_PG_PER_OSD"
 {% endif %}              # END FIX
 {% if rook_ceph_server %}
-              # Enable backend rook 
+              # Enable backend rook
               # Source: https://docs.ceph.com/en/latest/mgr/orchestrator/#configuring-the-orchestrator-cli
               ceph mgr module enable rook
               ceph orch set backend rook

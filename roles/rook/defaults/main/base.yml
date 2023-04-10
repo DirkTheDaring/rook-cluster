@@ -15,6 +15,7 @@ rook_argocd_namespace:          "argo-cd"
 rook_argocd_destination_server: "https://kubernetes.default.svc"
 
 # Helm Chart
+rook_helm_release_name:  rook
 
 rook_helm_repo_name:     rook-release
 rook_helm_repo_url:      https://charts.rook.io/release
@@ -22,7 +23,6 @@ rook_helm_chart_name:    rook-ceph
 rook_helm_chart_version: ""        # empty strings means pick latest
 # rook_helm_chart_version: "~^1\.8\."    # pick by regular expression
 # rook_helm_chart_version: "1.8.1" # set absolute version
-rook_helm_release_name:  rook
 
 # Github Repository
 rook_releases_url:      "https://api.github.com/repos/rook/rook/releases"
@@ -33,15 +33,11 @@ rook_releases_jmespath: "[].tag_name"
 # Configuration Database
 rook_root_credentials_dir: "{{ playbook_dir }}/credentials"
 rook_force_string_dict:
-#  path_list:
-#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
-
-rook_helm_cluster_chart_name:         "rook-ceph-cluster"
-rook_helm_cluster_chart_release_name: "rook-ceph-cluster"
-
 rook_default_storage_class: ""
 # rook_default_storage_class: "rook-cephfs-delete"
 

@@ -5,11 +5,11 @@
       ansible.builtin.set_fact:
         harbor_application_params: "{{ harbor_values | chart_values_to_argo_parameters(harbor_force_string_dict) }}"
 
-  #  - name: Write result to /tmp/harbor-application.yaml
-  #    ansible.builtin.copy:
-  #      content: "{{ harbor_application_params }}"
-  #      dest: /tmp/harbor-application-params.yaml
-  #    when: ansible_verbosity > 2
+    # - name: Write result to /tmp/harbor-application.yaml
+    #   ansible.builtin.copy:
+    #     content: "{{ harbor_application_params }}"
+    #     dest: /tmp/harbor-application-params.yaml
+    #   when: ansible_verbosity > 2
 
     - name: Create /tmp/harbor-application.yaml if verbosity > 2
       ansible.builtin.template:

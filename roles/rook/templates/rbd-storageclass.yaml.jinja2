@@ -19,7 +19,7 @@ kind: StorageClass
 metadata:
   name:      {{ item.name }}
 {% if 'annotations' in item %}
-  annotations: 
+  annotations:
     {{ item.annotations | to_yaml(indent=4) }}
 {% endif  %}
 provisioner: rook-ceph.rbd.csi.ceph.com

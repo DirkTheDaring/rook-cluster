@@ -4,7 +4,7 @@ kwhoami_subdomain:    ""
 kwhoami_hostname:     "kwhoami"
 
 # Deployment Method: argocd, helm
-kwhoami_deployment:    "argocd"
+kwhoami_deployment:    "helm"
 
 # Kubernetes
 kwhoami_namespace:    "kwhoami"

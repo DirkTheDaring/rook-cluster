@@ -1,9 +1,10 @@
 velero_credentials_dir: "{{ velero_root_credentials_dir }}/velero"
 
+# yamllint disable-line
+velero_fqdn:                  "{{ velero_hostname }}{{ '' if velero_subdomain == '' else '.' + velero_subdomain }}.{{ velero_domain }}"
+
 # Import configuration
 velero_credentials_s3_json: "{{ velero_root_credentials_dir }}/minio/config.json"
-
-velero_fqdn:                  "{{ velero_hostname }}{{ '' if velero_subdomain == '' else '.' + velero_subdomain }}.{{ velero_domain }}"
 # Velero Setttings
 # https://hub.docker.com/r/velero/velero/tags?page=1&ordering=last_updated
 velero_values_image_tag: ""

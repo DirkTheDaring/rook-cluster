@@ -4,7 +4,7 @@ traefik_subdomain:    ""
 traefik_hostname:     "traefik"
 
 # Deployment Method: argocd, helm
-traefik_deployment:    "argocd"
+traefik_deployment:    "helm"
 
 # Kubernetes
 traefik_namespace:    "ingress"
@@ -32,13 +32,10 @@ traefik_releases_jmespath: "[].tag_name"
 
 # Configuration Database
 traefik_root_credentials_dir: "{{ playbook_dir }}/credentials"
-
-# This is for argocd, which must have certain values as string
 traefik_force_string_dict:
   path_regex_list:
     - '^env\['
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
-
 traefik_loadbalancer_ip: "127.0.0.1"
 
 # traefik_persistence_storage_class: ceph-filesystem
@@ -52,10 +49,10 @@ traefik_nfs_static_enable: false
 # traefik_image_tag:  "2.5.1"
 
 traefik_ports: []
-# - name: quassel-core
-#   value: "4242"
-# - name: jnlp
-#   value: "50000"
+  # - name: quassel-core
+  #   value: "4242"
+  # - name: jnlp
+  #   value: "50000"
 
 traefik_values_additional_arguments: []
 traefik_values_env: []
@@ -63,15 +60,14 @@ traefik_values_env: []
 traefik_node_selector: {}
 
 traefik_affinity: {}
-#  nodeAffinity:
-#    requiredDuringSchedulingIgnoredDuringExecution:
-#      nodeSelectorTerms:
-#      - matchExpressions:
-#        - key:      node-role.kubernetes.io/master
-#          operator: Exists
+# nodeAffinity:
+#   requiredDuringSchedulingIgnoredDuringExecution:
+#     nodeSelectorTerms:
+#       - matchExpressions:
+#         - key:      node-role.kubernetes.io/master
+#           operator: Exists
 
 traefik_tolerations: []
-# traefik_tolerations:
-# - key:       "node-role.kubernetes.io/master"
-#   operator:  "Exists"
-#   effect:    "NoSchedule"
+  # - key:       "node-role.kubernetes.io/master"
+  #  operator:  "Exists"
+  #  effect:    "NoSchedule"

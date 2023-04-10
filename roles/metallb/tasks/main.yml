@@ -2,6 +2,8 @@
   ansible.builtin.import_tasks: github-version.yml
 - name: Get helm chart version
   ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Get helm chart version canonical
+  ansible.builtin.import_tasks: helm-chart-version-canonical.yml
 - name: Set Version
   ansible.builtin.import_tasks: set-version.yml
 - name: Prepare deploy

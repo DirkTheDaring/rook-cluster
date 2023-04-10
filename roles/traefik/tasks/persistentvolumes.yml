@@ -1,7 +1,7 @@
 # - set_fact:
 #     traefik_persistent_volumes: "{{ lookup('template', 'persistentvolume.yaml.jinja2') }}"
 # - name: save operator init result to disk
-#   copy:
+#   ansible.builtin.copy:
 #    content: "{{ traefik_persistent_volumes }}"
 #    dest:    "/tmp/pv-traefik.yaml"
 

@@ -4,7 +4,7 @@ argo_dataflow_subdomain:    ""
 argo_dataflow_hostname:     "argo-dataflow"
 
 # Deployment Method: argocd, helm
-argo_dataflow_deployment:    "argocd"
+argo_dataflow_deployment:    "helm"
 
 # Kubernetes
 argo_dataflow_namespace:    "argo-dataflow-system"

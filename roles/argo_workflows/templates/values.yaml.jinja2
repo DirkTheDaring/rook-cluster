@@ -29,17 +29,17 @@ controller:
       database: "{{ argo_workflows_credentials_postgresql.database_name }}"
       tableName: argo_workflows
       userNameSecret:
-        name: credentials-postgresql 
+        name: credentials-postgresql
         key: username
       passwordSecret:
-        name: credentials-postgresql 
+        name: credentials-postgresql
         key: password
 
 # s3 (minio)
 artifactRepository:
   archiveLogs: "true"
   s3:
-    accessKeySecret: 
+    accessKeySecret:
       name: credentials-s3
       key: accesskey
     secretKeySecret:

@@ -4,7 +4,7 @@ mosquitto_subdomain:    ""
 mosquitto_hostname:     "mosquitto"
 
 # Deployment Method: argocd, helm
-mosquitto_deployment:    "argocd"
+mosquitto_deployment:    "helm"
 
 # Kubernetes
 mosquitto_namespace:    "mosquitto"

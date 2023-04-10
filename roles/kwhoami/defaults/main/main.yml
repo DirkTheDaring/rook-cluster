@@ -1,3 +1,4 @@
 kwhoami_credentials_dir: "{{ kwhoami_root_credentials_dir }}/kwhoami"
 
+# yamllint disable-line
 kwhoami_fqdn:                  "{{ kwhoami_hostname }}{{ '' if kwhoami_subdomain == '' else '.' + kwhoami_subdomain }}.{{ kwhoami_domain }}"

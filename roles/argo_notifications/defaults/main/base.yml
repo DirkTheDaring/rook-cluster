@@ -4,7 +4,7 @@ argo_notifications_subdomain:    ""
 argo_notifications_hostname:     "argo-notifications"
 
 # Deployment Method: argocd, helm
-argo_notifications_deployment:    "argocd"
+argo_notifications_deployment:    "helm"
 
 # Kubernetes
 argo_notifications_namespace:    "argo-notifications"

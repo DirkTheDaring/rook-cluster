@@ -5,7 +5,7 @@ minio_gui_hostname: "minio"
 minio_api_hostname: "s3"
 
 # Deployment Method: argocd, helm
-minio_deployment:    "argocd"
+minio_deployment:    "helm"
 
 # Kubernetes
 minio_namespace:    "minio"
@@ -34,13 +34,13 @@ minio_releases_jmespath: "[].tag_name"
 # Configuration Database
 minio_root_credentials_dir: "{{ playbook_dir }}/credentials"
 minio_force_string_dict:
-#  path_list:
-#  - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
-
 # only if nfs-static
+
 minio_nfs_enabled:        false
 # minio_nfs_server:         nfs.example.com
 # minio_nfs_path:           /nfs/share

@@ -1,0 +1,8 @@
+- name: Metallb helm chart version
+  ansible.builtin.set_fact:
+    metallb_helm_chart_version_canonical: "{{ helm_chart_version }}"
+
+- name: Dump fact helm_chart_version_canonical
+  ansible.builtin.debug:
+    msg: '{{ metallb_helm_chart_version_canonical }}'
+    verbosity: 1

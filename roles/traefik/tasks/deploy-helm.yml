@@ -1,9 +1,7 @@
 - name: Deploy with helm
   when: traefik_deployment == "helm"
   block:
-  #  # Usually Taken from deploy-prepare step
-
-    # - name: render values.yaml
+    # - name: Render values.yaml
     #   ansible.builtin.set_fact:
     #     traefik_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
 
@@ -17,7 +15,7 @@
         chart_ref:         "{{ traefik_helm_repo_name }}/{{ traefik_helm_chart_name }}"
         chart_version:     "{{ helm_chart_version }}"
         release_namespace: "{{ traefik_namespace }}"
-        release_name:      "{{ traefik_helm_chart_name }}"
+        release_name:      "{{ traefik_helm_release_name }}"
         create_namespace:  true
         release_values:    "{{ traefik_values }}"
         update_repo_cache: true

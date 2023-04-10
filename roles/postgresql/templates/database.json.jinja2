@@ -1,6 +1,6 @@
 {
   "namespace": {{ item.namespace | to_json }},
-  "name": {{ item.name | to_json }}, 
+  "name": {{ item.name | to_json }},
   "port": {{ item.port | default( 5432) }},
   "database_name":     {{ item.database_name | to_json }},
   "database_username": {{ item.database_username | to_json }},

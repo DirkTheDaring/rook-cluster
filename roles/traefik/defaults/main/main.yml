@@ -1,4 +1,5 @@
 traefik_credentials_dir: "{{ traefik_root_credentials_dir }}/traefik"
 
+# yamllint disable-line
 traefik_fqdn:                  "{{ traefik_hostname }}{{ '' if traefik_subdomain == '' else '.' + traefik_subdomain }}.{{ traefik_domain }}"
 traefik_fqdn2:                  ""

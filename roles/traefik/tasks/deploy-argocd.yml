@@ -6,10 +6,10 @@
         traefik_application_params: "{{ traefik_values | chart_values_to_argo_parameters(traefik_force_string_dict) }}"
 
     # - name: Write result to /tmp/traefik-application.yaml
-    #    ansible.builtin.copy:
-    #      content: "{{ traefik_application_params }}"
-    #      dest: /tmp/traefik-application-params.yaml
-    #    when: ansible_verbosity > 2
+    #   ansible.builtin.copy:
+    #     content: "{{ traefik_application_params }}"
+    #     dest: /tmp/traefik-application-params.yaml
+    #   when: ansible_verbosity > 2
 
     - name: Create /tmp/traefik-application.yaml if verbosity > 2
       ansible.builtin.template:

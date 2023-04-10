@@ -5,11 +5,11 @@
       ansible.builtin.set_fact:
         rook_application_params: "{{ rook_values | chart_values_to_argo_parameters(rook_force_string_dict) }}"
 
-  #  - name: Write result to /tmp/rook-application.yaml
-  #    ansible.builtin.copy:
-  #      content: "{{ rook_application_params }}"
-  #      dest: /tmp/rook-application-params.yaml
-  #    when: ansible_verbosity > 2
+    # - name: Write result to /tmp/rook-application.yaml
+    #   ansible.builtin.copy:
+    #     content: "{{ rook_application_params }}"
+    #     dest: /tmp/rook-application-params.yaml
+    #   when: ansible_verbosity > 2
 
     - name: Create /tmp/rook-application.yaml if verbosity > 2
       ansible.builtin.template:

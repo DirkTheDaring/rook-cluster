@@ -30,7 +30,7 @@ logs:
     level: INFO
 
 ports:
-  web: 
+  web:
     redirectTo: websecure
 {% for port in traefik_ports %}
   {{ port.name }}:

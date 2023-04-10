@@ -7,13 +7,13 @@ global:
 {% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
 controller:
   nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
 {% endif %}
 
 server:
 {% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
   nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
 {% endif %}
   ingress:
     enabled: true
@@ -114,7 +114,7 @@ server:
 dex:
 {% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
   nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
 {% endif %}
   env:
 {% for item in argocd_sso_list %}
@@ -148,10 +148,10 @@ configs:
 {% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
 redis:
   nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
 {% endif %}
 {% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
 repoServer:
   nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }} 
+    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
 {% endif %}

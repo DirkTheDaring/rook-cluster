@@ -1,3 +1,4 @@
 mosquitto_credentials_dir: "{{ mosquitto_root_credentials_dir }}/mosquitto"
 
+# yamllint disable-line
 mosquitto_fqdn:                  "{{ mosquitto_hostname }}{{ '' if mosquitto_subdomain == '' else '.' + mosquitto_subdomain }}.{{ mosquitto_domain }}"

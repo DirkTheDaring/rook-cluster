@@ -4,7 +4,7 @@ argocd_subdomain:    ""
 argocd_hostname:     "argocd"
 
 # Deployment Method: argocd, helm
-argocd_deployment:    "argocd"
+argocd_deployment:    "helm"
 
 # Kubernetes
 argocd_namespace:    "argo-cd"
@@ -37,8 +37,8 @@ argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"
 argocd_values: {}
 
 argocd_policy_users: []
-  #  - name: "demosuser"
-  #  role: "role:readonly"
+  # - name: "demosuser"
+  #   role: "role:readonly"
 argocd_policy_groups: []
   # - name: "demogroup"
   #   role: "role:admin"
@@ -48,11 +48,10 @@ argocd_sso_list: []
   #   id:   argo-workflows-sso
   #   uid:  0e56402e-93cd-49ed-a84b-ce8254a192e9
   #   redirectURIs:
-  #   - https://argo-workflows.office.kaupon.de/oauth2/callback
+  #     - https://argo-workflows.office.kaupon.de/oauth2/callback
   #   secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
 
 # argocd_node_selector_hostname: ""
-
 # Ldap
 argocd_ldap_profile: "activedirectory"
 
@@ -62,7 +61,7 @@ argocd_ldap_bind_dn:       ""
 argocd_ldap_bind_password: ""
 argocd_ldap_insecure_no_ssl: "false"
 argocd_ldap_insecure_tls:  "false"
-
 # Secrets for git repositories
+
 argocd_gitlab_secret: ""
 argocd_github_secret: ""
