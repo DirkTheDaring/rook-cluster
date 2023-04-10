@@ -68,7 +68,7 @@ message:
 
 from ansible.module_utils.basic import AnsibleModule
 import os
-import urllib.request
+import urllib3.request
 import yaml
 import time
 import re
@@ -111,8 +111,12 @@ def chart_version(config):
     if os.path.isfile(cache_file) and is_cachefile_expired(cache_file, days):
         os.remove(cache_file)
 
+    url=config[REPO_URL] + "/" + yaml_filename
     if not os.path.isfile(cache_file):
-        urllib.request.urlretrieve(config[REPO_URL] + "/" + yaml_filename, cache_file)
+        http = urllib3.PoolManager()
+        resp = http.request('GET', url)
+        with open(cache_file, 'wb') as out:
+            out.write(resp.data)
 
     with open(cache_file, 'r') as fp:
         repo = yaml.safe_load(fp)

@@ -2,8 +2,8 @@
   ansible.builtin.import_tasks: helm-chart-version.yml
 - name: Get github version
   ansible.builtin.import_tasks: github-version.yml
-- name: Config
-  ansible.builtin.import_tasks: config.yml
+- name: Load Config files
+  ansible.builtin.import_tasks: load-config-files.yml
 - name: Prepare deploy
   ansible.builtin.import_tasks: deploy-prepare.yml
 - name: Deploy argocd
@@ -16,5 +16,14 @@
 #   ansible.builtin.import_tasks: wait-for-argocd-application.yml
 - name: Storage
   ansible.builtin.import_tasks: storage.yml
-- name: Credentials
-  ansible.builtin.import_tasks: credentials.yml
+# - name: Credentials
+#   ansible.builtin.import_tasks: credentials.yml
+
+- name: Wait for secrets
+  ansible.builtin.import_tasks: wait-for-secret.yml
+- name: Get secrets
+  ansible.builtin.import_tasks: get-secret-values.yml
+- name: Extra information
+  ansible.builtin.import_tasks: extra-config-information.yml
+- name: Save
+  ansible.builtin.import_tasks:  save-config-files.yml

@@ -1,0 +1,36 @@
+# Variables which contain the stat if he file exists
+#  - keycloak_config_file
+#  - keycloak_postgresql_config_file
+#  - keycloak_management_config_file
+# Variables which contain the values read from config files
+#  - keycloak_config
+#  - keycloak_postgresql_config
+#  - keycloak_management_config
+
+- name: Check if file exists
+  ansible.builtin.stat:
+    path: "{{ keycloak_credentials_dir }}/web.json"
+  register: keycloak_config_file
+
+- name: Load File web.json
+  ansible.builtin.set_fact:
+  # yamllint disable-line
+    keycloak_config: "{{ lookup('file', keycloak_credentials_dir + '/web.json') if keycloak_config_file.stat.exists else '{}' | from_json }}"
+- name: Check if file exists
+  ansible.builtin.stat:
+    path: "{{ keycloak_credentials_dir }}/config.json"
+  register: keycloak_postgresql_config_file
+
+- name: Load File config.json
+  ansible.builtin.set_fact:
+  # yamllint disable-line
+    keycloak_postgresql_config: "{{ lookup('file', keycloak_credentials_dir + '/config.json') if keycloak_postgresql_config_file.stat.exists else '{}' | from_json }}"
+- name: Check if file exists
+  ansible.builtin.stat:
+    path: "{{ keycloak_credentials_dir }}/management.json"
+  register: keycloak_management_config_file
+
+- name: Load File management.json
+  ansible.builtin.set_fact:
+  # yamllint disable-line
+    keycloak_management_config: "{{ lookup('file', keycloak_credentials_dir + '/management.json') if keycloak_management_config_file.stat.exists else '{}' | from_json }}"

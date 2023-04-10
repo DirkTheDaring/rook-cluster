@@ -14,5 +14,11 @@
   ansible.builtin.import_tasks: wait-for-configmap.yml
 - name: Patch configmap
   ansible.builtin.import_tasks: patch-configmap.yml
+
+- name: Wait for secret to appear
+  ansible.builtin.import_tasks:  wait-for-secret.yml
+- name: Get secret value
+  ansible.builtin.import_tasks:  get-secret-values.yml
+
 - name: Save Credentials
   ansible.builtin.import_tasks: credentials.yml

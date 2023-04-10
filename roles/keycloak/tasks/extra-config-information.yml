@@ -1,0 +1,17 @@
+#  Secret: keycloak
+#  data:
+#     admin-password: XXXXXXXX
+#
+#  Secret: keycloak-postgresql
+#  data:
+#    password: XXXX
+#    postgres-password: XXXX
+
+#  Database name: bitname_keycloak
+
+# exec pg_isready -U "bn_keycloak" -d "dbname=bitnami_keycloak" -h 127.0.0.1 -p 5432
+
+- name: Extract password
+  ansible.builtin.set_fact:
+    keycloak_username: "user"
+    keycloak_url:      "https://{{ keycloak_fqdn }}"

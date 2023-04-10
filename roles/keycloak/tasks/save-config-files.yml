@@ -1,0 +1,26 @@
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ keycloak_credentials_dir }}"
+    state: directory
+    mode: '0700'
+
+- name: Create web.json
+  ansible.builtin.template:
+    src: "web.json.jinja2"
+    dest: "{{ keycloak_credentials_dir }}/web.json"
+    mode: '0644'
+  when: not keycloak_config_file.stat.exists
+
+- name: Create config.json
+  ansible.builtin.template:
+    src: "config.json.jinja2"
+    dest: "{{ keycloak_credentials_dir }}/config.json"
+    mode: '0644'
+  when: not keycloak_postgresql_config_file.stat.exists
+
+- name: Create management.json
+  ansible.builtin.template:
+    src: "management.json.jinja2"
+    dest: "{{ keycloak_credentials_dir }}/management.json"
+    mode: '0644'
+  when: not keycloak_management_config_file.stat.exists
