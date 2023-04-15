@@ -1,15 +1,21 @@
-- name: Block
-  when: rook_ceph_server and rook_deployment == "argocd"
+- name: Deploy argocd app
+  when:
+    - rook_deployment == "argocd"
+    - rook_ceph_server
   block:
-    - name: Create application for cluster
+    - name: Transform from helm values to application params
+      ansible.builtin.set_fact:
+        rook_application_params: >
+          {{ rook_helm_cluster_release_values
+          | chart_values_to_argo_parameters(rook_force_string_dict) }}
+
+    - name: Create /tmp/rook-cluster-application.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "cluster-application.yaml.jinja2"
+        dest: "/tmp/rook-cluster-application.yaml"
+        mode: '0644'
+      when: ansible_verbosity > 2
+
+    - name: Create argocd application
       kubernetes.core.k8s:
         template: cluster-application.yaml.jinja2
-
-#    - name: wait until application status turns to synced in argocd
-#      ansible.builtin.command:
-#        argv:
-#          - bash
-#          - -c
-#          - >
-#            while [[ \"$(kubectl -n {{ rook_argocd_namespace }} get application rook-ceph
-#            -o custom-columns=status:status.sync.status --no-headers)\" != \"Synced\" ]]; do sleep 3; done

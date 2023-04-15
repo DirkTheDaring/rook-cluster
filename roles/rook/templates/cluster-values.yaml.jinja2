@@ -6,6 +6,18 @@ cephClusterSpec:
     ssl: false
   network:
     provider: "host"
+{% if rook_mon_storage_classname is defined and rook_mon_storage_classname|length > 0 %}
+  mon:
+    count: 3
+    volumeClaimTemplate:
+      spec:
+        #storageClassName: local-path
+        storageClassName: {{ rook_mon_storage_classname }}
+        resources:
+          requests:
+            storage: 10Gi
+{% endif %}
+
   storage:
     useAllDevices: false
     deviceFilter:  "{{ rook_storage_device_filter }}"

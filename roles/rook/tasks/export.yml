@@ -24,7 +24,7 @@
 - name: Block
   when:
     - rook_ceph_server
-    - helm_chart_version[1:] is version("1.9.0", '<' )
+    - helm_chart_version_canonical is version("1.9.0", '<' )
   block:
     - name: Debug
       ansible.builtin.debug:
@@ -61,7 +61,7 @@
 - name: Block
   when:
     - rook_ceph_server
-    - helm_chart_version[1:] is version("1.9.0", '>=' )
+    - helm_chart_version_canonical is version("1.9.0", '>=' )
   block:
     - name: Debug
       ansible.builtin.debug:
@@ -108,13 +108,13 @@
       ansible.builtin.set_fact:
         export_vars_for_external: export-job-1.9.yaml.jinja2
       when:
-        - helm_chart_version[1:] is version("1.10.0", '<' )
+        - helm_chart_version_canonical is version("1.10.0", '<' )
 
     - name: Set fact for export-job
       ansible.builtin.set_fact:
         export_vars_for_external: export-job-1.10.yaml.jinja2
       when:
-        - helm_chart_version[1:] is version("1.10.0", '>=' )
+        - helm_chart_version_canonical is version("1.10.0", '>=' )
 
     - name: Create job and wait for completion - can take very long
       kubernetes.core.k8s:

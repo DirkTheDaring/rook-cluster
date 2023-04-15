@@ -2,11 +2,12 @@
   ansible.builtin.import_tasks: helm-chart-version.yml
 - name: Set version
   ansible.builtin.import_tasks: set-version.yml
-- name: Release version
-  ansible.builtin.import_tasks: release-version.yml
+
 
 - name: Argocd Debug
   ansible.builtin.import_tasks: argocd-debug.yml   # if rook_deployment == "argocd"
+- name: Prepare Deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
 - name: Argocd
   ansible.builtin.import_tasks: deploy-argocd.yml         # if rook_deployment == "argocd"
 - name: Deploy Helm
@@ -16,6 +17,9 @@
 - name: Wait for pod
   ansible.builtin.import_tasks: wait-for-pod-by-label.yml
 
+
+- name: Cluster Prepare Deploy
+  ansible.builtin.import_tasks: cluster-deploy-prepare.yml
 - name: Cluster Argocd
   ansible.builtin.import_tasks: cluster-deploy-argocd.yml  # only runs for server if rook_deployment == "argocd"
 - name: Cluster Helm

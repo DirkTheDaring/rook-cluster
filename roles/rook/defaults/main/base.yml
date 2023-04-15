@@ -21,14 +21,15 @@ rook_helm_repo_name:     rook-release
 rook_helm_repo_url:      https://charts.rook.io/release
 rook_helm_chart_name:    rook-ceph
 rook_helm_chart_version: ""        # empty strings means pick latest
-# rook_helm_chart_version: "~^1\.8\."    # pick by regular expression
-# rook_helm_chart_version: "1.8.1" # set absolute version
+# rook_helm_chart_version: "~^v1\\.10\\."    # pick by regular expression
+# rook_helm_chart_version: "v1.10.13" # set absolute version
 
 # Github Repository
-rook_releases_url:      "https://api.github.com/repos/rook/rook/releases"
 rook_releases_jmespath: "[].tag_name"
-# rook_release: "~^v1\.8\." # pick first match of regular expression
-# rook_release: "v1.8.1"
+rook_github_project_url:     "https://api.github.com/repos/rook/rook/releases"
+rook_github_project_version: ""
+# rook_github_project_version: "1.10.13"
+# rook_github_project_version: "~^1\.10\." # pick first match of regular expression
 
 # Configuration Database
 rook_root_credentials_dir: "{{ playbook_dir }}/credentials"
@@ -65,3 +66,10 @@ rook_ceph_public_network: ""
 rook_ceph_cluster_network: ""
 
 rook_cluster_id: "rook-ceph"
+
+rook_helm_cluster_chart_name:    "rook-ceph-cluster"
+rook_helm_cluster_release_name:  "rook-ceph-cluster"
+# rook_helm_chart_version:         "" # empty strings means pick latest
+
+# puts the mons on local-pathes - hopefully fixes the mon restart problem
+# rook_mon_storage_classname: "local-path"
