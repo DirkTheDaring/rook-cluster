@@ -68,15 +68,40 @@ message:
 
 from ansible.module_utils.basic import AnsibleModule
 import os
-import urllib.request
+import urllib3.request
 import yaml
 import time
 import re
 import json
+#import sys
 
 GITHUB_PROJECT_NAME="name"
 GITHUB_PROJECT_VERSION="version"
 CACHE_TIME="cache_time"
+ASSET_NAME="asset_name"
+#FILTER_BY_NAME="filter_by_name"
+
+class HttpException(Exception):
+    "Raised when response status != 200 "
+    def __init__(self, msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
+
+class VersionException(Exception):
+    "Raised when no version found"
+    def __init__(self, msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
+
+class AssetNotFoundException(Exception):
+    "Raised when asset matches"
+    def __init__(self, msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
+
 
 def is_cachefile_expired_epoch(filename, maximum):
     current_epoch = time.time()
@@ -88,23 +113,90 @@ def is_cachefile_expired(filename, days):
     maximum = 24 * 3600 * days
     return is_cachefile_expired_epoch(filename, maximum)
 
+def download_file(url, cache_file):
+    http = urllib3.PoolManager()
+    resp = http.request('GET', url)
+
+    if resp.status != 200:
+        raise HttpException(f'URL {url} returned: {resp.status}')
+
+    with open(cache_file, 'wb') as out:
+        out.write(resp.data)
+
+def load_json(cache_file):
+    with open(cache_file, 'r') as fp:
+        data = json.load(fp)
+    return data
+
+def get_keys(container, keyname):
+    _list = []
+    for item in container:
+        name = item[keyname]
+        name = name.strip()
+        if name == "":
+            continue
+        _list.append(name)
+    return _list
+
+def extract_project(project_name):
+    github_prefix = "https://github.com/"
+    api_prefix = "https://api.github.com/repos/"
+    if project_name.startswith(github_prefix):
+        start = len(github_prefix)
+        project_name = project_name[start:]
+    elif project_name.startswith(api_prefix):
+        start = len(api_prefix)
+        project_name = project_name[start:]
+
+    array = project_name.split("/")
+    if len(array) < 2:
+        return ""
+    return array[0] + "/" + array[1]
+
+def get_object_by_key(dicts, key, search_value):
+    for item in dicts:
+        value = item[key]
+        if value == search_value:
+            return item
+    return None
+
+def filter_list(_list, filter):
+
+    if filter == "":
+        return _list
+
+    filtered_list = []
+
+    if filter.startswith("~"):
+        regex = filter[1:]
+        regexc = re.compile(regex)
+        for item in _list:
+            if not regexc.match(item):
+                continue
+            filtered_list.append(item)
+        return filtered_list
+
+    for item in _list:
+        if item == filter:
+            filtered_list.append(item)
+    return filtered_list
+
+def last_of_nat_sorted_list(_list):
+    natsort = lambda s: [int(t) if t.isdigit() else t.lower() for t in re.split("(\d+)", s)]
+    sorted_list = sorted(_list,key=natsort)
+    return sorted_list[len(sorted_list)-1]
+
 def project_version(config):
     version = config[GITHUB_PROJECT_VERSION]
 
     regex = ""
     if version.startswith("~"):
         regex = version[1:]
-    elif version != "":
-        return version
 
     project_name = config[GITHUB_PROJECT_NAME]
-    prefix = "https://api.github.com/repos/"
-    if project_name.startswith(prefix):
-        array = project_name[len(prefix):].split("/")
-        if len(array) > 1:
-            project_name = array[0] + "/" + array[1]
-        else:
-           return ""
+    project_name = extract_project(project_name)
+    if project_name == "":
+        return ("", "", "")
 
     cache_dir = os.environ['HOME'] + "/.cache/github-releases/" + project_name
     cache_file = cache_dir + "/releases.json"
@@ -120,39 +212,62 @@ def project_version(config):
     url = "https://api.github.com/repos/" + project_name + "/releases"
 
     if not os.path.isfile(cache_file):
-        urllib.request.urlretrieve(url, cache_file)
+        download_file(url, cache_file)
 
-    with open(cache_file, 'r') as fp:
-        repos=json.load(fp);
+    repos = load_json(cache_file)
 
-    versions=[]
-    # strip addeded names, as we found an occation in v0.13.7 of metallb which
-    # has a leading space
+    versions = get_keys(repos, 'name')
 
-    if regex != "":
-        regexc = re.compile(regex)
-        for repo in repos:
-            name = repo['name']
-            if regexc.match(name):
-                 versions.append(name.strip())
+    filtered_versions = filter_list(versions, version)
+
+    if len(filtered_versions) == 0:
+        raise VersionException("No version matched out of: " + str(versions))
+
+    version = last_of_nat_sorted_list(filtered_versions)
+
+    repo = get_object_by_key(repos, 'name', version)
+
+    if not 'assets' in repo:
+        return (version, '', '')
+
+    assets = repo['assets']
+
+    if len(assets) ==  0:
+        return (version, '', '')
+
+    names = get_keys(assets, 'name')
+
+    if len(names) == 0:
+        return (version, '', '')
+
+    asset_name = config[ASSET_NAME]
+
+    filtered_names = filter_list(names, asset_name)
+
+    if len(filtered_names) == 0:
+        raise AssetNotFoundException("No asset matched out of: " + str(names))
+
+    if len(filtered_names) == 1:
+        name = filtered_names[0]
     else:
-        for repo in repos:
-            versions.append(repo['name'].strip())
+        name = last_of_nat_sorted_list(names)
 
-    if len(versions) == 0:
-        return ""
+    asset = get_object_by_key(assets, 'name', name)
 
-    natsort = lambda s: [int(t) if t.isdigit() else t.lower() for t in re.split("(\d+)", s)]
-    result = sorted(versions,key=natsort)
+    if not 'browser_download_url' in asset:
+        return (version, name, "")
 
-    return result[len(result)-1]
+    url = asset['browser_download_url']
+    return (version, name, url)
 
 def run_module():
+
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
         name=dict(type='str', required=True),
         version=dict(type='str', required=False, default=""),
-        cache_time=dict(type='int', required=False, default=1)
+        cache_time=dict(type='int', required=False, default=1),
+        asset_name=dict(type='str', required=False, default="")
     )
     # seed the result dict in the object
     # we primarily care about changed and state
@@ -161,9 +276,9 @@ def run_module():
     # for consumption, for example, in a subsequent task
     result = dict(
         changed=False,
-        github_project_version='',
         ansible_facts=dict()
     )
+        #github_project_version='',
 
     # the AnsibleModule object will be our abstraction working with Ansible
     # this includes instantiation, a couple of common attr would be the
@@ -182,11 +297,25 @@ def run_module():
 
     # manipulate or modify the state as needed (this is going to be the
     # part where your module will do what it needs to do)
-    version = project_version(module.params)
+
+    try:
+        version, asset_name,url = project_version(module.params)
+        #result['github_project_version'] = version
+        result['ansible_facts'] = {
+            'github_project_version': version,
+            'github_asset_name': asset_name,
+            'github_download_url': url
+        }
+    except HttpException as e:
+        module.fail_json(msg=str(e), **result)
+        return
+    except VersionException as e:
+        module.fail_json(msg=str(e), **result)
+    except AssetNotFoundException as e:
+        module.fail_json(msg=str(e), **result)
+
 
     #result['original_message'] = module.params['url']
-    result['github_project_version'] = version
-    result['ansible_facts'] = { 'github_project_version': version }
 
     # use whatever logic you need to determine whether or not this module
     # made any modifications to your target

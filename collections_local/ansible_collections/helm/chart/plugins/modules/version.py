@@ -80,6 +80,13 @@ CHART_NAME="name"
 CHART_VERSION="version"
 CACHE_TIME="cachetime"
 
+class HttpException(Exception):
+    "Raised when response status != 200 "
+    def __init__(self, msg):
+        self.msg = msg
+    def __str__(self):
+        return self.msg
+
 def is_cachefile_expired_epoch(filename, maximum):
     current_epoch = time.time()
     epoch = os.stat(filename).st_ctime
@@ -115,6 +122,10 @@ def chart_version(config):
     if not os.path.isfile(cache_file):
         http = urllib3.PoolManager()
         resp = http.request('GET', url)
+
+        if resp.status != 200:
+            raise HttpException(f'URL {url} returned: {resp.status}')
+
         with open(cache_file, 'wb') as out:
             out.write(resp.data)
 
@@ -177,11 +188,14 @@ def run_module():
 
     # manipulate or modify the state as needed (this is going to be the
     # part where your module will do what it needs to do)
-    version = chart_version(module.params)
-
-    #result['original_message'] = module.params['url']
-    result['helm_chart_version'] = version
-    result['ansible_facts'] = { 'helm_chart_version': version }
+    try:
+        version = chart_version(module.params)
+        #result['original_message'] = module.params['url']
+        result['helm_chart_version'] = version
+        result['ansible_facts'] = { 'helm_chart_version': version }
+    except HttpException as e:
+        module.fail_json(msg=str(e), **result)
+        return
 
     # use whatever logic you need to determine whether or not this module
     # made any modifications to your target
