@@ -1,0 +1,17 @@
+- name: Set download_dir to $HOME/bin if not set
+  ansible.builtin.set_fact:
+    keptn_client_bin_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/bin"
+  when: keptn_client_bin_dir|length == 0
+
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src:  "{{ keptn_client_download_dir }}/{{ github_asset_name }}"
+    dest: "{{ keptn_client_bin_dir }}"
+    mode: '0755'
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: "{{ keptn_client_bin_dir }}/{{ github_asset_name }}"
+    dest: "{{ keptn_client_bin_dir }}/{{ keptn_client_filename }}"
+    state: link
+

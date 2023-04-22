@@ -1,0 +1,10 @@
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Download
+  ansible.builtin.import_tasks: download.yml
+- name: Untar
+  ansible.builtin.import_tasks: untar.yml
+  when: github_asset_name.endswith('tar.gz')
+- name: Copy
+  ansible.builtin.import_tasks: copy.yml
+  when: not github_asset_name.endswith('tar.gz')
