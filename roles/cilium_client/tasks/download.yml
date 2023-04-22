@@ -1,0 +1,25 @@
+- name: Create temporary directory
+  when: cilium_client_download_dir|length > 0
+  block:
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ cilium_client_download_dir }}"
+        state: directory
+        mode: '0755'
+
+- name: Create temporary directory
+  when: cilium_client_download_dir|length == 0
+  block:
+    - name: Create temporary directory
+      ansible.builtin.tempfile:
+        state: directory
+      register: dir
+    - name: Assign cilium_client_download_dir
+      ansible.builtin.set_fact:
+        cilium_client_download_dir: "{{ dir.path }}"
+
+- name: Download asset
+  ansible.builtin.get_url:
+    url: "{{ github_download_url }}"
+    dest: "{{ cilium_client_download_dir }}/{{ github_asset_name }}"
+    mode: '0644'

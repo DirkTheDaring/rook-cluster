@@ -1,0 +1,14 @@
+# input:
+#   - cilium_client_github_project_url
+#   - cilium_client_github_project_version
+#   - cilium_client_github_asset_name
+# output facts:
+#   - github_project_version
+#   - github_asset_name
+#   - github_download_url
+
+- name: Get latest version from github
+  github.project.version:
+    name:       "{{ cilium_client_github_project_url }}"
+    version:    "{{ cilium_client_github_project_version }}"
+    asset_name: "{{ cilium_client_github_asset_name }}"

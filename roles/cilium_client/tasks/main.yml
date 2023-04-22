@@ -1,0 +1,6 @@
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Download
+  ansible.builtin.import_tasks: download.yml
+- name: Untar
+  ansible.builtin.import_tasks: untar.yml
