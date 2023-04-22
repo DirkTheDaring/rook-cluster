@@ -8,6 +8,7 @@
     - name: Create storage classes for cephfs
       kubernetes.core.k8s:
         template: storageclass.yaml.jinja2
+        apply: true
       loop:
         - name:          rook-cephfs-delete
           reclaimPolicy: Delete
@@ -17,6 +18,7 @@
     - name: Create storage classes for rbd
       kubernetes.core.k8s:
         template: rbd-storageclass.yaml.jinja2
+        apply: true
       loop:
         - name:          rook-rbd-delete
           reclaimPolicy: Delete

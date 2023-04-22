@@ -29,7 +29,7 @@ fi
 
 VERSION=$(cat $CACHE_FILE | jq -r ".[0].name")
 echo $VERSION
-if [ "$1" == "-d" ]; then 
+if [ "$1" == "-d" ]; then
   URL=$(cat $CACHE_FILE | jq -r ".[0].tarball_url" )
   curl --silent -OL --remote-header-name "$URL"
 fi
