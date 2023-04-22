@@ -6,10 +6,25 @@ skip_list:
 #  - yaml[comments]
   - yaml[colons]
 
-#warn_list:
-#  - no-changed-when
+# warn_list:
+#   - no-changed-when
 
 exclude_paths:
   - roles/rook/templates/
   - roles/rook/bin/
   - collections
+  - bin
+  - build
+  - config
+  - credentials
+  - downloads
+  - files
+  - offline
+  - old
+  - test
+  - tests
+  - tmp-1.9
+  - workaround
+  - playbook.yaml
+  - rook-*
+  - harbor-jobservice-scandata.yaml
