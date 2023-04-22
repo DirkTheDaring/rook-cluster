@@ -1,0 +1,20 @@
+- name: Deploy argocd app
+  when:
+    - linkerd_deployment == "argocd"
+  block:
+    - name: Transform from helm values to application params
+      ansible.builtin.set_fact:
+        linkerd_application_params: >
+          {{ linkerd_helm_release_values
+          | chart_values_to_argo_parameters(linkerd_force_string_dict) }}
+
+    - name: Create /tmp/linkerd-application.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "application.yaml.jinja2"
+        dest: "/tmp/linkerd-application.yaml"
+        mode: '0644'
+      when: ansible_verbosity > 2
+
+    - name: Create argocd application
+      kubernetes.core.k8s:
+        template: application.yaml.jinja2

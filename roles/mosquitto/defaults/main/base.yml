@@ -20,15 +20,16 @@ mosquitto_helm_release_name:  mosquitto
 mosquitto_helm_repo_name:     k8s-at-home
 mosquitto_helm_repo_url:      https://k8s-at-home.com/charts
 mosquitto_helm_chart_name:    mosquitto
-mosquitto_helm_chart_version: ""        # empty strings means pick latest
-# mosquitto_helm_chart_version: "~^4\.2\."    # pick by regular expression
+mosquitto_helm_chart_version: ''        # empty strings means pick latest
+# mosquitto_helm_chart_version: '~^4\.2\.'    # pick by regular expression
 # mosquitto_helm_chart_version: "4.2.0" # set absolute version
 
 # Github Repository
-mosquitto_releases_url:      "https://github.com/eclipse/mosquitto/releases"
 mosquitto_releases_jmespath: "[].tag_name"
-# mosquitto_release: "~^v2\.0\." # pick first match of regular expression
-# mosquitto_release: "v2.0.11"
+mosquitto_github_project_url:     "https://github.com/eclipse/mosquitto/releases"
+mosquitto_github_project_version: ''
+# mosquitto_github_project_version: 'v2.0.11'
+# mosquitto_github_project_version: '~^v2\.0\.' # pick first match of regular expression
 
 # Configuration Database
 mosquitto_root_credentials_dir: "{{ playbook_dir }}/credentials"

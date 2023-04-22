@@ -7,11 +7,15 @@
 
 - name: Load yaml and prune none values
   ansible.builtin.set_fact:
-    vault_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml | prune_none_value }}"
+    vault_helm_release_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml | prune_none_value }}"
+
+- name: Fix vault_values when not a mapping
+  ansible.builtin.set_fact:
+    vault_helm_release_values: "{{ vault_helm_release_values if vault_helm_release_values is mapping else {} }}"
 
 - name: Create pruned-values.yaml content if verbosity > 2
   ansible.builtin.copy:
-    content: "{{ vault_values | to_yaml }}"
+    content: "{{ vault_helm_release_values | to_yaml }}"
     dest: "/tmp/vault-pruned-values.yaml"
     mode: '0664'
   when: ansible_verbosity > 2

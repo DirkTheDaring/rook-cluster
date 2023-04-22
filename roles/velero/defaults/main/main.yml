@@ -9,14 +9,14 @@ velero_credentials_s3_json: "{{ velero_root_credentials_dir }}/minio/config.json
 # https://hub.docker.com/r/velero/velero/tags?page=1&ordering=last_updated
 velero_values_image_tag: ""
 # https://hub.docker.com/r/velero/velero-plugin-for-aws/tags?page=1&ordering=last_updated
-velero_init_container_aws_image: "velero/velero-plugin-for-aws:v1.5.2"
+velero_init_container_aws_image: "velero/velero-plugin-for-aws:v1.6.1"
 # https://hub.docker.com/r/velero/velero-plugin-for-csi/tags?page=1&ordering=last_updated
-velero_init_container_csi_image: "velero/velero-plugin-for-csi:v0.3.2"
+velero_init_container_csi_image: "velero/velero-plugin-for-csi:v0.4.2"
 velero_configuration_backup_storage_location_bucket: prod1
 velero_configuration_backup_storage_location_config_region: minio
 velero_configuration_backup_storage_location_config_s3_url:        https://minio-api.{{ velero_domain }}
 velero_configuration_backup_storage_location_config_s3_public_url: https://minio-api.{{ velero_domain }}
 velero_configuration_log_level: debug
 # https://hub.docker.com/r/velero/velero-restic-restore-helper/tags?page=1&ordering=last_updated
-velero_config_maps_restic_restore_action_config_data_image: "velero/velero-restore-helper:v1.10.0"
+velero_config_maps_restic_restore_action_config_data_image: "velero/velero-restore-helper:v1.10.2"
 velero_kubectl_image_tag: ""

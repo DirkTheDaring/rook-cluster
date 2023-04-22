@@ -1,5 +1,6 @@
 # tasks/wait-for-pod-by-label.yml
-# kubectl -n rook-ceph get pods -l app=rook-ceph-operator --no-headers -o name
+
+  # kubectl -n rook-ceph get pods -l app=rook-ceph-operator --no-headers -o name
 - name: Wait until pod with label app=rook-ceph-operator appears
   ansible.builtin.command:
     argv:
@@ -12,15 +13,19 @@
           sleep 10
         done
 
+  # kubectl -n rook-ceph get pods -l app=rook-ceph-operator --no-headers "-ocustom-columns=data:status.conditions[?(@.type=='Ready')].type"
 - name: Wait until pod with label app=rook-ceph-operator becomes ready
   ansible.builtin.command:
     argv:
-      - kubectl
-      - wait
-      - -n
-      - "{{ rook_namespace }}"
-      - --timeout=600s
-      - --for=condition=Ready
-      - pod
-      - -l
-      - app=rook-ceph-operator
+      - bash
+      - -c
+      - 'while true; do
+
+        RESULT=$(kubectl -n {{ rook_namespace }} get pods -l app=rook-ceph-operator
+        --no-headers "-ocustom-columns=data:status.conditions[?(@.type==''Ready'')].type")
+
+        [ "$RESULT" = "Ready" ] && break
+
+        sleep 3
+
+        done'

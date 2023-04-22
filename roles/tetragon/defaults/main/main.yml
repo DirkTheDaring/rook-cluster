@@ -1,0 +1,4 @@
+tetragon_credentials_dir: "{{ tetragon_root_credentials_dir }}/tetragon"
+
+# yamllint disable-line
+tetragon_fqdn:                  "{{ tetragon_hostname }}{{ '' if tetragon_subdomain == '' else '.' + tetragon_subdomain }}.{{ tetragon_domain }}"

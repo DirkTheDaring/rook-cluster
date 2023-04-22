@@ -1,21 +1,18 @@
 - name: Deploy argocd app
-  when: minio_deployment == "argocd"
+  when:
+    - minio_deployment == "argocd"
   block:
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
-        minio_application_params: "{{ minio_values | chart_values_to_argo_parameters(minio_force_string_dict) }}"
-
-    # - name: Write result to /tmp/minio-application.yaml
-    #   ansible.builtin.copy:
-    #     content: "{{ minio_application_params }}"
-    #     dest: /tmp/minio-application-params.yaml
-    #   when: ansible_verbosity > 2
+        minio_application_params: >
+          {{ minio_helm_release_values
+          | chart_values_to_argo_parameters(minio_force_string_dict) }}
 
     - name: Create /tmp/minio-application.yaml if verbosity > 2
       ansible.builtin.template:
         src:  "application.yaml.jinja2"
         dest: "/tmp/minio-application.yaml"
-        mode: '0664'
+        mode: '0644'
       when: ansible_verbosity > 2
 
     - name: Create argocd application

@@ -1,21 +1,18 @@
 - name: Deploy argocd app
-  when: traefik_deployment == "argocd"
+  when:
+    - traefik_deployment == "argocd"
   block:
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
-        traefik_application_params: "{{ traefik_values | chart_values_to_argo_parameters(traefik_force_string_dict) }}"
-
-    # - name: Write result to /tmp/traefik-application.yaml
-    #   ansible.builtin.copy:
-    #     content: "{{ traefik_application_params }}"
-    #     dest: /tmp/traefik-application-params.yaml
-    #   when: ansible_verbosity > 2
+        traefik_application_params: >
+          {{ traefik_helm_release_values
+          | chart_values_to_argo_parameters(traefik_force_string_dict) }}
 
     - name: Create /tmp/traefik-application.yaml if verbosity > 2
       ansible.builtin.template:
         src:  "application.yaml.jinja2"
         dest: "/tmp/traefik-application.yaml"
-        mode: '0664'
+        mode: '0644'
       when: ansible_verbosity > 2
 
     - name: Create argocd application

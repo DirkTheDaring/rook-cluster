@@ -17,18 +17,19 @@ vault_argocd_destination_server: "https://kubernetes.default.svc"
 # Helm Chart
 vault_helm_release_name:  vault
 
-vault_helm_repo_name:     vault
+vault_helm_repo_name:     hashicorp
 vault_helm_repo_url:      https://helm.releases.hashicorp.com
 vault_helm_chart_name:    vault
-vault_helm_chart_version: ""        # empty strings means pick latest
-# vault_helm_chart_version: "~^0\.18\."    # pick by regular expression
+vault_helm_chart_version: ''        # empty strings means pick latest
+# vault_helm_chart_version: '~^0\.18\.'    # pick by regular expression
 # vault_helm_chart_version: "0.18.0" # set absolute version
 
 # Github Repository
-vault_releases_url:      "https://api.github.com/repos/hashicorp/vault/releases"
 vault_releases_jmespath: "[].tag_name"
-# vault_release: "~^v1\.9\." # pick first match of regular expression
-# vault_release: "v1.9.2"
+vault_github_project_url:     "https://api.github.com/repos/hashicorp/vault/releases"
+vault_github_project_version: ''
+# vault_github_project_version: 'v1.9.2'
+# vault_github_project_version: '~^v1\.9\.' # pick first match of regular expression
 
 # Configuration Database
 vault_root_credentials_dir: "{{ playbook_dir }}/credentials"

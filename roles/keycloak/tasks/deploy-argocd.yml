@@ -1,21 +1,18 @@
 - name: Deploy argocd app
-  when: keycloak_deployment == "argocd"
+  when:
+    - keycloak_deployment == "argocd"
   block:
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
-        keycloak_application_params: "{{ keycloak_values | chart_values_to_argo_parameters(keycloak_force_string_dict) }}"
-
-    # - name: Write result to /tmp/keycloak-application.yaml
-    #   ansible.builtin.copy:
-    #     content: "{{ keycloak_application_params }}"
-    #     dest: /tmp/keycloak-application-params.yaml
-    #   when: ansible_verbosity > 2
+        keycloak_application_params: >
+          {{ keycloak_helm_release_values
+          | chart_values_to_argo_parameters(keycloak_force_string_dict) }}
 
     - name: Create /tmp/keycloak-application.yaml if verbosity > 2
       ansible.builtin.template:
         src:  "application.yaml.jinja2"
         dest: "/tmp/keycloak-application.yaml"
-        mode: '0664'
+        mode: '0644'
       when: ansible_verbosity > 2
 
     - name: Create argocd application

@@ -1,21 +1,18 @@
 - name: Deploy argocd app
-  when: metallb_deployment == "argocd"
+  when:
+    - metallb_deployment == "argocd"
   block:
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
-        metallb_application_params: "{{ metallb_values | chart_values_to_argo_parameters(metallb_force_string_dict) }}"
-
-    # - name: Write result to /tmp/metallb-application.yaml
-    #   ansible.builtin.copy:
-    #     content: "{{ metallb_application_params }}"
-    #     dest: /tmp/metallb-application-params.yaml
-    #   when: ansible_verbosity > 2
+        metallb_application_params: >
+          {{ metallb_helm_release_values
+          | chart_values_to_argo_parameters(metallb_force_string_dict) }}
 
     - name: Create /tmp/metallb-application.yaml if verbosity > 2
       ansible.builtin.template:
         src:  "application.yaml.jinja2"
         dest: "/tmp/metallb-application.yaml"
-        mode: '0664'
+        mode: '0644'
       when: ansible_verbosity > 2
 
     - name: Create argocd application

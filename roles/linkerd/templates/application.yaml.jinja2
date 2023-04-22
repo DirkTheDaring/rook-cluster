@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ linkerd_argocd_namespace }}
+  name:      {{ linkerd_helm_release_name }}
+spec:
+  destination:
+    server:    {{ linkerd_argocd_destination_server }}
+    namespace: {{ linkerd_namespace }}
+  project: {{ linkerd_argocd_project }}
+  source:
+    repoURL:        {{ linkerd_helm_repo_url }}
+    chart:          {{ linkerd_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+{{ linkerd_application_params }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

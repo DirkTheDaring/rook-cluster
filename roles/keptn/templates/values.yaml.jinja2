@@ -1,0 +1,31 @@
+apiGatewayNginx:
+  podSecurityContext:
+    enabled: true
+
+bridge:
+  podSecurityContext:
+    enabled: true
+  oauth:
+    enabled:      true
+    discovery:    https://argocd.office.kaupon.de/api/dex/.well-known/openid-configuration
+    baseUrl:      https://{{ keptn_fqdn }}
+    clientID:     argocd-repo-creds-keptn-prod-sso
+    clientSecret: 2fa21b8b-023f-4a4f-b028-2a2abcee7cca
+    scope:        profile
+
+ingress:
+  enabled: true
+  annotations:
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
+  host: {{ keptn_fqdn }}
+
+podSecurityContext:
+  enabled: true
+
+# This whole setting for mongo is a bugfix for version 1.3
+mongo:
+  service:
+    nameOverride: mongo
+    ports:
+      mongodb: 27017

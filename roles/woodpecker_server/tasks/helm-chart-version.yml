@@ -1,0 +1,30 @@
+# output:
+#   -  helm_chart_version
+#   -  helm_chart_version_canonical
+
+- name: Get latest helm chart version
+  helm.chart.version:
+    repo_name:  "{{ woodpecker_server_helm_repo_name }}"
+    repo_url:   "{{ woodpecker_server_helm_repo_url }}"
+    name:       "{{ woodpecker_server_helm_chart_name }}"
+    version:    "{{ woodpecker_server_helm_chart_version | default('') }}"
+  register: result
+
+- name: Create canonical helm chart version for version compare
+  ansible.builtin.set_fact:
+    helm_chart_version_canonical: "{{ helm_chart_version[0:] }}"
+
+- name: Dump result
+  ansible.builtin.debug:
+    msg: '{{ result }}'
+    verbosity: 2
+
+- name: Dump fact helm_chart_version
+  ansible.builtin.debug:
+    msg: '{{ helm_chart_version }}'
+    verbosity: 1
+
+- name: Dump fact helm_chart_version_canonical
+  ansible.builtin.debug:
+    msg: '{{ helm_chart_version_canonical }}'
+    verbosity: 1

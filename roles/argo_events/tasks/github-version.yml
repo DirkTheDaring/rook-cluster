@@ -1,7 +1,13 @@
+# input:
+#   - argo_events_github_project_url
+#   - argo_events_github_project_version
+# output:
+#   - github_project_version
+
 - name: Get latest version from github
   github.project.version:
-    name:    "{{ argo_events_github_project_name | default(argo_events_releases_url) }}"
-    version: "{{ argo_events_github_project_version | default(argo_events_release | default('')) }}"
+    name:    "{{ argo_events_github_project_url }}"
+    version: "{{ argo_events_github_project_version }}"
   register: result
 
 - name: Dump result

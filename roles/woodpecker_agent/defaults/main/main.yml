@@ -1,0 +1,4 @@
+woodpecker_agent_credentials_dir: "{{ woodpecker_agent_root_credentials_dir }}/woodpecker-agent"
+
+# yamllint disable-line
+woodpecker_agent_fqdn:                  "{{ woodpecker_agent_hostname }}{{ '' if woodpecker_agent_subdomain == '' else '.' + woodpecker_agent_subdomain }}.{{ woodpecker_agent_domain }}"

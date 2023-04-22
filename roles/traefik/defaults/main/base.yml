@@ -20,15 +20,16 @@ traefik_helm_release_name:  traefik
 traefik_helm_repo_name:     traefik
 traefik_helm_repo_url:      https://helm.traefik.io/traefik
 traefik_helm_chart_name:    traefik
-traefik_helm_chart_version: ""        # empty strings means pick latest
-# traefik_helm_chart_version: "~^10\.6\."    # pick by regular expression
+traefik_helm_chart_version: ''        # empty strings means pick latest
+# traefik_helm_chart_version: '~^10\.6\.'    # pick by regular expression
 # traefik_helm_chart_version: "10.6.0" # set absolute version
 
 # Github Repository
-traefik_releases_url:      "https://api.github.com/repos/traefik/traefik/releases"
 traefik_releases_jmespath: "[].tag_name"
-# traefik_release: "~^v1\.7\." # pick first match of regular expression
-# traefik_release: "v1.7.33"
+traefik_github_project_url:     "https://api.github.com/repos/traefik/traefik/releases"
+traefik_github_project_version: ''
+# traefik_github_project_version: 'v1.7.33'
+# traefik_github_project_version: '~^v1\.7\.' # pick first match of regular expression
 
 # Configuration Database
 traefik_root_credentials_dir: "{{ playbook_dir }}/credentials"

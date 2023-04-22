@@ -1,0 +1,52 @@
+# DNS
+woodpecker_server_domain:       "example.com"
+woodpecker_server_subdomain:    ""
+woodpecker_server_hostname:     "woodpecker-server"
+
+# Deployment Method: argocd, helm
+woodpecker_server_deployment:    "helm"
+
+# Kubernetes
+woodpecker_server_namespace:    "woodpecker-server"
+
+# Argocd
+woodpecker_server_argocd_project:            "default"
+woodpecker_server_argocd_namespace:          "argo-cd"
+woodpecker_server_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+woodpecker_server_helm_release_name:  woodpecker-server
+
+woodpecker_server_helm_repo_name:     woodpecker
+woodpecker_server_helm_repo_url:      https://woodpecker-ci.org
+woodpecker_server_helm_chart_name:    woodpecker-server
+woodpecker_server_helm_chart_version: ''        # empty strings means pick latest
+# woodpecker_server_helm_chart_version: '~^0\.15\.'    # pick by regular expression
+# woodpecker_server_helm_chart_version: "0.15.6" # set absolute version
+
+# Github Repository
+woodpecker_server_releases_jmespath: "[].tag_name"
+woodpecker_server_github_project_url:     "https://api.github.com/repos/woodpecker-ci/woodpecker/releases"
+woodpecker_server_github_project_version: ''
+# woodpecker_server_github_project_version: 'v0.15.7'
+# woodpecker_server_github_project_version: '~^v0\.15\.' # pick first match of regular expression
+
+# Configuration Database
+woodpecker_server_root_credentials_dir: "{{ playbook_dir }}/credentials"
+woodpecker_server_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['
+woodpecker_server_repo_type: gitlab
+woodpecker_server_open: true
+woodpecker_server_gitlab_url: https://gitlab.com
+woodpecker_server_admin: xxx
+
+woodpecker_server_persistent_volume_enabled: true
+woodpecker_server_persistent_volume_storage_class: nfs-static
+woodpecker_server_persistent_volume_size: "10Gi"
+
+woodpecker_server_ingress_enabled: true
+woodpecker_server_log_level: info

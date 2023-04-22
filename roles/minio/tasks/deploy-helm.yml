@@ -1,10 +1,7 @@
 - name: Deploy with helm
-  when: minio_deployment == "helm"
+  when:
+    - minio_deployment == "helm"
   block:
-    # - name: Render values.yaml
-    #   ansible.builtin.set_fact:
-    #     minio_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
-
     - name: Add chart repo
       kubernetes.core.helm_repository:
         name:     "{{ minio_helm_repo_name }}"
@@ -17,5 +14,5 @@
         release_namespace: "{{ minio_namespace }}"
         release_name:      "{{ minio_helm_release_name }}"
         create_namespace:  true
-        release_values:    "{{ minio_values }}"
+        release_values:    "{{ minio_helm_release_values }}"
         update_repo_cache: true

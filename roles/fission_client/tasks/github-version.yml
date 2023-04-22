@@ -1,0 +1,14 @@
+# input:
+#   - fission_client_github_project_url
+#   - fission_client_github_project_version
+#   - fission_client_github_asset_name
+# output facts:
+#   - github_project_version
+#   - github_asset_name
+#   - github_download_url
+
+- name: Get latest version from github
+  github.project.version:
+    name:       "{{ fission_client_github_project_url }}"
+    version:    "{{ fission_client_github_project_version }}"
+    asset_name: "{{ fission_client_github_asset_name }}"

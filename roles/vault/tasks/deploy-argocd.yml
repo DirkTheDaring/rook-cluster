@@ -1,21 +1,18 @@
 - name: Deploy argocd app
-  when: vault_deployment == "argocd"
+  when:
+    - vault_deployment == "argocd"
   block:
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
-        vault_application_params: "{{ vault_values | chart_values_to_argo_parameters(vault_force_string_dict) }}"
-
-    # - name: Write result to /tmp/vault-application.yaml
-    #   ansible.builtin.copy:
-    #     content: "{{ vault_application_params }}"
-    #     dest: /tmp/vault-application-params.yaml
-    #   when: ansible_verbosity > 2
+        vault_application_params: >
+          {{ vault_helm_release_values
+          | chart_values_to_argo_parameters(vault_force_string_dict) }}
 
     - name: Create /tmp/vault-application.yaml if verbosity > 2
       ansible.builtin.template:
         src:  "application.yaml.jinja2"
         dest: "/tmp/vault-application.yaml"
-        mode: '0664'
+        mode: '0644'
       when: ansible_verbosity > 2
 
     - name: Create argocd application

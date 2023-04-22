@@ -1,0 +1,14 @@
+# input:
+#   - tetragon_client_github_project_url
+#   - tetragon_client_github_project_version
+#   - tetragon_client_github_asset_name
+# output facts:
+#   - github_project_version
+#   - github_asset_name
+#   - github_download_url
+
+- name: Get latest version from github
+  github.project.version:
+    name:       "{{ tetragon_client_github_project_url }}"
+    version:    "{{ tetragon_client_github_project_version }}"
+    asset_name: "{{ tetragon_client_github_asset_name }}"

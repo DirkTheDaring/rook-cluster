@@ -1,7 +1,13 @@
+# input:
+#   - velero_github_project_url
+#   - velero_github_project_version
+# output:
+#   - github_project_version
+
 - name: Get latest version from github
   github.project.version:
-    name:    "{{ velero_github_project_name | default(velero_releases_url) }}"
-    version: "{{ velero_github_project_version | default(velero_release | default('')) }}"
+    name:    "{{ velero_github_project_url }}"
+    version: "{{ velero_github_project_version }}"
   register: result
 
 - name: Dump result

@@ -1,0 +1,41 @@
+# DNS
+linkerd_domain:       "example.com"
+linkerd_subdomain:    ""
+linkerd_hostname:     "linkerd"
+
+# Deployment Method: argocd, helm
+linkerd_deployment:    "helm"
+
+# Kubernetes
+linkerd_namespace:    "linkerd"
+
+# Argocd
+linkerd_argocd_project:            "default"
+linkerd_argocd_namespace:          "argo-cd"
+linkerd_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+linkerd_helm_release_name:  linkerd
+
+linkerd_helm_repo_name:     linkerd
+linkerd_helm_repo_url:      https://helm.linkerd.io/stable
+linkerd_helm_chart_name:    linkerd-control-plane
+linkerd_helm_chart_version: ''        # empty strings means pick latest
+# linkerd_helm_chart_version: '~^1\.18\.'    # pick by regular expression
+# linkerd_helm_chart_version: "1.18.0" # set absolute version
+
+# Github Repository
+linkerd_releases_jmespath: "[].tag_name"
+linkerd_github_project_url:     "https://github.com/linkerd/linkerd2"
+linkerd_github_project_version: ''
+# linkerd_github_project_version: 'v1.7.1'
+# linkerd_github_project_version: '~^v1\.7\.' # pick first match of regular expression
+
+# Configuration Database
+linkerd_root_credentials_dir: "{{ playbook_dir }}/credentials"
+linkerd_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['

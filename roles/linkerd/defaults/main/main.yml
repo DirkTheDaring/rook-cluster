@@ -1,0 +1,4 @@
+linkerd_credentials_dir: "{{ linkerd_root_credentials_dir }}/linkerd"
+
+# yamllint disable-line
+linkerd_fqdn:                  "{{ linkerd_hostname }}{{ '' if linkerd_subdomain == '' else '.' + linkerd_subdomain }}.{{ linkerd_domain }}"

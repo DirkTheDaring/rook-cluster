@@ -1,0 +1,41 @@
+# DNS
+tetragon_domain:       "example.com"
+tetragon_subdomain:    ""
+tetragon_hostname:     "tetragon"
+
+# Deployment Method: argocd, helm
+tetragon_deployment:    "helm"
+
+# Kubernetes
+tetragon_namespace:    "tetragon"
+
+# Argocd
+tetragon_argocd_project:            "default"
+tetragon_argocd_namespace:          "argo-cd"
+tetragon_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+tetragon_helm_release_name:  tetragon
+
+tetragon_helm_repo_name:     cilium
+tetragon_helm_repo_url:      https://helm.cilium.io
+tetragon_helm_chart_name:    tetragon
+tetragon_helm_chart_version: ''        # empty strings means pick latest
+# tetragon_helm_chart_version: '~^1\.18\.'    # pick by regular expression
+# tetragon_helm_chart_version: "1.18.0" # set absolute version
+
+# Github Repository
+tetragon_releases_jmespath: "[].tag_name"
+tetragon_github_project_url:     "https://github.com/cilium/tetragon"
+tetragon_github_project_version: ''
+# tetragon_github_project_version: 'v0.9.0'
+# tetragon_github_project_version: '~^v0\.9\.' # pick first match of regular expression
+
+# Configuration Database
+tetragon_root_credentials_dir: "{{ playbook_dir }}/credentials"
+tetragon_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['

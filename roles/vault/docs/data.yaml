@@ -1,0 +1,10 @@
+---
+homepage: https://www.vaultproject.io
+license: https://raw.githubusercontent.com/hashicorp/vault/main/LICENSE
+license_type: Mozilla Public License, version 2.0
+git_repository: https://github.com/hashicorp/vault
+releases: https://github.com/hashicorp/vault/releases
+helm_repo_name: hashicorp
+helm_repo_url: https://helm.releases.hashicorp.com
+helm_chart_name: vault
+# https://developer.hashicorp.com/vault/docs/platform/k8s/helm

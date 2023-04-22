@@ -1,10 +1,7 @@
 - name: Deploy with helm
-  when: external_dns_deployment == "helm"
+  when:
+    - external_dns_deployment == "helm"
   block:
-    # - name: Render values.yaml
-    #   ansible.builtin.set_fact:
-    #     external_dns_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml }}"
-
     - name: Add chart repo
       kubernetes.core.helm_repository:
         name:     "{{ external_dns_helm_repo_name }}"
@@ -17,5 +14,5 @@
         release_namespace: "{{ external_dns_namespace }}"
         release_name:      "{{ external_dns_helm_release_name }}"
         create_namespace:  true
-        release_values:    "{{ external_dns_values }}"
+        release_values:    "{{ external_dns_helm_release_values }}"
         update_repo_cache: true

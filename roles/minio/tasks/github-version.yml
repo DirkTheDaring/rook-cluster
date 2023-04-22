@@ -1,7 +1,13 @@
+# input:
+#   - minio_github_project_url
+#   - minio_github_project_version
+# output:
+#   - github_project_version
+
 - name: Get latest version from github
   github.project.version:
-    name:    "{{ minio_github_project_name | default(minio_releases_url) }}"
-    version: "{{ minio_github_project_version | default(minio_release | default('')) }}"
+    name:    "{{ minio_github_project_url }}"
+    version: "{{ minio_github_project_version }}"
   register: result
 
 - name: Dump result

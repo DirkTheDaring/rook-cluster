@@ -1,0 +1,65 @@
+- name: Deploy with helm
+  when:
+    - woodpecker_agent_deployment == "helm"
+  block:
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ woodpecker_agent_helm_repo_name }}"
+        repo_url: "{{ woodpecker_agent_helm_repo_url }}"
+
+#    - name: Deploy helm chart
+#      kubernetes.core.helm:
+#        chart_ref:         "{{ woodpecker_agent_helm_repo_name }}/{{ woodpecker_agent_helm_chart_name }}"
+#        chart_version:     "{{ helm_chart_version }}"
+#        release_namespace: "{{ woodpecker_agent_namespace }}"
+#        release_name:      "{{ woodpecker_agent_helm_release_name }}"
+#        create_namespace:  true
+#        release_values:    "{{ woodpecker_agent_helm_release_values }}"
+#        update_repo_cache: true
+#        post_renderer:     "{{ woodpecker_agent_post_renderer }}"
+
+    - name: Create temporary directory
+      ansible.builtin.tempfile:
+        state: directory
+      register: tmp_dir
+    
+    - name: Copy Files
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ tmp_dir.path }}/{{ item }}"
+        mode: '0664'
+      loop:
+        - kustomization.yaml
+        - patch.yaml
+      loop_control:
+        label: "{{ tmp_dir.path }}/{{ item }}"
+ 
+    - name: Copy render script 
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: "{{ tmp_dir.path }}/{{ item }}"
+        mode: '0775'
+      loop:
+        - post-renderer.sh
+      loop_control:
+        label: "{{ tmp_dir.path }}/{{ item }}"
+    
+    - name: Deploy with helm
+      ansible.builtin.command:
+        argv:
+          - helm 
+          - upgrade
+          - --install
+          - --namespace
+          - "{{ woodpecker_agent_namespace }}"
+          - "{{ woodpecker_agent_helm_release_name }}"
+          - "{{ woodpecker_agent_helm_repo_name }}/{{ woodpecker_agent_helm_chart_name }}"
+          - --version
+          - "{{ helm_chart_version }}"
+          - --post-renderer
+          - "{{ tmp_dir.path }}/post-renderer.sh"
+
+    - name: Cleanup temporary directory
+      ansible.builtin.file:
+        path: "{{ tmp_dir.path }}"
+        state: absent

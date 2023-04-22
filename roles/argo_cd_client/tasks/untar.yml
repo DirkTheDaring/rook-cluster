@@ -1,0 +1,15 @@
+- name: Set download_dir to $HOME/bin if not set
+  ansible.builtin.set_fact:
+    argocd_client_bin_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/bin"
+  when: argocd_client_bin_dir|length == 0
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: "{{ argocd_client_bin_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Extract binary
+  ansible.builtin.unarchive:
+    src: "{{ argocd_client_download_dir }}/{{ github_asset_name }}"
+    dest: "{{ argocd_client_bin_dir }}"

@@ -1,38 +1,4 @@
-# DNS
-argocd_domain:       "example.com"
-argocd_subdomain:    ""
-argocd_hostname:     "argocd"
-
-# Deployment Method: argocd, helm
-argocd_deployment:    "helm"
-
-# Kubernetes
-argocd_namespace:    "argo-cd"
 # argocd_node_selector_hostname: ""
-
-# Argocd
-argocd_argocd_project:            "default"
-argocd_argocd_namespace:          "argo-cd"
-argocd_argocd_destination_server: "https://kubernetes.default.svc"
-
-# Helm Chart
-argocd_helm_release_name:  argocd
-
-argocd_helm_repo_name:     argocd
-argocd_helm_repo_url:      https://argoproj.github.io/argo-helm
-argocd_helm_chart_name:    argo-cd
-argocd_helm_chart_version: ""        # empty strings means pick latest
-# argocd_helm_chart_version: "~^2\.24\."    # pick by regular expression
-# argocd_helm_chart_version: "2.24.0" # set absolute version
-
-# Github Repository
-argocd_releases_url:      "https://api.github.com/repos/argoproj/argo-cd/releases"
-argocd_releases_jmespath: "[].tag_name"
-# argocd_release: "~^v1\.7\." # pick first match of regular expression
-# argocd_release: "v1.7.1"
-
-# Configuration Database
-argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"
 
 argocd_values: {}
 
@@ -65,3 +31,38 @@ argocd_ldap_insecure_tls:  "false"
 
 argocd_gitlab_secret: ""
 argocd_github_secret: ""
+# DNS
+argocd_domain:       "example.com"
+argocd_subdomain:    ""
+argocd_hostname:     "argocd"
+
+# Deployment Method: argocd, helm
+argocd_deployment:    "helm"
+
+# Kubernetes
+argocd_namespace:    "argo-cd"
+
+# Argocd
+argocd_argocd_project:            "default"
+argocd_argocd_namespace:          "argo-cd"
+argocd_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+argocd_helm_release_name:  argocd
+
+argocd_helm_repo_name:     argocd
+argocd_helm_repo_url:      https://argoproj.github.io/argo-helm
+argocd_helm_chart_name:    argo-cd
+argocd_helm_chart_version: ''        # empty strings means pick latest
+# argocd_helm_chart_version: '~^v2\.24\.'    # pick by regular expression
+# argocd_helm_chart_version: "v2.24.0" # set absolute version
+
+# Github Repository
+argocd_releases_jmespath: "[].tag_name"
+argocd_github_project_url:     "https://api.github.com/repos/argoproj/argo-cd/releases"
+argocd_github_project_version: ''
+# argocd_github_project_version: 'v1.7.1'
+# argocd_github_project_version: '~^v1\.7\.' # pick first match of regular expression
+
+# Configuration Database
+argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"

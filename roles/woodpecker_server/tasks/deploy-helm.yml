@@ -1,0 +1,18 @@
+- name: Deploy with helm
+  when:
+    - woodpecker_server_deployment == "helm"
+  block:
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ woodpecker_server_helm_repo_name }}"
+        repo_url: "{{ woodpecker_server_helm_repo_url }}"
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ woodpecker_server_helm_repo_name }}/{{ woodpecker_server_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ woodpecker_server_namespace }}"
+        release_name:      "{{ woodpecker_server_helm_release_name }}"
+        create_namespace:  true
+        release_values:    "{{ woodpecker_server_helm_release_values }}"
+        update_repo_cache: true

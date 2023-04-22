@@ -1,0 +1,4 @@
+fission_credentials_dir: "{{ fission_root_credentials_dir }}/fission"
+
+# yamllint disable-line
+fission_fqdn:                  "{{ fission_hostname }}{{ '' if fission_subdomain == '' else '.' + fission_subdomain }}.{{ fission_domain }}"

@@ -1,0 +1,17 @@
+- name: Set download_dir to $HOME/bin if not set
+  ansible.builtin.set_fact:
+    tetragon_client_bin_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/bin"
+  when: tetragon_client_bin_dir|length == 0
+
+- name: Copy file with owner and permissions
+  ansible.builtin.copy:
+    src:  "{{ tetragon_client_download_dir }}/{{ github_asset_name }}"
+    dest: "{{ tetragon_client_bin_dir }}"
+    mode: '0755'
+
+- name: Create a symbolic link
+  ansible.builtin.file:
+    src: "{{ tetragon_client_bin_dir }}/{{ github_asset_name }}"
+    dest: "{{ tetragon_client_bin_dir }}/{{ tetragon_client_filename }}"
+    state: link
+

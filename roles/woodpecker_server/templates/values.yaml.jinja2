@@ -1,0 +1,43 @@
+env:
+  # See
+  # https://woodpecker-ci.org/docs/administration/server-config
+
+  WOODPECKER_LOG_LEVEL: {{ woodpecker_server_log_level }}
+
+  WOODPECKER_HOST: {{ woodpecker_server_host }}
+  WOODPECKER_GITLAB_URL: {{ woodpecker_server_gitlab_url }}
+  WOODPECKER_ADMIN: {{ woodpecker_server_admin }}
+
+  # WOODPECKER_USERNAME: dietmar
+  WOODPECKER_OPEN: {{ woodpecker_server_open | lower }}
+  WOODPECKER_GITHUB: {{ 'true' if woodpecker_server_repo_type == 'github' else 'false' }}
+{% if woodpecker_server_repo_type != 'github' %}
+  WOODPECKER_{{ woodpecker_server_repo_type | upper }}: true
+{% endif %}
+
+extraSecretNamesForEnvFrom:
+- woodpecker-server-agent-secret
+- woodpecker-server-{{ woodpecker_server_repo_type | lower }}-client
+- woodpecker-server-{{ woodpecker_server_repo_type | lower }}-secret
+
+persistentVolume:
+  enabled: {{ woodpecker_server_persistent_volume_enabled | lower }}
+  size: {{ woodpecker_server_persistent_volume_size }}
+  mountPath: "/var/lib/woodpecker"
+  storageClass: {{ woodpecker_server_persistent_volume_storage_class }}
+
+ingress:
+  enabled: {{ woodpecker_server_ingress_enabled | lower }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - host: {{ woodpecker_server_fqdn }}
+      paths:
+      - path: /
+        backend:
+          serviceName: woodpecker-server
+          servicePort: 80
+  tls: []
+
+affinity: {}

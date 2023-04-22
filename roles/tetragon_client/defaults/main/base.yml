@@ -1,0 +1,10 @@
+# Github
+tetragon_client_github_project_url:     "https://github.com/cilium/tetragon"
+tetragon_client_github_project_version: '~^Release v'
+# tetragon_client_github_project_version: '^Release v[0-9]+\.[0-9]+\.[0-9]+$' # no release with -rc1 -rc2 in it
+# tetragon_client_github_project_version: "Release v0.9.0"
+# tetragon_client_github_project_version: '~^Release v0\.9\.' # pick first match of regular expression
+
+tetragon_client_github_asset_name:      '~.*-linux-amd64\.tar\.gz$'
+tetragon_client_download_dir: ""
+tetragon_client_bin_dir: ""

@@ -7,11 +7,15 @@
 
 - name: Load yaml and prune none values
   ansible.builtin.set_fact:
-    minio_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml | prune_none_value }}"
+    minio_helm_release_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml | prune_none_value }}"
+
+- name: Fix minio_values when not a mapping
+  ansible.builtin.set_fact:
+    minio_helm_release_values: "{{ minio_helm_release_values if minio_helm_release_values is mapping else {} }}"
 
 - name: Create pruned-values.yaml content if verbosity > 2
   ansible.builtin.copy:
-    content: "{{ minio_values | to_yaml }}"
+    content: "{{ minio_helm_release_values | to_yaml }}"
     dest: "/tmp/minio-pruned-values.yaml"
     mode: '0664'
   when: ansible_verbosity > 2

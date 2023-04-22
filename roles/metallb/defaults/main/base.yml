@@ -20,15 +20,16 @@ metallb_helm_release_name:  metallb
 metallb_helm_repo_name:     metallb
 metallb_helm_repo_url:      https://metallb.github.io/metallb
 metallb_helm_chart_name:    metallb
-metallb_helm_chart_version: ""        # empty strings means pick latest
-# metallb_helm_chart_version: "~^0\.11\."    # pick by regular expression
-# metallb_helm_chart_version: "0.11.0" # set absolute version
+metallb_helm_chart_version: ''        # empty strings means pick latest
+# metallb_helm_chart_version: '~^0\.13\.'    # pick by regular expression
+# metallb_helm_chart_version: "0.13.7" # set absolute version
 
 # Github Repository
-metallb_releases_url:      "https://api.github.com/repos/metallb/metallb/releases"
 metallb_releases_jmespath: "[].tag_name"
-# metallb_release: "~^v0\.11\." # pick first match of regular expression
-# metallb_release: "v0.11.0"
+metallb_github_project_url:     "https://api.github.com/repos/metallb/metallb/releases"
+metallb_github_project_version: ''
+# metallb_github_project_version: 'v0.13.9'
+# metallb_github_project_version: '~^v0\.13\.' # pick first match of regular expression
 
 # Configuration Database
 metallb_root_credentials_dir: "{{ playbook_dir }}/credentials"

@@ -1,24 +1,22 @@
 # dangerous heuristic, but for now no better idea
 - name: Extract major.minor version
   ansible.builtin.set_fact:
-    metallb_basic_version: "{{ helm_chart_version[1:].split('.')[0] }}.{{ helm_chart_version[1:].split('.')[1] }}"
-    metallb_version_major: "{{ helm_chart_version[1:].split('.')[0] | int }}"
-    metallb_version_minor: "{{ helm_chart_version[1:].split('.')[1] | int }}"
+    metallb_basic_version: "{{ helm_chart_version_canonical.split('.')[0] }}.{{ helm_chart_version_canonical.split('.')[1] }}"
+    metallb_version_major: "{{ helm_chart_version_canonical.split('.')[0] | int }}"
+    metallb_version_minor: "{{ helm_chart_version_canonical.split('.')[1] | int }}"
   when: metallb_basic_version is not defined
 
 - name: Show Major.Minor Version
   ansible.builtin.debug:
     msg: "metallb_basic_version: {{ metallb_basic_version }}"
     verbosity: 1
+
 - name: Show Major Version
   ansible.builtin.debug:
     msg: "metallb_version_major: {{ metallb_version_major }}"
     verbosity: 1
+
 - name: Show Minor Version
   ansible.builtin.debug:
     msg: "metallb_version_minor  {{ metallb_version_minor }}"
-    verbosity: 1
-- name: Show metallb_build_dir
-  ansible.builtin.debug:
-    msg: "metallb_build_dir: {{ metallb_build_dir }}"
     verbosity: 1

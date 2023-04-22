@@ -1,0 +1,14 @@
+# input:
+#   - velero_client_github_project_url
+#   - velero_client_github_project_version
+#   - velero_client_github_asset_name
+# output facts:
+#   - github_project_version
+#   - github_asset_name
+#   - github_download_url
+
+- name: Get latest version from github
+  github.project.version:
+    name:       "{{ velero_client_github_project_url }}"
+    version:    "{{ velero_client_github_project_version }}"
+    asset_name: "{{ velero_client_github_asset_name }}"

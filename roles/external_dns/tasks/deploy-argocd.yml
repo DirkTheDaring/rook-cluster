@@ -1,21 +1,18 @@
 - name: Deploy argocd app
-  when: external_dns_deployment == "argocd"
+  when:
+    - external_dns_deployment == "argocd"
   block:
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
-        external_dns_application_params: "{{ external_dns_values | chart_values_to_argo_parameters(external_dns_force_string_dict) }}"
-
-    # - name: Write result to /tmp/external-dns-application.yaml
-    #   ansible.builtin.copy:
-    #     content: "{{ external_dns_application_params }}"
-    #     dest: /tmp/external-dns-application-params.yaml
-    #   when: ansible_verbosity > 2
+        external_dns_application_params: >
+          {{ external_dns_helm_release_values
+          | chart_values_to_argo_parameters(external_dns_force_string_dict) }}
 
     - name: Create /tmp/external-dns-application.yaml if verbosity > 2
       ansible.builtin.template:
         src:  "application.yaml.jinja2"
         dest: "/tmp/external-dns-application.yaml"
-        mode: '0664'
+        mode: '0644'
       when: ansible_verbosity > 2
 
     - name: Create argocd application

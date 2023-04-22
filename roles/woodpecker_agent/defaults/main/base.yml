@@ -1,0 +1,41 @@
+# DNS
+woodpecker_agent_domain:       "example.com"
+woodpecker_agent_subdomain:    ""
+woodpecker_agent_hostname:     "woodpecker-agent"
+
+# Deployment Method: argocd, helm
+woodpecker_agent_deployment:    "helm"
+
+# Kubernetes
+woodpecker_agent_namespace:    "woodpecker-agent"
+
+# Argocd
+woodpecker_agent_argocd_project:            "default"
+woodpecker_agent_argocd_namespace:          "argo-cd"
+woodpecker_agent_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+woodpecker_agent_helm_release_name:  woodpecker-agent
+
+woodpecker_agent_helm_repo_name:     woodpecker
+woodpecker_agent_helm_repo_url:      https://woodpecker-ci.org
+woodpecker_agent_helm_chart_name:    woodpecker-agent
+woodpecker_agent_helm_chart_version: ''        # empty strings means pick latest
+# woodpecker_agent_helm_chart_version: '~^0\.15\.'    # pick by regular expression
+# woodpecker_agent_helm_chart_version: "0.15.6" # set absolute version
+
+# Github Repository
+woodpecker_agent_releases_jmespath: "[].tag_name"
+woodpecker_agent_github_project_url:     "https://api.github.com/repos/woodpecker-ci/woodpecker/releases"
+woodpecker_agent_github_project_version: ''
+# woodpecker_agent_github_project_version: 'v0.15.7'
+# woodpecker_agent_github_project_version: '~^v0\.15\.' # pick first match of regular expression
+
+# Configuration Database
+woodpecker_agent_root_credentials_dir: "{{ playbook_dir }}/credentials"
+woodpecker_agent_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['

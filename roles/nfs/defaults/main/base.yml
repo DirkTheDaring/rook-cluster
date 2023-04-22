@@ -20,15 +20,16 @@ nfs_subdir_external_provisioner_helm_release_name:  nfs-subdir-external-provisio
 nfs_subdir_external_provisioner_helm_repo_name:     nfs-subdir-external-provisioner
 nfs_subdir_external_provisioner_helm_repo_url:      https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner
 nfs_subdir_external_provisioner_helm_chart_name:    nfs-subdir-external-provisioner
-nfs_subdir_external_provisioner_helm_chart_version: ""        # empty strings means pick latest
-# nfs_subdir_external_provisioner_helm_chart_version: "~^4\.0\."    # pick by regular expression
+nfs_subdir_external_provisioner_helm_chart_version: ''        # empty strings means pick latest
+# nfs_subdir_external_provisioner_helm_chart_version: '~^4\.0\.'    # pick by regular expression
 # nfs_subdir_external_provisioner_helm_chart_version: "4.0.14" # set absolute version
 
 # Github Repository
-nfs_subdir_external_provisioner_releases_url:      "https://api.github.com/repos/kubernetes-sigs/nfs-subdir-external-provisioner/releases"
 nfs_subdir_external_provisioner_releases_jmespath: "[].tag_name"
-# nfs_subdir_external_provisioner_release: "~^nfs-subdir-external-provisioner-4\.0\." # pick first match of regular expression
-# nfs_subdir_external_provisioner_release: "nfs-subdir-external-provisioner-4.0.14"
+nfs_subdir_external_provisioner_github_project_url:     "https://api.github.com/repos/kubernetes-sigs/nfs-subdir-external-provisioner/releases"
+nfs_subdir_external_provisioner_github_project_version: ''
+# nfs_subdir_external_provisioner_github_project_version: 'nfs-subdir-external-provisioner-4.0.14'
+# nfs_subdir_external_provisioner_github_project_version: '~^nfs-subdir-external-provisioner-4\.0\.' # pick first match of regular expression
 
 # Configuration Database
 nfs_subdir_external_provisioner_root_credentials_dir: "{{ playbook_dir }}/credentials"

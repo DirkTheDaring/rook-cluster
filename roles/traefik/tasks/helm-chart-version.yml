@@ -1,22 +1,6 @@
-# - name: traefik_helm_repo_name
-#   debug:
-#     msg: 'traefik_helm_repo_name: {{ traefik_helm_repo_name }}'
-#     verbosity: 2
-#
-# - name: traefik_helm_repo_url
-#   debug:
-#     msg: 'traefik_helm_repo_url: {{ traefik_helm_repo_url }}'
-#     verbosity: 2
-#
-# - name: traefik_helm_chart_name
-#   debug:
-#     msg: 'traefik_helm_chart_name: {{ traefik_helm_chart_name }}'
-#     verbosity: 2
-#
-# - name: traefik_helm_chart_version
-#   debug:
-#     msg: 'traefik_helm_chart_version: {{ traefik_helm_chart_version}}'
-#     verbosity: 2
+# output:
+#   -  helm_chart_version
+#   -  helm_chart_version_canonical
 
 - name: Get latest helm chart version
   helm.chart.version:
@@ -26,6 +10,10 @@
     version:    "{{ traefik_helm_chart_version | default('') }}"
   register: result
 
+- name: Create canonical helm chart version for version compare
+  ansible.builtin.set_fact:
+    helm_chart_version_canonical: "{{ helm_chart_version[0:] }}"
+
 - name: Dump result
   ansible.builtin.debug:
     msg: '{{ result }}'
@@ -34,4 +22,9 @@
 - name: Dump fact helm_chart_version
   ansible.builtin.debug:
     msg: '{{ helm_chart_version }}'
+    verbosity: 1
+
+- name: Dump fact helm_chart_version_canonical
+  ansible.builtin.debug:
+    msg: '{{ helm_chart_version_canonical }}'
     verbosity: 1

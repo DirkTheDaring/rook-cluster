@@ -1,0 +1,4 @@
+cert_manager_credentials_dir: "{{ cert_manager_root_credentials_dir }}/cert-manager"
+
+# yamllint disable-line
+cert_manager_fqdn:                  "{{ cert_manager_hostname }}{{ '' if cert_manager_subdomain == '' else '.' + cert_manager_subdomain }}.{{ cert_manager_domain }}"

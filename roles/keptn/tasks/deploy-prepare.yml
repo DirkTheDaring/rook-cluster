@@ -1,0 +1,21 @@
+- name: Create values.yaml content if verbosity > 2
+  ansible.builtin.template:
+    src:  "values.yaml.jinja2"
+    dest: "/tmp/keptn-values.yaml"
+    mode: '0664'
+  when: ansible_verbosity > 2
+
+- name: Load yaml and prune none values
+  ansible.builtin.set_fact:
+    keptn_helm_release_values: "{{ lookup('template', 'values.yaml.jinja2') | from_yaml | prune_none_value }}"
+
+- name: Fix keptn_values when not a mapping
+  ansible.builtin.set_fact:
+    keptn_helm_release_values: "{{ keptn_helm_release_values if keptn_helm_release_values is mapping else {} }}"
+
+- name: Create pruned-values.yaml content if verbosity > 2
+  ansible.builtin.copy:
+    content: "{{ keptn_helm_release_values | to_yaml }}"
+    dest: "/tmp/keptn-pruned-values.yaml"
+    mode: '0664'
+  when: ansible_verbosity > 2

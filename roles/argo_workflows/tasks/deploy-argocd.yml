@@ -1,21 +1,18 @@
 - name: Deploy argocd app
-  when: argo_workflows_deployment == "argocd"
+  when:
+    - argo_workflows_deployment == "argocd"
   block:
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
-        argo_workflows_application_params: "{{ argo_workflows_values | chart_values_to_argo_parameters(argo_workflows_force_string_dict) }}"
-
-    # - name: Write result to /tmp/argo-workflows-application.yaml
-    #   ansible.builtin.copy:
-    #     content: "{{ argo_workflows_application_params }}"
-    #     dest: /tmp/argo-workflows-application-params.yaml
-    #   when: ansible_verbosity > 2
+        argo_workflows_application_params: >
+          {{ argo_workflows_helm_release_values
+          | chart_values_to_argo_parameters(argo_workflows_force_string_dict) }}
 
     - name: Create /tmp/argo-workflows-application.yaml if verbosity > 2
       ansible.builtin.template:
         src:  "application.yaml.jinja2"
         dest: "/tmp/argo-workflows-application.yaml"
-        mode: '0664'
+        mode: '0644'
       when: ansible_verbosity > 2
 
     - name: Create argocd application

@@ -1,0 +1,10 @@
+# Github
+woodpecker_client_github_project_url:     "https://api.github.com/repos/woodpecker-ci/woodpecker/releases"
+woodpecker_client_github_project_version: '~^'
+# woodpecker_client_github_project_version: '^[0-9]+\.[0-9]+\.[0-9]+$' # no release with -rc1 -rc2 in it
+# woodpecker_client_github_project_version: "0.15.7"
+# woodpecker_client_github_project_version: '~^0\.15\.' # pick first match of regular expression
+
+woodpecker_client_github_asset_name:      'woodpecker-cli_linux_amd64.tar.gz'
+woodpecker_client_download_dir: ""
+woodpecker_client_bin_dir: ""

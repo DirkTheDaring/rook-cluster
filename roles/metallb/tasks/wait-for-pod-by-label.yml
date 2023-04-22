@@ -1,5 +1,6 @@
 # tasks/wait-for-pod-by-label.yml
-# kubectl -n metallb-system get pods -l app.kubernetes.io/component=controller --no-headers -o name
+
+  # kubectl -n metallb-system get pods -l app.kubernetes.io/component=controller --no-headers -o name
 - name: Wait until pod with label app.kubernetes.io/component=controller appears
   ansible.builtin.command:
     argv:
@@ -12,15 +13,19 @@
           sleep 10
         done
 
+  # kubectl -n metallb-system get pods -l app.kubernetes.io/component=controller --no-headers "-ocustom-columns=data:status.conditions[?(@.type=='Ready')].type"
 - name: Wait until pod with label app.kubernetes.io/component=controller becomes ready
   ansible.builtin.command:
     argv:
-      - kubectl
-      - wait
-      - -n
-      - "{{ metallb_namespace }}"
-      - --timeout=600s
-      - --for=condition=Ready
-      - pod
-      - -l
-      - app.kubernetes.io/component=controller
+      - bash
+      - -c
+      - 'while true; do
+
+        RESULT=$(kubectl -n {{ metallb_namespace }} get pods -l app.kubernetes.io/component=controller
+        --no-headers "-ocustom-columns=data:status.conditions[?(@.type==''Ready'')].type")
+
+        [ "$RESULT" = "Ready" ] && break
+
+        sleep 3
+
+        done'

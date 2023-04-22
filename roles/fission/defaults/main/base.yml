@@ -1,0 +1,41 @@
+# DNS
+fission_domain:       "example.com"
+fission_subdomain:    ""
+fission_hostname:     "fission"
+
+# Deployment Method: argocd, helm
+fission_deployment:    "helm"
+
+# Kubernetes
+fission_namespace:    "fission"
+
+# Argocd
+fission_argocd_project:            "default"
+fission_argocd_namespace:          "argo-cd"
+fission_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+fission_helm_release_name:  fission
+
+fission_helm_repo_name:     fission
+fission_helm_repo_url:      https://fission.github.io/fission-charts
+fission_helm_chart_name:    fission-all
+fission_helm_chart_version: ''        # empty strings means pick latest
+# fission_helm_chart_version: '~^1\.18\.'    # pick by regular expression
+# fission_helm_chart_version: "1.18.0" # set absolute version
+
+# Github Repository
+fission_releases_jmespath: "[].tag_name"
+fission_github_project_url:     "https://api.github.com/repos/fission/fission/releases"
+fission_github_project_version: ''
+# fission_github_project_version: 'v1.7.1'
+# fission_github_project_version: '~^v1\.7\.' # pick first match of regular expression
+
+# Configuration Database
+fission_root_credentials_dir: "{{ playbook_dir }}/credentials"
+fission_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['

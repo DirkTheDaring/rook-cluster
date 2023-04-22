@@ -20,15 +20,16 @@ velero_helm_release_name:  velero
 velero_helm_repo_name:     velero
 velero_helm_repo_url:      https://vmware-tanzu.github.io/helm-charts
 velero_helm_chart_name:    velero
-velero_helm_chart_version: ""        # empty strings means pick latest
-# velero_helm_chart_version: "~^2\.24\."    # pick by regular expression
-# velero_helm_chart_version: "2.24.0" # set absolute version
+velero_helm_chart_version: ''        # empty strings means pick latest
+# velero_helm_chart_version: '~^3\.1\.'    # pick by regular expression
+# velero_helm_chart_version: "3.1.6" # set absolute version
 
 # Github Repository
-velero_releases_url:      "https://api.github.com/repos/vmware-tanzu/velero/releases"
 velero_releases_jmespath: "[].tag_name"
-# velero_release: "~^v1\.7\." # pick first match of regular expression
-# velero_release: "v1.7.1"
+velero_github_project_url:     "https://api.github.com/repos/vmware-tanzu/velero/releases"
+velero_github_project_version: ''
+# velero_github_project_version: 'v1.7.1'
+# velero_github_project_version: '~^v1\.7\.' # pick first match of regular expression
 
 # Configuration Database
 velero_root_credentials_dir: "{{ playbook_dir }}/credentials"

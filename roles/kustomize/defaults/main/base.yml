@@ -1,0 +1,10 @@
+# Github
+kustomize_github_project_url:     "https://github.com/kubernetes-sigs/kustomize"
+kustomize_github_project_version: '~^kustomize/v'
+# kustomize_github_project_version: '^kustomize/v[0-9]+\.[0-9]+\.[0-9]+$' # no release with -rc1 -rc2 in it
+# kustomize_github_project_version: "kustomize/v5.0.1"
+# kustomize_github_project_version: '~^kustomize/v5\.0\.' # pick first match of regular expression
+
+kustomize_github_asset_name:      '~^kustomize_.*_linux_amd64.tar.gz$'
+kustomize_download_dir: ""
+kustomize_bin_dir: ""

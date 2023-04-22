@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ cert_manager_argocd_namespace }}
+  name:      {{ cert_manager_helm_release_name }}
+spec:
+  destination:
+    server:    {{ cert_manager_argocd_destination_server }}
+    namespace: {{ cert_manager_namespace }}
+  project: {{ cert_manager_argocd_project }}
+  source:
+    repoURL:        {{ cert_manager_helm_repo_url }}
+    chart:          {{ cert_manager_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+{{ cert_manager_application_params }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
