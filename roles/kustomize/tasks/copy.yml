@@ -14,4 +14,3 @@
     src: "{{ kustomize_bin_dir }}/{{ github_asset_name }}"
     dest: "{{ kustomize_bin_dir }}/{{ kustomize_filename }}"
     state: link
-

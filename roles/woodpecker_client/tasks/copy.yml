@@ -14,4 +14,3 @@
     src: "{{ woodpecker_client_bin_dir }}/{{ github_asset_name }}"
     dest: "{{ woodpecker_client_bin_dir }}/{{ woodpecker_client_filename }}"
     state: link
-

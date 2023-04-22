@@ -14,4 +14,3 @@
     src: "{{ cilium_client_bin_dir }}/{{ github_asset_name }}"
     dest: "{{ cilium_client_bin_dir }}/{{ cilium_client_filename }}"
     state: link
-

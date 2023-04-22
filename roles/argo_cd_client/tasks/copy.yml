@@ -14,4 +14,3 @@
     src: "{{ argocd_client_bin_dir }}/{{ github_asset_name }}"
     dest: "{{ argocd_client_bin_dir }}/{{ argocd_client_filename }}"
     state: link
-

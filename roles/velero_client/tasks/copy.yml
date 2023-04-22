@@ -14,4 +14,3 @@
     src: "{{ velero_client_bin_dir }}/{{ github_asset_name }}"
     dest: "{{ velero_client_bin_dir }}/{{ velero_client_filename }}"
     state: link
-

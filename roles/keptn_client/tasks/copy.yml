@@ -14,4 +14,3 @@
     src: "{{ keptn_client_bin_dir }}/{{ github_asset_name }}"
     dest: "{{ keptn_client_bin_dir }}/{{ keptn_client_filename }}"
     state: link
-

@@ -14,4 +14,3 @@
     src: "{{ fission_client_bin_dir }}/{{ github_asset_name }}"
     dest: "{{ fission_client_bin_dir }}/{{ fission_client_filename }}"
     state: link
-
