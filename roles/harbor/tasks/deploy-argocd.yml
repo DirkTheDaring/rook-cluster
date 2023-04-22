@@ -1,21 +1,18 @@
 - name: Deploy argocd app
-  when: harbor_deployment == "argocd"
+  when:
+    - harbor_deployment == "argocd"
   block:
     - name: Transform from helm values to application params
       ansible.builtin.set_fact:
-        harbor_application_params: "{{ harbor_values | chart_values_to_argo_parameters(harbor_force_string_dict) }}"
-
-    # - name: Write result to /tmp/harbor-application.yaml
-    #   ansible.builtin.copy:
-    #     content: "{{ harbor_application_params }}"
-    #     dest: /tmp/harbor-application-params.yaml
-    #   when: ansible_verbosity > 2
+        harbor_application_params: >
+          {{ harbor_helm_release_values
+          | chart_values_to_argo_parameters(harbor_force_string_dict) }}
 
     - name: Create /tmp/harbor-application.yaml if verbosity > 2
       ansible.builtin.template:
         src:  "application.yaml.jinja2"
         dest: "/tmp/harbor-application.yaml"
-        mode: '0664'
+        mode: '0644'
       when: ansible_verbosity > 2
 
     - name: Create argocd application

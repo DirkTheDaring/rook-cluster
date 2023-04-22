@@ -4,4 +4,3 @@ https://registry.terraform.io/providers/BESTSELLER/harbor/latest/docs/resources/
 
 API:
 https://community.pivotal.io/s/article/How-to-Browse-and-Query-Harbor-Registry-using-REST-API?language=en_US
-
