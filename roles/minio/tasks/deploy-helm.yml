@@ -6,6 +6,9 @@
       kubernetes.core.helm_repository:
         name:     "{{ minio_helm_repo_name }}"
         repo_url: "{{ minio_helm_repo_url }}"
+      ignore_errors: true
+      tags:
+        - skip_ansible_lint
 
     - name: Deploy helm chart
       kubernetes.core.helm:

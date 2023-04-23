@@ -7,6 +7,9 @@
       kubernetes.core.helm_repository:
         name:     "{{ rook_helm_repo_name }}"
         repo_url: "{{ rook_helm_repo_url }}"
+      ignore_errors: true
+      tags:
+        - skip_ansible_lint
 
     - name: Deploy helm chart
       kubernetes.core.helm:
