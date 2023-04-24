@@ -1,9 +1,16 @@
 global:
   storageClass: "{{ postgresql_storage_class }}"
+  # older Versions of helm chart
   postgresql:
     postgresqlDatabase: "{{ item.database_name }}"
     postgresqlUsername: "{{ item.database_username }}"
     postgresqlPassword: "{{ item.database_password }}"
+  # Newer version, at least helm chart 12.3.1
+  auth:
+    database: "{{ item.database_name }}"
+    username: "{{ item.database_username }}"
+    password: "{{ item.database_password }}"
+
 persistence:
   storageClass: "{{ postgresql_storage_class }}"
 {% if postgresql_node_selector is defined and postgresql_node_selector is mapping %}
@@ -11,4 +18,3 @@ primary:
   nodeSelector:
     {{ postgresql_node_selector | to_yaml(indent=4) }}
 {% endif %}
-
