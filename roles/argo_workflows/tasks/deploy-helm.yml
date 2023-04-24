@@ -1,0 +1,21 @@
+- name: Deploy with helm
+  when:
+    - argo_workflows_deployment == "helm"
+  block:
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ argo_workflows_helm_repo_name }}"
+        repo_url: "{{ argo_workflows_helm_repo_url }}"
+      ignore_errors: true
+      tags:
+        - skip_ansible_lint
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ argo_workflows_helm_repo_name }}/{{ argo_workflows_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ argo_workflows_namespace }}"
+        release_name:      "{{ argo_workflows_helm_release_name }}"
+        create_namespace:  true
+        release_values:    "{{ argo_workflows_helm_release_values }}"
+        update_repo_cache: true
