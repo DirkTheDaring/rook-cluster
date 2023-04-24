@@ -1,15 +1,15 @@
 global:
   storageClass: "{{ postgresql_storage_class }}"
-  # older Versions of helm chart
   postgresql:
+    # older Versions of helm chart
     postgresqlDatabase: "{{ item.database_name }}"
     postgresqlUsername: "{{ item.database_username }}"
     postgresqlPassword: "{{ item.database_password }}"
-  # Newer version, at least helm chart 12.3.1
-  auth:
-    database: "{{ item.database_name }}"
-    username: "{{ item.database_username }}"
-    password: "{{ item.database_password }}"
+    # Newer versions, at least helm chart 12.3.1
+    auth:
+      database: "{{ item.database_name }}"
+      username: "{{ item.database_username }}"
+      password: "{{ item.database_password }}"
 
 persistence:
   storageClass: "{{ postgresql_storage_class }}"
