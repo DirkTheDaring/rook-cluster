@@ -1,0 +1,5 @@
+gpu_operator_credentials_dir: "{{ gpu_operator_root_credentials_dir }}/gpu-operator"
+
+# yamllint disable-line
+gpu_operator_fqdn:                  "{{ gpu_operator_hostname }}{{ '' if gpu_operator_subdomain == '' else '.' + gpu_operator_subdomain }}.{{ gpu_operator_domain }}"
+gpu_operator_driver_repository: "harbor{{ '' if gpu_operator_subdomain == '' else '.' + gpu_operator_subdomain }}.{{ gpu_operator_domain }}/nvidia"

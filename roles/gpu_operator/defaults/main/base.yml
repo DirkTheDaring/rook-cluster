@@ -1,0 +1,43 @@
+# DNS
+gpu_operator_domain:       "example.com"
+gpu_operator_subdomain:    ""
+gpu_operator_hostname:     "gpu-operator"
+
+# Deployment Method: argocd, helm
+gpu_operator_deployment:    "helm"
+
+# Kubernetes
+gpu_operator_namespace:    "gpu-operator"
+
+# Argocd
+gpu_operator_argocd_project:            "default"
+gpu_operator_argocd_namespace:          "argo-cd"
+gpu_operator_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+gpu_operator_helm_release_name:  gpu-operator
+
+gpu_operator_helm_repo_name:     gpu-operator
+gpu_operator_helm_repo_url:      https://nvidia.github.io/gpu-operator
+gpu_operator_helm_chart_name:    gpu-operator
+gpu_operator_helm_chart_version: ''        # empty strings means pick latest
+# gpu_operator_helm_chart_version: '~^v23\.3\.'    # pick by regular expression
+# gpu_operator_helm_chart_version: "v23.3.1" # set absolute version
+
+# Github Repository
+gpu_operator_releases_jmespath: "[].tag_name"
+gpu_operator_github_project_url:     "https://github.com/NVIDIA/gpu-operator"
+gpu_operator_github_project_version: ''
+# gpu_operator_github_project_version: 'GPU Operator 223.3.1'
+# gpu_operator_github_project_version: '~^GPU Operator 223\.3\.' # pick first match of regular expression
+
+# Configuration Database
+gpu_operator_root_credentials_dir: "{{ playbook_dir }}/credentials"
+gpu_operator_node_feature_discovery_master_node_selector: ""
+gpu_operator_node_feature_discovery_worker_node_selector: ""
+gpu_operator_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['

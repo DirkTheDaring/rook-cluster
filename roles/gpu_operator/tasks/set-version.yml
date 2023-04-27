@@ -1,0 +1,22 @@
+# dangerous heuristic, but for now no better idea
+- name: Extract major.minor version
+  ansible.builtin.set_fact:
+    gpu_operator_basic_version: "{{ helm_chart_version_canonical.split('.')[0] }}.{{ helm_chart_version_canonical.split('.')[1] }}"
+    gpu_operator_version_major: "{{ helm_chart_version_canonical.split('.')[0] | int }}"
+    gpu_operator_version_minor: "{{ helm_chart_version_canonical.split('.')[1] | int }}"
+  when: gpu_operator_basic_version is not defined
+
+- name: Show Major.Minor Version
+  ansible.builtin.debug:
+    msg: "gpu_operator_basic_version: {{ gpu_operator_basic_version }}"
+    verbosity: 1
+
+- name: Show Major Version
+  ansible.builtin.debug:
+    msg: "gpu_operator_version_major: {{ gpu_operator_version_major }}"
+    verbosity: 1
+
+- name: Show Minor Version
+  ansible.builtin.debug:
+    msg: "gpu_operator_version_minor  {{ gpu_operator_version_minor }}"
+    verbosity: 1

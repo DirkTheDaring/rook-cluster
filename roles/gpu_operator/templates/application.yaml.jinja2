@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ gpu_operator_argocd_namespace }}
+  name:      {{ gpu_operator_helm_release_name }}
+spec:
+  destination:
+    server:    {{ gpu_operator_argocd_destination_server }}
+    namespace: {{ gpu_operator_namespace }}
+  project: {{ gpu_operator_argocd_project }}
+  source:
+    repoURL:        {{ gpu_operator_helm_repo_url }}
+    chart:          {{ gpu_operator_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+{{ gpu_operator_application_params }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

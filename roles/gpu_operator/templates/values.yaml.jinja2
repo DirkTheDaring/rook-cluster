@@ -1,0 +1,14 @@
+dcgm:
+  enabled: true
+driver:
+  repository: {{ gpu_operator_driver_repository }}
+operator:
+  defaultRuntime: crio
+
+node-feature-discovery:
+  master:
+    nodeSelector:
+      kubernetes.io/hostname: {{ gpu_operator_node_feature_discovery_master_node_selector }}
+  worker:
+    nodeSelector:
+      kubernetes.io/hostname: {{ gpu_operator_node_feature_discovery_worker_node_selector }}

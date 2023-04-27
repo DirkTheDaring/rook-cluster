@@ -1,0 +1,12 @@
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Get Helm version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Prepare deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
+- name: Deploy on argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml
+- name: Deploy on helm
+  ansible.builtin.import_tasks: deploy-helm.yml
+- name: Set version
+  ansible.builtin.import_tasks: set-version.yml
