@@ -24,7 +24,7 @@ argo_notifications_argocd_destination_server: "https://kubernetes.default.svc"
 # Helm Chart
 argo_notifications_helm_release_name:  argo-notifications
 
-argo_notifications_helm_repo_name:     argo
+argo_notifications_helm_repo_name:     argocd
 argo_notifications_helm_repo_url:      https://argoproj.github.io/argo-helm
 argo_notifications_helm_chart_name:    argocd-notifications
 argo_notifications_helm_chart_version: ''        # empty strings means pick latest

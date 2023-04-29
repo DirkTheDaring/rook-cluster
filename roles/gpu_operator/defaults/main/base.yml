@@ -28,8 +28,8 @@ gpu_operator_helm_chart_version: ''        # empty strings means pick latest
 gpu_operator_releases_jmespath: "[].tag_name"
 gpu_operator_github_project_url:     "https://github.com/NVIDIA/gpu-operator"
 gpu_operator_github_project_version: ''
-# gpu_operator_github_project_version: 'GPU Operator 223.3.1'
-# gpu_operator_github_project_version: '~^GPU Operator 223\.3\.' # pick first match of regular expression
+# gpu_operator_github_project_version: '23.3.1'
+# gpu_operator_github_project_version: '~^23\.3\.' # pick first match of regular expression
 
 # Configuration Database
 gpu_operator_root_credentials_dir: "{{ playbook_dir }}/credentials"

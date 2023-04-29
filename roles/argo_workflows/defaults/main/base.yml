@@ -23,7 +23,7 @@ argo_workflows_argocd_destination_server: "https://kubernetes.default.svc"
 # Helm Chart
 argo_workflows_helm_release_name:  argo-workflows
 
-argo_workflows_helm_repo_name:     argo-workflows
+argo_workflows_helm_repo_name:     argocd
 argo_workflows_helm_repo_url:      https://argoproj.github.io/argo-helm
 argo_workflows_helm_chart_name:    argo-workflows
 argo_workflows_helm_chart_version: ''        # empty strings means pick latest

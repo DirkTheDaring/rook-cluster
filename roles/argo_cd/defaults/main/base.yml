@@ -52,7 +52,7 @@ argocd_helm_release_name:  argocd
 
 argocd_helm_repo_name:     argocd
 argocd_helm_repo_url:      https://argoproj.github.io/argo-helm
-argocd_helm_chart_name:    argo-cd
+argocd_helm_chart_name:    argocd
 argocd_helm_chart_version: ''        # empty strings means pick latest
 # argocd_helm_chart_version: '~^v2\.24\.'    # pick by regular expression
 # argocd_helm_chart_version: "v2.24.0" # set absolute version

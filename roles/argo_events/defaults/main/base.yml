@@ -23,7 +23,7 @@ argo_events_argocd_destination_server: "https://kubernetes.default.svc"
 # Helm Chart
 argo_events_helm_release_name:  argo-events
 
-argo_events_helm_repo_name:     argo
+argo_events_helm_repo_name:     argocd
 argo_events_helm_repo_url:      https://argoproj.github.io/argo-helm
 argo_events_helm_chart_name:    argo-events
 argo_events_helm_chart_version: ''        # empty strings means pick latest
