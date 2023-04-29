@@ -216,7 +216,7 @@ def project_version(config):
 
     repos = load_json(cache_file)
 
-    versions = get_keys(repos, 'name')
+    versions = get_keys(repos, 'tag_name')
 
     filtered_versions = filter_list(versions, version)
 
@@ -225,7 +225,7 @@ def project_version(config):
 
     version = last_of_nat_sorted_list(filtered_versions)
 
-    repo = get_object_by_key(repos, 'name', version)
+    repo = get_object_by_key(repos, 'tag_name', version)
 
     if not 'assets' in repo:
         return (version, '', '')
