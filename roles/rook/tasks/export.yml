@@ -126,18 +126,27 @@
         wait_timeout: 7200 # seconds
       when: rook_job.stdout == ""
 
-    - name: Read JSON output
+    # The export job can be missing, therefore the result of rook_job_name can be == ""
+    - name: Get Job name
       ansible.builtin.command:
         argv:
           - bash
           - -c
-          - >
-            kubectl -n {{ rook_namespace }} get pod -l job-name=export-vars-for-external -o custom-columns=NAME:metadata.name --no-headers
-            | xargs kubectl -n {{ rook_namespace }} logs| awk '{ if ( f==1) {print }} /^--- json/ { f=1 }'
+          - kubectl -n {{ rook_namespace }} get pod -l job-name=export-vars-for-external -o custom-columns=NAME:metadata.name --no-headers
+      register: rook_job_name
+
+    - name: Read JSON output from job
+      ansible.builtin.command:
+        argv:
+          - bash
+          - -c
+          - kubectl -n {{ rook_namespace }} logs {{ rook_job_name.stdout }} | awk '{ if ( f==1) {print }} /^--- json/ { f=1 }'
       register: rook_export_result
+      when: rook_job_name.stdout|length > 0
 
     - name: Create config.json in rook_credentials_dir
       ansible.builtin.copy:
         content: "{{ rook_export_result.stdout | from_json | to_nice_json }}\n"
         dest:    "{{ rook_credentials_dir }}/config-1.9.json"
         mode: '0644'
+      when: rook_job_name.stdout|length > 0
