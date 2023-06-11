@@ -45,3 +45,10 @@ external_dns_force_string_dict:
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
+
+external_dns_rfc2136_host: ""
+external_dns_rfc2136_port: 53
+external_dns_rfc2136_zone: ""
+external_dns_rfc2136_tsig_secret: ""
+external_dns_rfc2136_tsig_secret_alg: hmac-sha256
+external_dns_rfc2136_tsig_keyname: externaldns-key

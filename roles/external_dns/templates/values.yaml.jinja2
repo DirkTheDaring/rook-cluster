@@ -4,3 +4,11 @@ extraEnvVars:
 - name:  {{ item.name }}
   value: {{ item.value }}
 {% endfor %}
+
+rfc2136:
+  host: {{ external_dns_rfc2136_host }}
+  port: {{ external_dns_rfc2136_port }}
+  zone: {{ external_dns_rfc2136_zone }}
+  tsigSecret: {{ external_dns_rfc2136_tsig_secret }}
+  tsigSecretAlg: {{ external_dns_rfc2136_tsig_secret_alg }}
+  tsigKeyname: {{ external_dns_rfc2136_tsig_keyname }}
