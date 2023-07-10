@@ -12,7 +12,7 @@
 
 - name: Create canonical helm chart version for version compare
   ansible.builtin.set_fact:
-    helm_chart_version_canonical: "{{ helm_chart_version[1:] }}"
+    helm_chart_version_canonical: "{{ helm_chart_version }}"
 
 - name: Dump result
   ansible.builtin.debug:
