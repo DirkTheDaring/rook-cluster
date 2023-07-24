@@ -9,3 +9,10 @@ $ ceph dashboard ac-user-set-password admin -i /tmp/x
 
 #  it happened that the user was locked out!!!
 ceph dashboard ac-user-enable admin
+
+# Understanding mon-status
+https://docs.ceph.com/en/latest/rados/troubleshooting/troubleshooting-mon/#understanding-mon-status
+
+# Remove mon-id from mon list (after crash an additional mon remained, and it needed to be deleted with mon remove)
+ceph mon remove {mon-id}
+
