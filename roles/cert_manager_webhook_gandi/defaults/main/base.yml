@@ -35,3 +35,6 @@ cert_manager_webhook_gandi_github_project_version: ''
 cert_manager_webhook_gandi_root_credentials_dir: "{{ playbook_dir }}/credentials"
 
 cert_manager_webhook_gandi_api_token: ""
+
+cert_manager_webhook_gandi_cert_manager_namespace:           "cert-manager"
+cert_manager_webhook_gandi_cert_manager_service_acount_name: "cert-manager"
