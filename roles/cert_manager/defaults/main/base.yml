@@ -33,6 +33,10 @@ cert_manager_github_project_version: ''
 
 # Configuration Database
 cert_manager_root_credentials_dir: "{{ playbook_dir }}/credentials"
+cert_manager_dns01_recursive_nameservers: []
+  #- "8.8.8.8:53"
+  #- "1.1.1.1:53"
+cert_manager_dns01_recursive_nameservers_only: false
 cert_manager_force_string_dict:
   # path_list:
   #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'

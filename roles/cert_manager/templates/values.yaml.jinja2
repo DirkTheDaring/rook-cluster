@@ -1,2 +1,8 @@
 installCRDs: true
-extraArgs: ['--dns01-recursive-nameservers-only','--dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53']
+extraArgs:
+{% if cert_manager_dns01_recursive_nameservers_only %}
+  - '--dns01-recursive-nameservers-only'
+{% endif %}
+{% if cert_manager_dns01_recursive_nameservers | length != 0 %}
+  - '--dns01-recursive-nameservers={{ ",".join(cert_manager_dns01_recursive_nameservers) }}'
+{% endif %}
