@@ -1,0 +1,10 @@
+- name: Get githubversion
+  import_tasks: github-version.yml
+    #- name: Git clone
+    #  import_tasks: gitclone.yml
+- name: Get helm version
+  import_tasks: helm-chart-version.yml
+- name: Prepare deployment
+  import_tasks: deploy-prepare.yml
+- name: Deploy helm 
+  import_tasks: deploy-helm.yml

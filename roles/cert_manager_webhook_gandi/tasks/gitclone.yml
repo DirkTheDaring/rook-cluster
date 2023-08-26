@@ -1,0 +1,35 @@
+- name: Create temporary build directory
+  ansible.builtin.tempfile:
+    state: directory
+    suffix: git
+  register: tmpdir
+
+- name: Git checkout
+  ansible.builtin.git:
+    repo:    '{{ cert_manager_webhook_gandi_github_project_url }}'
+    dest:    '{{ tmpdir.path }}'
+    version: '{{ github_project_version }}'
+    depth: 1
+
+- name: Deploy helm chart
+  kubernetes.core.helm:
+    chart_ref:         '{{ tmpdir.path }}/deploy/cert-manager-webhook-gandi'
+    release_namespace: '{{ cert_manager_webhook_gandi_namespace }}'
+    release_name:      '{{ cert_manager_webhook_gandi_helm_release_name }}'
+    create_namespace:  true
+    release_values: 
+      features:
+        apiPriorityAndFairness: true
+      image:
+        tag: "{{ github_project_version[1:] }}"
+      logLevel: 2
+
+
+#    chart_ref:         "{{ cert_manager_helm_repo_name }}/{{ cert_manager_helm_chart_name }}"
+#    chart_version:     "{{ helm_chart_version }}"
+#    release_namespace: "{{ cert_manager_namespace }}"
+#    release_name:      "{{ cert_manager_helm_release_name }}"
+#    create_namespace:  true
+#    release_values:    "{{ cert_manager_helm_release_values }}"
+#    update_repo_cache: true
+#

@@ -1,0 +1,4 @@
+cert_manager_webhook_gandi_credentials_dir: "{{ cert_manager_webhook_gandi_root_credentials_dir }}/cert-manager-webhook-gandi"
+
+# yamllint disable-line
+cert_manager_webhook_gandi_fqdn:                  "{{ cert_manager_webhook_gandi_hostname }}{{ '' if cert_manager_webhook_gandi_subdomain == '' else '.' + cert_manager_webhook_gandi_subdomain }}.{{ cert_manager_webhook_gandi_domain }}"

@@ -1,0 +1,37 @@
+# DNS
+cert_manager_webhook_gandi_domain:       "example.com"
+cert_manager_webhook_gandi_subdomain:    ""
+cert_manager_webhook_gandi_hostname:     "cert-manager-webhook-gandi"
+
+# Deployment Method: argocd, helm
+cert_manager_webhook_gandi_deployment:    "helm"
+
+# Kubernetes
+cert_manager_webhook_gandi_namespace:    "cert-manager"
+
+# Argocd
+cert_manager_webhook_gandi_argocd_project:            "default"
+cert_manager_webhook_gandi_argocd_namespace:          "argo-cd"
+cert_manager_webhook_gandi_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+cert_manager_webhook_gandi_helm_release_name:  cert-manager-webhook-gandi
+
+cert_manager_webhook_gandi_helm_repo_name:     cert-manager-webhook-gandi
+cert_manager_webhook_gandi_helm_repo_url:      https://sintef.github.io/cert-manager-webhook-gandi
+cert_manager_webhook_gandi_helm_chart_name:    cert-manager-webhook-gandi
+cert_manager_webhook_gandi_helm_chart_version: ''        # empty strings means pick latest
+# cert_manager_webhook_gandi_helm_chart_version: '~^v0\.4\.'    # pick by regular expression
+# cert_manager_webhook_gandi_helm_chart_version: "v0.4.0" # set absolute version
+
+# Github Repository
+cert_manager_webhook_gandi_releases_jmespath: "[].tag_name"
+cert_manager_webhook_gandi_github_project_url:     "https://github.com/bwolf/cert-manager-webhook-gandi"
+cert_manager_webhook_gandi_github_project_version: ''
+# cert_manager_webhook_gandi_github_project_version: 'v0.2.0'
+# cert_manager_webhook_gandi_github_project_version: '~^v0\.2\.' # pick first match of regular expression
+
+# Configuration Database
+cert_manager_webhook_gandi_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+cert_manager_webhook_gandi_api_token: ""
