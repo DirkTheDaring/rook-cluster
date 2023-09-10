@@ -19,3 +19,5 @@ rfc2136:
 
 crd:
   create: {{ external_dns_crd_create | default('false') | lower }}
+
+sources: {{ external_dns_sources }}

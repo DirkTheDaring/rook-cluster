@@ -54,3 +54,8 @@ external_dns_rfc2136_tsig_secret_alg: hmac-sha256
 external_dns_rfc2136_tsig_keyname: externaldns-key
 external_dns_crd_create: false
 external_dns_log_level: info
+external_dns_sources:
+  #- crd
+  - service
+  - ingress
+  #- contour-httpproxy
