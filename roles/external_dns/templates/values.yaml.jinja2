@@ -14,3 +14,6 @@ rfc2136:
   tsigSecretAlg: {{ external_dns_rfc2136_tsig_secret_alg }}
   tsigKeyname: {{ external_dns_rfc2136_tsig_keyname }}
 {% endif %}
+
+crd:
+  create: {{ external_dns_crd_create | default('false') | lower }}

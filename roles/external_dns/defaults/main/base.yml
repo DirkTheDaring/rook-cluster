@@ -52,3 +52,4 @@ external_dns_rfc2136_zone: ""
 external_dns_rfc2136_tsig_secret: ""
 external_dns_rfc2136_tsig_secret_alg: hmac-sha256
 external_dns_rfc2136_tsig_keyname: externaldns-key
+external_dns_crd_create: false
