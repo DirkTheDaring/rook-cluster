@@ -60,3 +60,4 @@ external_dns_sources:
   - ingress
   #- contour-httpproxy
 external_dns_domain_filters: []
+external_dns_extra_args: {}
