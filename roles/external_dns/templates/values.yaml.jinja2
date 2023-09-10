@@ -5,6 +5,7 @@ extraEnvVars:
   value: {{ item.value }}
 {% endfor %}
 
+{% if external_dns_rfc2136_host | length > 0 %}
 rfc2136:
   host: {{ external_dns_rfc2136_host }}
   port: {{ external_dns_rfc2136_port }}
@@ -12,3 +13,4 @@ rfc2136:
   tsigSecret: {{ external_dns_rfc2136_tsig_secret }}
   tsigSecretAlg: {{ external_dns_rfc2136_tsig_secret_alg }}
   tsigKeyname: {{ external_dns_rfc2136_tsig_keyname }}
+{% endif %}
