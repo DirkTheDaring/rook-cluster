@@ -1,3 +1,5 @@
+logLevel: {{ external_dns_log_level }}
+
 provider: {{ external_dns_provider }}
 extraEnvVars:
 {% for item in external_dns_extra_env %}
