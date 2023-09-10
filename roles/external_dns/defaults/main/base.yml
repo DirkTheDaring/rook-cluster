@@ -60,4 +60,5 @@ external_dns_sources:
   - ingress
   #- contour-httpproxy
 external_dns_domain_filters: []
-external_dns_extra_args: {}
+external_dns_extra_args: {} 
+  #  txt-wildcard-replacement: "_"   #  required setting for dns providers, which do not allow * at any position in txt record settings
