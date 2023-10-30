@@ -39,10 +39,14 @@ spec:
             - "bash"
             - "-c"
             - |
-              set -e
+              set -ex
               ceph status
               # FIXME This requires external access!!!
+{% if rook_basic_version == "1.12" %}
+              URL="https://raw.githubusercontent.com/rook/rook/release-1.11/deploy/examples/create-external-cluster-resources.py"
+{% else %}
               URL="https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/create-external-cluster-resources.py"
+{% endif %}
               curl -o /tmp/create-external-cluster-resources.py -sL "$URL"
               JSON=$(python3 /tmp/create-external-cluster-resources.py --rbd-data-pool-name ceph-filesystem-data0 --format json)
 
@@ -61,12 +65,10 @@ spec:
                   echo "- mon_max_pg_per_osd: $MON_MAX_PG_PER_OSD_OLD"
                   echo "+ mon_max_pg_per_osd: $MON_MAX_PG_PER_OSD_NEW"
               fi
+              set +x
               # All after ###autogen will be parsed as json
               echo "--- json output starts after this line"
               echo $JSON|jq
-              #JSON1=$(echo $JSON | jq '.[]|select(.kind=="Secret")|select(.data.userID)|select(.data.userID!="ceph-dashboard-link")|(.data.userID): .data.userKey }| jq -s add')
-              #JSON2=$(echo $JSON | jq '.[]|select(.kind=="Secret")|select(.data.adminID)|{ (.data.adminID): .data.adminKey }| jq -s add)'
-              #echo $JSON1 $JSON2|jq -s add
 
       volumes:
         - name: ceph-admin-secret
