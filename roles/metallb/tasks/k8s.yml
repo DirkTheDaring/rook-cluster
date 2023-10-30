@@ -1,3 +1,7 @@
+- name: Pause for 1 minute(s) until crd is applied
+  ansible.builtin.pause:
+    minutes: 1
+
 - name: Set fact
   ansible.builtin.set_fact:
     file_list:
