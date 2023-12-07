@@ -31,7 +31,12 @@ logs:
 
 ports:
   web:
+{% if helm_chart_version_canonical is version("26.0.0", '>=' ) %}
+    redirectTo:
+      port: websecure
+{% else %}
     redirectTo: websecure
+{% endif %}
 {% for port in traefik_ports %}
   {{ port.name }}:
     port: {{ port.value }}
@@ -54,13 +59,16 @@ persistence:
   accessMode: {{ traefik_persistent_volume_access_modes |default('ReadWriteMany') }}
   size: 128Mi
   storageClass: {{ traefik_persistence_storage_class }}
+  annotations:
+    pv.beta.kubernetes.io/gid: "65532"
 
 affinity:     {{ traefik_affinity }}
 nodeSelector: {{ traefik_node_selector }}
 tolerations:  {{ traefik_tolerations }}
 
 image:
-  name:  {{ '"' + traefik_image_name + '"' if traefik_image_name is defined and traefik_image_name | length }}
+  registry: {{ '"' + traefik_image_registry + '"' if traefik_image_registry is defined and traefik_image_registry | length }}
+  repository: {{ '"' + traefik_image_repository + '"' if traefik_image_repository is defined and traefik_image_repository | length }}
   tag:   {{ '"' + traefik_image_tag + '"'  if traefik_image_tag  is defined and traefik_image_tag  | length }}
 
 additionalArguments:
