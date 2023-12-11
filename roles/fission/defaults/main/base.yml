@@ -39,3 +39,6 @@ fission_force_string_dict:
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
+fission_persistence_storageclass: "-"
+fission_router_service_type: LoadBalancer
+fission_ingress_router_domain: router.example.com

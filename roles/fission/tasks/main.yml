@@ -10,3 +10,5 @@
   ansible.builtin.import_tasks: deploy-helm.yml
 - name: Wait for namespace
   ansible.builtin.import_tasks: wait-for-namespace.yml
+- name: Deploy ingressroute
+  ansible.builtin.import_tasks: ingressroute.yml

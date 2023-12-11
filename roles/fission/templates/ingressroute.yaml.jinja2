@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  namespace: {{ fission_namespace }}
+  name:      fission-router
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: HostRegexp(`{{ fission_ingress_router_domain }}`,`{subhost:[a-zA-Z0-9-]+}.{{ fission_ingress_router_domain }}`)
+      services:
+        - name: router
+          port: 80
+  tls:
+    certResolver: letsencrypt
+    domains:
+      - main: {{ fission_ingress_router_domain }}
+        sans:
+          - '*.{{ fission_ingress_router_domain }}'
