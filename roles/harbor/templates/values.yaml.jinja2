@@ -2,38 +2,44 @@ persistence:
   persistentVolumeClaim:
     registry:
       storageClass: {{ harbor_persistence_registry_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteOnce
-      size: 5Gi
+      accessMode: {{ harbor_persistence_registry_accessmode | default(harbor_persistence_accessmode) }}
+      size: {{ harbor_persistence_registry_size | default(harbor_persistence_size_database) }}
+{% if helm_chart_version_canonical is version("1.12.0", '<' ) %}
     chartmuseum:
       storageClass: {{ harbor_persistence_chartmuseum_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteMany
-      size: 5Gi
+      accessMode: {{ harbor_persistence_chartmuseum_accessmode | default(harbor_persistence_accessmode) }}
+      size: {{ harbor_persistence_chartmuseum_size | default(harbor_persistence_size_database) }}
+{% endif %}
     jobservice:
+{% if helm_chart_version_canonical is version("1.10.0", '<' ) %}
       # begin < 1.10
       storageClass: {{ harbor_persistence_jobservice_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteMany
-      size: 1Gi
+      accessMode: {{ harbor_persistence_jobservice_accessmode | default(harbor_persistence_accessmode) }}
+      size: {{ harbor_persistence_jobservice_size | default(harbor_persistence_size) }}
       # end  < 1.10
+{% endif %}
       jobLog:
-        storageClass: {{ harbor_persistence_jobservice_storage_class | default(harbor_persistence_storage_class) }}
-        accessMode: ReadWriteOnce
-        size: 1Gi
+        storageClass: {{ harbor_persistence_jobservice_joblog_storage_class | default(harbor_persistence_storage_class) }}
+        accessMode: {{ harbor_persistence_jobservice_joblog_accessmode | default(harbor_persistence_accessmode) }}
+        size: {{ harbor_persistence_jobservice_joblog_size | default(harbor_persistence_size) }}
+{% if helm_chart_version_canonical is version("1.12.0", '<' ) %}
       scanDataExports:
-        storageClass: {{ harbor_persistence_jobservice_scan_data_storage_class | default(harbor_persistence_storage_class) }}
-        accessMode: ReadWriteMany
-        size: 1Gi
+        storageClass: {{ harbor_persistence_jobservice_scandataexports_storage_class | default(harbor_persistence_storage_class) }}
+        accessMode: {{ harbor_persistence_jobservice_scandataexports_accessmode | default(harbor_persistence_accessmode) }}
+        size: {{ harbor_persistence_jobservice_scandataexports_size | default(harbor_persistence_size) }}
+{% endif %}
     database:
       storageClass: {{ harbor_persistence_database_storage_class| default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteOnce
-      size: 1Gi
+      accessMode: {{ harbor_persistence_database_accessmode | default(harbor_persistence_accessmode) }}
+      size: {{ harbor_persistence_database_size | default(harbor_persistence_size) }}
     redis:
       storageClass: {{ harbor_persistence_redis_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteMany
-      size: 1Gi
+      accessMode: {{ harbor_persistence_redis_accessmode | default(harbor_persistence_accessmode) }}
+      size: {{ harbor_persistence_redis_size | default(harbor_persistence_size) }}
     trivy:
       storageClass: {{ harbor_persistence_trivy_storage_class | default(harbor_persistence_storage_class) }}
-      accessMode: ReadWriteMany
-      size: 5Gi
+      accessMode: {{ harbor_persistence_trivy_accessmode | default(harbor_persistence_accessmode) }}
+      size: {{ harbor_persistence_trivy_size | default(harbor_persistence_size_database) }}
 
 expose:
   tls:
@@ -58,22 +64,28 @@ portal:
 core:
   nodeSelector:
     kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
-jobservice:
+{% if helm_chart_version_canonical is version("1.12.0", '<' ) %}
+chartmuseum:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
+{% endif %}
+{% if helm_chart_version_canonical is version("1.13.0", '<' ) %}
+notary:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
+{% endif %}
+{% if helm_chart_version_canonical is version("1.11.0", '<' ) %}
+signer:
+  nodeSelector:
+    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
+{% endif %}
+exporter:
   nodeSelector:
     kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 registry:
   nodeSelector:
     kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
-chartmuseum:
-  nodeSelector:
-    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
-trivy:
-  nodeSelector:
-    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
-notary:
-  nodeSelector:
-    kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
-signer:
+jobservice:
   nodeSelector:
     kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
 database:
@@ -82,6 +94,6 @@ database:
 redis:
   nodeSelector:
     kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
-exporter:
+trivy:
   nodeSelector:
     kubernetes.io/hostname: {{ harbor_node_selector_hostname }}
