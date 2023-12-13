@@ -55,11 +55,11 @@ external_dns_rfc2136_tsig_keyname: externaldns-key
 external_dns_crd_create: false
 external_dns_log_level: info
 external_dns_sources:
-  #- crd
+  # - crd
   - service
   - ingress
-  #- contour-httpproxy
+  # - contour-httpproxy
 external_dns_domain_filters: []
-external_dns_extra_args: {} 
+external_dns_extra_args: {}
   # txt-wildcard-replacement: "_"   #  required setting for dns providers, which do not allow * at any position in txt record settings
   # txt-owner-id: "your-cluster-name"

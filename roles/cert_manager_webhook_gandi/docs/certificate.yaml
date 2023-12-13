@@ -5,8 +5,8 @@ metadata:
 spec:
   commonName: cert-manager.example.com
   dnsNames:
-  - cert-manager.example.com
-  - '*.cert-manager.example.com'
+    - cert-manager.example.com
+    - '*.cert-manager.example.com'
   issuerRef:
     # https://github.com/cert-manager/cert-manager/discussions/3066
     # You MUST specify kind

@@ -5,8 +5,8 @@ metadata:
 spec:
   commonName: trantor.example.com
   dnsNames:
-  - trantor.example.com
-  - '*.trantor.example.com'
+    - trantor.example.com
+    - '*.trantor.example.com'
   issuerRef:
     # https://github.com/trantor/trantor/discussions/3066
     # You MUST specify kind

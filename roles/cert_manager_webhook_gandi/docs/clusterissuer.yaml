@@ -10,11 +10,11 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-issuer-gandi-account-key
     solvers:
-    - dns01:
-        webhook:
-          solverName: gandi
-          groupName:  acme.bwolf.me
-          config:
-            apiKeySecretRef:
-              name: gandi-credentials
-              key:  api-token
+      - dns01:
+          webhook:
+            solverName: gandi
+            groupName:  acme.bwolf.me
+            config:
+              apiKeySecretRef:
+                name: gandi-credentials
+                key:  api-token

@@ -17,7 +17,7 @@
     release_namespace: '{{ cert_manager_webhook_gandi_namespace }}'
     release_name:      '{{ cert_manager_webhook_gandi_helm_release_name }}'
     create_namespace:  true
-    release_values: 
+    release_values:
       features:
         apiPriorityAndFairness: true
       image:

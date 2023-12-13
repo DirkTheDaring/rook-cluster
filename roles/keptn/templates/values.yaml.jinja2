@@ -6,12 +6,13 @@ bridge:
   podSecurityContext:
     enabled: true
   oauth:
-    enabled:      true
-    discovery:    https://argocd.office.kaupon.de/api/dex/.well-known/openid-configuration
-    baseUrl:      https://{{ keptn_fqdn }}
-    clientID:     argocd-repo-creds-keptn-prod-sso
-    clientSecret: 2fa21b8b-023f-4a4f-b028-2a2abcee7cca
-    scope:        profile
+    enabled:      {{ keptn_bridge_oauth_enabled }}
+    discovery:    {{ keptn_bridge_oauth_discovery }}
+https://argocd.office.kaupon.de/api/dex/.well-known/openid-configuration
+    baseUrl:      {{ keptn_bridge_oauth_base_url }}
+    clientID:     {{ keptn_bridge_oauth_client_id }}
+    clientSecret: {{ keptn_bridge_oauth_client_secret }}
+    scope:        {{ keptn_bridge_oauth_scope }}
 
 ingress:
   enabled: true

@@ -40,11 +40,3 @@ keptn_force_string_dict:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
 keptn_storage_class: local-path
-
-# oidc
-keptn_oidc_enabled:      false
-keptn_oidc_discovery:    https://argocd.example.com/api/dex/.well-known/openid-configuration
-keptn_oidc_baseUrl:      https://{{ keptn_fqdn }}
-keptn_oidc_clientID:     argocd-repo-creds-keptn-prod-sso
-keptn_oidc_clientSecret: xxxxxxxxxxxxxxxxxxxxxxx
-keptn_oidc_scope:        profile
