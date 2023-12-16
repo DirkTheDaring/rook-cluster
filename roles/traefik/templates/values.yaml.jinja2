@@ -20,6 +20,8 @@ deployment:
     volumeMounts:
     - name: data
       mountPath: /data
+    securityContext:
+      privileged: true
 
 ingressRoute:
   dashboard:
