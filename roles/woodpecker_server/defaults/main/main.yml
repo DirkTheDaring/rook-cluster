@@ -2,4 +2,5 @@ woodpecker_server_credentials_dir: "{{ woodpecker_server_root_credentials_dir }}
 
 # yamllint disable-line
 woodpecker_server_fqdn:                  "{{ woodpecker_server_hostname }}{{ '' if woodpecker_server_subdomain == '' else '.' + woodpecker_server_subdomain }}.{{ woodpecker_server_domain }}"
+# yamllint disable-line
 woodpecker_server_host: "https://{{ woodpecker_server_hostname }}{{ '' if woodpecker_server_subdomain == '' else '.' + woodpecker_server_subdomain }}.{{ woodpecker_server_domain }}"

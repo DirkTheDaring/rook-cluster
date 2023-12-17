@@ -33,12 +33,13 @@ fission_github_project_version: ''
 
 # Configuration Database
 fission_root_credentials_dir: "{{ playbook_dir }}/credentials"
+fission_persistence_storageclass: "-"
+fission_router_service_type: LoadBalancer
+fission_ingress_router_domain: router.example.com
+
 fission_force_string_dict:
   # path_list:
   #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
-fission_persistence_storageclass: "-"
-fission_router_service_type: LoadBalancer
-fission_ingress_router_domain: router.example.com

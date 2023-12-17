@@ -39,12 +39,6 @@ external_dns_github_project_name:    kubernetes-sigs/external-dns
 
 external_dns_provider: "aws"
 external_dns_extra_env: []
-external_dns_force_string_dict:
-  # path_list:
-  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
-  path_regex_list:
-    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
-    # - '^env\['
 
 external_dns_rfc2136_host: ""
 external_dns_rfc2136_port: 53
@@ -63,3 +57,9 @@ external_dns_domain_filters: []
 external_dns_extra_args: {}
   # txt-wildcard-replacement: "_"   #  required setting for dns providers, which do not allow * at any position in txt record settings
   # txt-owner-id: "your-cluster-name"
+external_dns_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['

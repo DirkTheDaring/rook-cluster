@@ -38,14 +38,15 @@ harbor_node_selector_hostname: ""
 
 harbor_persistence_storage_class: nfs-client
 # harbor_persistence_database_storage_class: nfs-client
+
+harbor_persistence_accessmode: ReadWriteOnce
+
+harbor_persistence_size_database: 5Gi
+harbor_persistence_size: 1Gi
+
 harbor_force_string_dict:
   # path_list:
   #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
-
-harbor_persistence_accessmode: ReadWriteOnce
-
-harbor_persistence_size_database: 5Gi
-harbor_persistence_size: 1Gi

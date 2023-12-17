@@ -11,6 +11,7 @@
 
 - name: Fix cert_manager_webhook_gandi_values when not a mapping
   ansible.builtin.set_fact:
+    # yamllint disable-line
     cert_manager_webhook_gandi_helm_release_values: "{{ cert_manager_webhook_gandi_helm_release_values if cert_manager_webhook_gandi_helm_release_values is mapping else {} }}"
 
 - name: Create pruned-values.yaml content if verbosity > 2
