@@ -1,0 +1,15 @@
+
+#- name: Pause for 2 minute(s) until crd is applied
+#  ansible.builtin.pause:
+#    minutes: 2
+
+- name: Set fact
+  ansible.builtin.set_fact:
+    file_list:
+      - ciliuml2announcementpolicy.yaml.jinja2
+      - ciliumloadbalanceripPool.yaml.jinja2
+
+- name: Apply operator
+  kubernetes.core.k8s:
+    template: "{{ item }}"
+  loop: "{{ file_list }}"

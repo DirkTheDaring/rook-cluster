@@ -1,0 +1,11 @@
+apiVersion: "cilium.io/v2alpha1"
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: default
+spec:
+  cidrs:
+  - cidr: "{{ cilium_config_cidr }}"
+  serviceSelector:
+    matchLabels:
+      "io.kubernetes.service.namespace": "{{ cilium_config_service_namespace }}"
+      "io.kubernetes.service.name":      "{{ cilium_config_service_name }}"
