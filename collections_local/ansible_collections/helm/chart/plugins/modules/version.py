@@ -147,10 +147,10 @@ def chart_version(config):
     if len(versions) == 0:
         return ""
 
-    natsort = lambda s: [int(t) if t.isdigit() else t.lower() for t in re.split("(\d+)", s)]
+    natsort = lambda s: [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", s)]
     result = sorted(versions,key=natsort)
 
-    return result[len(result)-1]
+    return result[-1]
 def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
