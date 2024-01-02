@@ -1,0 +1,8 @@
+namespace: helm
+name: chart
+version: 1.0.0
+authors:
+  - Dirk The Daring <dirkthearing@email.de>
+readme: README.md
+dependencies:
+  ansible.builtin: ">=1.0.0"

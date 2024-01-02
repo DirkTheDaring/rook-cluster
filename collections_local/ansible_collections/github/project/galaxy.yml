@@ -1,0 +1,8 @@
+namespace: github
+name: project
+version: 1.0.0
+authors:
+  - Dirk The Daring <dirkthedaring@emaild.e>
+readme: README.md
+dependencies:
+  ansible.builtin: ">=1.0.0"
