@@ -182,13 +182,15 @@ def filter_list(_list, filter):
     return filtered_list
 
 def last_of_nat_sorted_list(_list):
-    natsort = lambda s: [int(t) if t.isdigit() else t.lower() for t in re.split("(\d+)", s)]
-    sorted_list = sorted(_list,key=natsort)
-    return sorted_list[len(sorted_list)-1]
+    natsort = lambda s: [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", s)]
+    sorted_list = sorted(_list, key=natsort)
+    return sorted_list[-1]
 
 def project_version(config):
     version = config[GITHUB_PROJECT_VERSION]
 
+    # extract regex from version string by convention. When the string starts with ~
+    # then it is a regex
     regex = ""
     if version.startswith("~"):
         regex = version[1:]

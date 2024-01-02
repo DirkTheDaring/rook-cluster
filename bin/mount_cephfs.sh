@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 #set -x
 if [ "$1" == "" ]; then
-  echo "need rook/config.json"
+  echo "need rook/admin.json"
   exit 1
 fi 
 if [ "$2" == "" ]; then

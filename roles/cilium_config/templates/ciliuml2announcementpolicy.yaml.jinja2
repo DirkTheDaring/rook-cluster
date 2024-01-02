@@ -9,9 +9,7 @@ spec:
     matchLabels:
       io.kubernetes.service.namespace: {{ cilium_config_service_namespace }}
   nodeSelector:
-    matchExpressions:
-    - key: node-role.kubernetes.io/control-plane
-      operator: DoesNotExist
+    matchExpressions: {{ cilium_config_matchexpressions }}
   interfaces:
    - {{ cilium_config_service_interface }}
   externalIPs: false
