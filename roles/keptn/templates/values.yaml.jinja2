@@ -1,44 +1,30 @@
-apiGatewayNginx:
-  podSecurityContext:
-    enabled: true
+## @section Keptn
+certManager:
+  ## @param certManager.enabled Enable this value to install Keptn Certificate Manager
+  enabled: {{ keptn_certmanager_enabled | lower }}
+lifecycleOperator:
+  ## @param lifecycleOperator.enabled Enable this value to install Keptn Lifecycle Operator
+  enabled: {{ keptn_lifecycleoperator_enabled | lower}}
+metricsOperator:
+  ## @param metricsOperator.enabled Enable this value to install Keptn Metrics Operator
+  enabled: {{ keptn_metricsoperator_enabled | lower }}
 
-bridge:
-  podSecurityContext:
-    enabled: true
-  oauth:
-    enabled:      {{ keptn_bridge_oauth_enabled }}
-    discovery:    {{ keptn_bridge_oauth_discovery }}
-    baseUrl:      {{ keptn_bridge_oauth_base_url }}
-    clientID:     {{ keptn_bridge_oauth_client_id }}
-    clientSecret: {{ keptn_bridge_oauth_client_secret }}
-    scope:        {{ keptn_bridge_oauth_scope }}
+## @section Global parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
-ingress:
-  enabled: true
-  annotations:
-    traefik.ingress.kubernetes.io/router.tls: "true"
-    traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
-  host: {{ keptn_fqdn }}
+global:
+  ## @param global.imageRegistry Global Docker image registry
+  imageRegistry: {{ keptn_global_imageregistry | quote }}
 
-podSecurityContext:
-  enabled: true
-
-# This whole setting for mongo is a bugfix for version 1.3
-#mongo:
-#  service:
-#    nameOverride: mongo
-#    ports:
-#      mongodb: 27017
-
-# subchart mongodb was aliased as "mongo" in keptn 
-mongo:
-  persistence:
-    storageClass: "nfs-static"
-
-nats:
-  nats:
-    jetstream:
-      fileStorage:
-        storageClassName: "nfs-static"
-
-
+  ## @param global.imagePullSecrets Global Docker registry secret names as an array
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: {{ keptn_global_imagepullsecrets }}
+  ## @param global.commonLabels Common annotations to add to all Keptn resources. Evaluated as a template
+  commonLabels: {{ keptn_global_commonlabels | to_json }}
+  ## @param global.commonAnnotations Common annotations to add to all Keptn resources. Evaluated as a template
+  commonAnnotations: {{ keptn_global_annotations | to_json }}

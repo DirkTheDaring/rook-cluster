@@ -1,4 +1,0 @@
-keptn_credentials_dir: "{{ keptn_root_credentials_dir }}/keptn"
-
-# yamllint disable-line
-keptn_fqdn:                  "{{ keptn_hostname }}{{ '' if keptn_subdomain == '' else '.' + keptn_subdomain }}.{{ keptn_domain }}"
