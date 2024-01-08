@@ -7,7 +7,7 @@
 # keptn_bridge_oauth_scope:        profile
 
 keptn_bridge_oauth_enabled:       false
-keptn_bridge_oauth_discovery:     https://argocd.{{ kept_domain }}/api/dex/.well-known/openid-configuration
+keptn_bridge_oauth_discovery:     https://argocd.{{ keptn_domain }}/api/dex/.well-known/openid-configuration
 keptn_bridge_oauth_base_url:      https://{{ keptn_fqdn }}
 keptn_bridge_oauth_client_id:     argocd-repo-creds-keptn-prod-sso
 keptn_bridge_oauth_client_secret: xxxxxxxxxxxxxxxxxxxxxxx
