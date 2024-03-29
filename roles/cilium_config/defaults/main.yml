@@ -1,7 +1,7 @@
 cilium_config_service_namespace: ingress
 cilium_config_service_name:      traefik
 cilium_config_service_interface: "^ens[0-9]+"
-cilium_config_cidr: "192.168.178.0/23"
+cilium_config_cidr: "192.168.178.0/17"
 # The matchexpression needs to align with the selector of the ingress!
 cilium_config_matchexpressions:
   - key: node-role.kubernetes.io/control-plane
