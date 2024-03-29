@@ -1,0 +1,10 @@
+
+# kubectl create -k "github.com/fission/fission/crds/v1?ref={{version}}
+
+- name: Create CRDS
+  ansible.builtin.command:
+    argv:
+      - kubectl
+      - create
+      - -k
+      - "github.com/fission/fission/crds/v1?ref={{ helm_chart_version_canonical }}"

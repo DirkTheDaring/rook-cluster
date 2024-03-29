@@ -2,6 +2,8 @@
   ansible.builtin.import_tasks: helm-chart-version.yml
 - name: Get github version
   ansible.builtin.import_tasks: github-version.yml
+- name: Install CRDSs
+  ansible.builtin.import_tasks: crds.yml
 - name: Prepare deploy
   ansible.builtin.import_tasks: deploy-prepare.yml
 - name: Deploy argocd
