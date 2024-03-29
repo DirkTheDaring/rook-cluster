@@ -28,7 +28,7 @@ keptn_certmanager_enabled: true
 keptn_lifecycleoperator_enabled: true
 keptn_metricsoperator_enabled: true
 
-keptn_global_imageregistry: ""
+keptn_global_imageregistry: "ghcr.io"
 keptn_global_imagepullsecrets: []
 
 keptn_global_commonlabels: {}
