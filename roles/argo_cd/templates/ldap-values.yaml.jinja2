@@ -1,47 +1,10 @@
-{% if  argocd_release is defined and argocd_release|length != 0 %}
 global:
-  image:
-    tag: "{{ argocd_release }}"
-{% endif %}
-
-{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
-controller:
-  nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
-{% endif %}
-
-server:
-{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
-  nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
-{% endif %}
-  ingress:
-    enabled: true
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure #, jnlp needs an IngressRouteTCP object!
-      traefik.ingress.kubernetes.io/router.tls: "true"
-    hosts:
-    - "{{ argocd_fqdn }}"
-
-  extraArgs:
-  - --insecure
-  rbacConfig:
-    policy.default: role:none
-    scopes: '[groups, email]'
-    policy.csv: |
-      p, role:none, *, *, */*, deny
-{% for item in argocd_policy_users %}
-      g, {{ item.name }}, {{ item.role }}
-{% endfor %}
-{% for item in argocd_policy_groups %}
-      g, {{ item.name }}, {{ item.role }}
-{% endfor %}
-
-  config:
-    url: https://{{ argocd_fqdn }}
+  domain: {{ argocd_fqdn }}
+configs:
+  cm:
     dex.config: |-
       connectors:
-{% if argocd_ldap_profile == "ldap"  %}
+{% if argocd_ldap_profile == "ldap" %}
       - type: ldap
         name: "SSO"
         id: ad
@@ -110,22 +73,27 @@ server:
 {% endfor %}
         secretEnv: {{ item.secretEnv }}
 {% endfor %}
+  params:
+    dexserver.disable.tls: true
+  rbac:
+    policy.default: 'role:none'
+    policy.csv: |
+      p, role:none, *, *, */*, deny
+{% for item in argocd_policy_users %}
+      g, {{ item.name }}, {{ item.role }}
+{% endfor %}
+{% for item in argocd_policy_groups %}
+      g, {{ item.name }}, {{ item.role }}
+{% endfor %}
+    scopes: "[groups,email]"
 
-dex:
-{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
-  nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
-{% endif %}
-  env:
+  credentialTemplates:
 {% for item in argocd_sso_list %}
-  - name: {{ item.secretEnv }}
-    valueFrom:
-      secretKeyRef:
-        name: argocd-repo-creds-{{ item.id }}
-        key:  client-secret
+    {{ item.id }}:
+      client-id:     argocd-repo-creds-{{ item.id }}
+      client-secret: {{ item.uid }}
 {% endfor %}
 
-configs:
   secret:
 {% if argocd_gitlab_secret is defined and argocd_gitlab_secret != "" %}
     # Shared secret for authenticating GitLab webhook events
@@ -138,20 +106,25 @@ configs:
     extra:
       dex.ldap.bindDN: "{{ argocd_ldap_bind_dn }}"
       dex.ldap.bindPW: "{{ argocd_ldap_bind_password }}"
-  credentialTemplates:
+
+dex:
+  env: 
 {% for item in argocd_sso_list %}
-    {{ item.id }}:
-      client-id:     argocd-repo-creds-{{ item.id }}
-      client-secret: {{ item.uid }}
+  - name: {{ item.secretEnv }}
+    valueFrom:
+      secretKeyRef:
+        name: argocd-repo-creds-{{ item.id }}
+        key:  client-secret
 {% endfor %}
 
-{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
-redis:
-  nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
-{% endif %}
-{% if argocd_node_selector_hostname is defined and argocd_node_selector_hostname != "" %}
-repoServer:
-  nodeSelector:
-    kubernetes.io/hostname: {{ argocd_node_selector_hostname }}
-{% endif %}
+server:
+  extraArgs:
+    - --insecure
+  service:
+    servicePortHttps: 80 # 443
+  ingress:
+    enabled: true
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure #, jnlp needs an IngressRouteTCP object!
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    ingressClassName: "traefik"
