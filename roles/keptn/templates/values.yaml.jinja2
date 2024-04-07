@@ -4,7 +4,7 @@ certManager:
   enabled: {{ keptn_certmanager_enabled | lower }}
 lifecycleOperator:
   ## @param lifecycleOperator.enabled Enable this value to install Keptn Lifecycle Operator
-  enabled: {{ keptn_lifecycleoperator_enabled | lower}}
+  enabled: {{ keptn_lifecycleoperator_enabled | lower }}
 metricsOperator:
   ## @param metricsOperator.enabled Enable this value to install Keptn Metrics Operator
   enabled: {{ keptn_metricsoperator_enabled | lower }}
@@ -24,7 +24,11 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: {{ keptn_global_imagepullsecrets }}
+  ## @param global.imagePullPolicy Policy for pulling Docker images. Options: Always, IfNotPresent, Never
+  imagePullPolicy: ""
   ## @param global.commonLabels Common annotations to add to all Keptn resources. Evaluated as a template
   commonLabels: {{ keptn_global_commonlabels | to_json }}
   ## @param global.commonAnnotations Common annotations to add to all Keptn resources. Evaluated as a template
   commonAnnotations: {{ keptn_global_annotations | to_json }}
+  ## @param global.caInjectionAnnotations CA injection annotations for cert-manager.io configuration
+  caInjectionAnnotations: {}
