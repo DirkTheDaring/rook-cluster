@@ -1,0 +1,20 @@
+- name: Create namespace
+  import_tasks: namespace.yml
+
+- name: Create pvc
+  import_tasks: pvc.yml
+
+- name: Render docker secret
+  import_tasks: docker-secret.yml
+
+- name: Get helm chart version
+  import_tasks: helm-chart-version.yml
+
+- name: Prepare deploy
+  import_tasks: deploy-prepare.yml
+
+- name: Deploy with helm
+  import_tasks: deploy-helm.yml
+
+
+

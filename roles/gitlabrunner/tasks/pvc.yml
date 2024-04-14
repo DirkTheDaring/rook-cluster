@@ -1,0 +1,3 @@
+- name: Create persistent volume claim
+  kubernetes.core.k8s:
+    template: pvc.yaml.jinja2

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: {{ gitlabrunner_namespace }}
+  name:      nfs-gitlab-runner-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ gitlabrunner_resources_requests_storage }}
+{% if gitlabrunner_storageclassname != "" %}
+  storageClassName: {{ gitlabrunner_storageclassname }}
+{% endif %}

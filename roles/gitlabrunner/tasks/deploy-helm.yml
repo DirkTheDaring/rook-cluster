@@ -1,0 +1,21 @@
+- name: Deploy with helm
+  when:
+    - gitlabrunner_deployment == "helm"
+  block:
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ gitlabrunner_helm_repo_name }}"
+        repo_url: "{{ gitlabrunner_helm_repo_url }}"
+      ignore_errors: true
+      tags:
+        - skip_ansible_lint
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ gitlabrunner_helm_repo_name }}/{{ gitlabrunner_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ gitlabrunner_namespace }}"
+        release_name:      "{{ gitlabrunner_helm_release_name }}"
+        create_namespace:  true
+        release_values:    "{{ gitlabrunner_helm_release_values }}"
+        update_repo_cache: true

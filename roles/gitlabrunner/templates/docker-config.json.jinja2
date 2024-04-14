@@ -1,0 +1,8 @@
+{
+  "auths": {
+{% for auth in gitlabrunner_auths %}{{ ',\n' if loop.index > 1 }}    "{{ auth['domain'] }}": {
+      "auth": "{{ [ auth['username'], auth['password'] ] | join(':') | b64encode }}"
+    }{% endfor %}
+
+  }
+}

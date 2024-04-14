@@ -1,0 +1,66 @@
+gitlabUrl:   {{ gitlabrunner_gitlaburl   }}
+runnerToken: {{ gitlabrunner_runnertoken }}
+
+## For RBAC support:
+rbac:
+  create: true
+
+  ## Define list of rules to be added to the rbac role permissions.
+  ## Each rule supports the keys:
+  ## - apiGroups: default "" (indicates the core API group) if missing or empty.
+  ## - resources: default "*" if missing or empty.
+  ## - verbs: default "*" if missing or empty.
+  ##
+  ## Read more about the recommended rules on the following link
+  ##
+  ## ref: https://docs.gitlab.com/runner/executors/kubernetes.html#configure-runner-api-permissions
+  ##
+  rules: []
+  # - resources: ["configmaps", "events", "pods", "pods/attach", "pods/exec", "secrets", "services"]
+  #   verbs: ["get", "list", "watch", "create", "patch", "update", "delete"]
+  # - apiGroups: [""]
+  #   resources: ["pods/exec"]
+  #   verbs: ["create", "patch", "delete"]
+  # - apiGroups: [""]
+  #   resources: ["pods/log"]
+  #   verbs: ["get"]
+
+  ## Run the gitlab-bastion container with the ability to deploy/manage containers of jobs
+  ## cluster-wide or only within namespace
+  clusterWideAccess: false
+
+  ## Use the following Kubernetes Service Account name if RBAC is disabled in this Helm chart (see rbac.create)
+  ##
+  # serviceAccountName: default
+
+## Secrets to be additionally mounted to the containers.
+## All secrets are mounted through init-runner-secrets volume
+## and placed as readonly at /init-secrets in the init container
+## and finally copied to an in-memory volume runner-secrets that is
+## mounted at /secrets.
+secrets:
+  - name: docker-secret
+
+  # Example:
+  # - name: my-secret
+  # - name: myOtherSecret
+  #   items:
+  #     - key: key_one
+  #       path: path_one
+runners:
+  # runner configuration, where the multi line strings is evaluated as
+  # template so you can specify helm values inside of it.
+  #
+  # tpl: https://helm.sh/docs/howto/charts_tips_and_tricks/#using-the-tpl-function
+  # runner configuration: https://docs.gitlab.com/runner/configuration/advanced-configuration.html
+  config: |
+    [[runners]]
+      # Maximum build log size in kilobytes. Default is 4096 (4MB)
+      output_limit = 40960
+      [runners.kubernetes]
+        namespace = "{{ '{{' }}.Release.Namespace}}"
+        image = "alpine"
+        privileged = true
+        [[runners.kubernetes.volumes.pvc]]
+          name = "nfs-gitlab-runner-pvc"
+          mount_path = "/output"
