@@ -75,6 +75,7 @@ configs:
 {% endfor %}
   params:
     dexserver.disable.tls: true
+    server.insecure: true # setting for ingress
   rbac:
     policy.default: 'role:none'
     policy.csv: |
@@ -121,8 +122,7 @@ server:
   extraArgs:
     - --insecure
   service:
-    servicePortHttp:  8080 # quirk because k8s 1.29.* complains otherwise about duplicate ports
-    servicePortHttps: 80 # 443
+    servicePortHttp: 8080 # quirk
   ingress:
     enabled: true
     annotations:
