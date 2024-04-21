@@ -121,6 +121,7 @@ server:
   extraArgs:
     - --insecure
   service:
+    servicePortHttp:  8080 # quirk because k8s 1.29.* complains otherwise about duplicate ports
     servicePortHttps: 80 # 443
   ingress:
     enabled: true
