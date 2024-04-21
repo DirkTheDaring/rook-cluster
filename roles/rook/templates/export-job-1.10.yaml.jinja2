@@ -48,8 +48,13 @@ spec:
               URL="https://raw.githubusercontent.com/rook/rook/release-{{ rook_basic_version }}/deploy/examples/create-external-cluster-resources.py"
 {% endif %}
               curl -o /tmp/create-external-cluster-resources.py -sL "$URL"
+{% if helm_chart_version_canonical is version("1.13.0", '<' ) %}
               JSON=$(python3 /tmp/create-external-cluster-resources.py --rbd-data-pool-name ceph-filesystem-data0 --format json)
-
+{% else %}
+              JSON=$(python3 /tmp/create-external-cluster-resources.py --rbd-data-pool-name ceph-blockpool --format json)
+              # if the the follwing line is required needs to be checked
+              # ceph osd pool application disable ceph-filesystem-data0 rbd --yes-i-really-mean-it
+{% endif %}
               ceph mgr module disable nfs
               # Source: https://docs.ceph.com/en/latest/mgr/orchestrator/#configuring-the-orchestrator-cli
               ceph mgr module enable rook
