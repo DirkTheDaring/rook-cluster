@@ -48,7 +48,12 @@ ports:
 {% for port in traefik_ports %}
   {{ port.name }}:
     port: {{ port.value }}
+{% if helm_chart_version_canonical is version('28.1', '>=' ) %}
+    expose:
+      default: true
+{% else %}
     expose: true
+{% endif %}
     exposedPort: {{ port.value }}
     protocol: TCP
 {% endfor %}
