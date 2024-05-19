@@ -41,6 +41,7 @@ ports:
 {% if helm_chart_version_canonical is version("26.0.0", '>=' ) %}
     redirectTo:
       port: websecure
+      priority: 10
 {% else %}
     redirectTo: websecure
 {% endif %}
