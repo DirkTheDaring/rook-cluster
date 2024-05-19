@@ -9,6 +9,11 @@
 # https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
 # Storage configured with a group ID (GID) allows writing only by Pods using the same GID. Mismatched or missing GIDs cause permission denied errors. To reduce the need for coordination with users, an administrator can annotate a PersistentVolume with a GID. Then the GID is automatically added to any Pod that uses the PersistentVolume.
 
+{% if helm_chart_version_canonical is version('28.1', '>=' ) %}
+core:
+  defaultRuleSyntax: v2
+{% endif %}
+
 deployment:
   initContainers:
   - name:  set-volume-permissions
