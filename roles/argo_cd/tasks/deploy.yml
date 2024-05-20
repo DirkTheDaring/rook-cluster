@@ -24,12 +24,21 @@
 
   # Replaced kubectl wait, because it failed sometimes
   # kubectl -n argocd get pod -l app.kubernetes.io/name=argocd-server --no-headers -o 'custom-columns=NAME:status.conditions[0].type
+  # Now modified for kubernetes 1.29 to respect "PodReadyToStartContainers"
+
 - name: Wait until all argocd pods are ready
   ansible.builtin.command:
     argv:
       - bash
       - -c
-      - >
-        while [ "$(kubectl -n {{ argocd_namespace }} get pod -l {{ item }} --no-headers
-        -o 'custom-columns=NAME:status.conditions[0].type')" != "Initialized" ]; do sleep 3; done
+      - |
+        while true; do 
+          RESULT="$(kubectl -n {{ argocd_namespace }} get pods -l {{ item }} --no-headers -o 'custom-columns=NAME:status.conditions[0].type')"; 
+          if [ "$RESULT" = "Initialized" ] || [ "$RESULT" = "PodReadyToStartContainers" ]; then 
+            break; 
+          else 
+            sleep 3; 
+          fi; 
+        done
   loop: "{{ argocd_label_list }}"
+
