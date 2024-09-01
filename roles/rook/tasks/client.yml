@@ -141,18 +141,16 @@
               sleep 10
             done
 
+      # kubectl wait -n rook-ceph  --timeout=600s --for=condition=Running pod -l app=rook-ceph-operator
+      # The following ignores pods which are in state completed
+      # kubectl wait -n rook-ceph --timeout=600s --for=condition=Ready $(kubectl get pods -n rook-ceph -l app=rook-ceph-operator --field-selector=status.phase!=Succeeded -o name)
     - name: Wait until rook-ceph-operator becomes ready
       ansible.builtin.command:
         argv:
-          - kubectl
-          - wait
-          - -n
-          - "{{ rook_namespace }}"
-          - --timeout=600s
-          - --for=condition=Ready
-          - pod
-          - -l
-          - app=rook-ceph-operator
+          - bash
+          - -c
+          - >
+            kubectl -n {{ rook_namespace }} wait --timeout=600s --for=condition=Ready $(kubectl get pods -n rook-ceph -l app=rook-ceph-operator --field-selector=status.phase!=Succeeded -o name)
 
     - name: Recursively remove directory
       ansible.builtin.file:
