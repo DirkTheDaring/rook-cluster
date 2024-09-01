@@ -45,6 +45,12 @@ ports:
 {% else %}
     redirectTo: websecure
 {% endif %}
+{% if helm_chart_version_canonical is version('28.1', '>=' ) %}
+  websecure:
+    transport:
+      respondingTimeouts:
+        readTimeout: 24h
+{% endif %}
 {% for port in traefik_ports %}
   {{ port.name }}:
     port: {{ port.value }}
