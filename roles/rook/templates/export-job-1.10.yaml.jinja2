@@ -56,7 +56,9 @@ spec:
               # ceph osd pool application disable ceph-filesystem-data0 rbd --yes-i-really-mean-it
 {% endif %}
               ceph mgr module disable nfs
+
               # Source: https://docs.ceph.com/en/latest/mgr/orchestrator/#configuring-the-orchestrator-cli
+              # On Dashboard -> Cluster -> Services
               ceph mgr module enable rook
               ceph orch set backend rook
 
