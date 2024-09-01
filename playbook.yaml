@@ -3,36 +3,63 @@
   - localhost
   #- prod1-master1
   connection: local   # without ssh
-  gather_facts: False
+  #gather_facts: False
+  gather_facts: True
   #any_errors_fatal: True
   roles:
-  #- nfs
-  #- metallb
-  #- traefik
-  #- argo-cd
-  #- minio         # deployment requires argo-cd, runtime requires nfs
-  #- velero-argocd # deployment requires argo-cd, runtime requires minio
-  #- postgresql
-
-  #- argo-dataflow
-  #- argo-events
-  #- argo-workflows     # requires postgresql, minio(bucket=argo-workflows)
-  #- argo-notifications # requires postgresql
-
-  #- vault-argocd
-  #- vault-unseal
-  #- external-dns
-  - mosquitto
-
-#  - harbor-argocd
-#  - keycloak
+  # - gitlabrunner
+  # - prometheus
+  # - kibana
+  # - storage1
+  # - rook
+  # - metallb # deprecated, do not use
+  # - cilium_config
+  # - nfs
+  # - traefik # requires nfs
+  # - argo_cd
+  # - harbor
+  # - postgresql
+  # - rook-csi # FIXME
+  # - minio         # deployment requires argo-cd, runtime requires nfs
+  # - velero # deployment requires argo-cd, runtime requires minio
+  # - argo-dataflow
+  # - argo-events
+  # - argo-workflows     # requires postgresql, minio(bucket=argo-workflows), nfs
+  # - argo-notifications # requires postgresql
+  # - vault
+  # - vault_unseal
+  # - external_dns
+  # - mosquitto
+  # - whoami
+  # - kwhoami
+  # - traefik-forward-auth 
+  # - keycloak
+  # - fluxcd
+  # - cert_manager
+  # - cert_manager_webhook_gandi
+  # - fission
+  # - fission_client
+  # - linkerd
+  # - keptn
+  # - tetragon
+  # - woodpecker_server
+  # - woodpecker_agent
+  # - woodpecker_client
+  # - velero_client
+  # - kustomize
+  # - tetragon_client
+  # - cilium_client
+  # - argo_cd_client
+  # - keptn_client
+  # - chartmuseum
+  # - gpu_operator
+  # - cockroachdb
+  # - zitadel
+  # - k9s
 
 #  - helm-info
-#  - rook-argocd
-#  - rook-csi # FIXME
 # All storage layers are not deployed by argo, as argo + argo-workflows depend on int
 #  - velero-client
-
 
 #  Datastructs for
 #  * Backup (where, what, data relevance)

@@ -1,10 +1,13 @@
-- name: everybody
+- name: Everybody
   hosts:
-  - localhost
+    - localhost
   connection: local   # without ssh
-  gather_facts: False
+  gather_facts: false
   roles:
-  - argo-cd
-  - rook-argocd
-  - metallb
-  - traefik
+    # - argo-cd
+    # - nfs
+    # - metallb # deprecated do not use anymore
+    # - cilium_config
+    # - traefik
+    # - rook
+    # - storage1
