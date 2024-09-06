@@ -129,3 +129,4 @@ server:
       traefik.ingress.kubernetes.io/router.entrypoints: websecure #, jnlp needs an IngressRouteTCP object!
       traefik.ingress.kubernetes.io/router.tls: "true"
     ingressClassName: "traefik"
+    tls: {{ argocd_server_ingress_tls }}

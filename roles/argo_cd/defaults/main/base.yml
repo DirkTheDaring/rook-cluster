@@ -66,3 +66,7 @@ argocd_github_project_version: ''
 
 # Configuration Database
 argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"
+argocd_server_ingress_tls: false
+
+# The cluster issuer
+argocd_cluster_issuer_name: "" 

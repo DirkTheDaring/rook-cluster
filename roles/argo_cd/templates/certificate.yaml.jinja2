@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  namespace: {{ argocd_namespace }}
+  name:      argocd-server-tls
+spec:
+  dnsNames:
+    - {{ argocd_fqdn }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: {{ argocd_cluster_issuer_name }}
+  secretName: argocd-server-tls
