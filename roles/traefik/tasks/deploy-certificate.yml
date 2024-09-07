@@ -1,0 +1,14 @@
+- name: Deploy certificate
+  when:
+    - traefik_tls_enabled
+  block:
+    - name: Create /tmp/traefik-certificate.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "certificate.yaml.jinja2"
+        dest: "/tmp/traefik-certificate.yaml"
+        mode: '0644'
+      when: ansible_verbosity > 2
+
+    - name: Create traefik certificate
+      kubernetes.core.k8s:
+        template: certificate.yaml.jinja2

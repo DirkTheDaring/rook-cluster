@@ -7,6 +7,10 @@ kind: IngressRoute
 metadata:
   namespace: {{ traefik_namespace }}
   name:      traefik-dashboard
+{% if traefik_ingressclass_enabled %}
+  annotations:
+    kubernetes.io/ingress.class: {{ traefik_ingressclass_name }}
+{% endif %}
 spec:
   entryPoints:
   - websecure
@@ -19,6 +23,9 @@ spec:
     - kind: TraefikService
       name: api@internal
   tls:
+{% if traefik_tls_enabled %}
+    secretName: traefik-dashboard-tls
+{% else %}
     certResolver: letsencrypt
     domains:
       - main: "{{ traefik_domain }}"
@@ -32,4 +39,5 @@ spec:
 {% for item in traefik_domains_additional %}
         - "{{ item }}"
 {% endfor %}
+{% endif %}
 {% endif %}

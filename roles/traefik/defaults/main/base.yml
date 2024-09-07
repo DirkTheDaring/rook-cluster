@@ -72,3 +72,8 @@ traefik_tolerations: []
   # - key:       "node-role.kubernetes.io/master"
   #  operator:  "Exists"
   #  effect:    "NoSchedule"
+traefik_cluster_issuer_name: ""
+traefik_ingressclass_enabled: false
+traefik_ingressclass_isdefaultclass: true
+traefik_ingressclass_name: "my-custom-class"
+traefik_tls_enabled: false
