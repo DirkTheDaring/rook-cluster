@@ -6,3 +6,4 @@ cilium_config_cidr: "192.168.178.0/17"
 cilium_config_matchexpressions:
   - key: node-role.kubernetes.io/control-plane
     operator: DoesNotExist
+cilium_config_supported_version: "1.16.0"

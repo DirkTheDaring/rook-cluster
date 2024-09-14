@@ -3,8 +3,13 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: default
 spec:
+{% if cilium_config_supported_version is version("1.14.0", '>=' ) %}
+  blocks:
+  - cidr: "{{ cilium_config_cidr }}"
+{% else %}
   cidrs:
   - cidr: "{{ cilium_config_cidr }}"
+{% endif %}
   serviceSelector:
     matchLabels:
       "io.kubernetes.service.namespace": "{{ cilium_config_service_namespace }}"
