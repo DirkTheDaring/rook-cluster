@@ -1,0 +1,20 @@
+- name: Deploy argocd app
+  when:
+    - chartmuseum_deployment == "argocd"
+  block:
+    - name: Transform from helm values to application params
+      ansible.builtin.set_fact:
+        chartmuseum_application_params: >
+          {{ chartmuseum_helm_release_values
+          | chart_values_to_argo_parameters(chartmuseum_force_string_dict) }}
+
+    - name: Create /tmp/chartmuseum-application.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "application.yaml.jinja2"
+        dest: "/tmp/chartmuseum-application.yaml"
+        mode: '0644'
+      when: ansible_verbosity > 2
+
+    - name: Create argocd application
+      kubernetes.core.k8s:
+        template: application.yaml.jinja2

@@ -1,0 +1,21 @@
+# input:
+#   - chartmuseum_github_project_url
+#   - chartmuseum_github_project_version
+# output:
+#   - github_project_version
+
+- name: Get latest version from github
+  github.project.version:
+    name:    "{{ chartmuseum_github_project_url }}"
+    version: "{{ chartmuseum_github_project_version }}"
+  register: result
+
+- name: Dump result
+  ansible.builtin.debug:
+    msg: '{{ result }}'
+    verbosity: 2
+
+- name: Dump fact github_project_version
+  ansible.builtin.debug:
+    msg: '{{ github_project_version }}'
+    verbosity: 1

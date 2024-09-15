@@ -1,0 +1,14 @@
+- name: Deploy certificate
+  when:
+    - chartmuseum_ingress_hosts_tls
+  block:
+    - name: Create /tmp/chartmuseum-certificate.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "certificate.yaml.jinja2"
+        dest: "/tmp/chartmuseum-certificate.yaml"
+        mode: '0644'
+      when: ansible_verbosity > 2
+
+    - name: Create argocd certificate
+      kubernetes.core.k8s:
+        template: certificate.yaml.jinja2

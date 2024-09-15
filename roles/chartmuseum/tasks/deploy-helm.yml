@@ -1,0 +1,21 @@
+- name: Deploy with helm
+  when:
+    - chartmuseum_deployment == "helm"
+  block:
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ chartmuseum_helm_repo_name }}"
+        repo_url: "{{ chartmuseum_helm_repo_url }}"
+      ignore_errors: true
+      tags:
+        - skip_ansible_lint
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ chartmuseum_helm_repo_name }}/{{ chartmuseum_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ chartmuseum_namespace }}"
+        release_name:      "{{ chartmuseum_helm_release_name }}"
+        create_namespace:  true
+        release_values:    "{{ chartmuseum_helm_release_values }}"
+        update_repo_cache: true

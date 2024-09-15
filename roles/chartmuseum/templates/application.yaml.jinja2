@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ chartmuseum_argocd_namespace }}
+  name:      {{ chartmuseum_helm_release_name }}
+spec:
+  destination:
+    server:    {{ chartmuseum_argocd_destination_server }}
+    namespace: {{ chartmuseum_namespace }}
+  project: {{ chartmuseum_argocd_project }}
+  source:
+    repoURL:        {{ chartmuseum_helm_repo_url }}
+    chart:          {{ chartmuseum_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+{{ chartmuseum_application_params }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

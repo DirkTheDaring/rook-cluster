@@ -1,0 +1,24 @@
+env:
+  open:
+    DEPTH: 1
+    DEBUG: true
+    DISABLE_API: false
+    #STORAGE: local
+
+persistence:
+  enabled: true
+  storageClass: "{{ chartmuseum_persistence_storage_class }}"
+  #accessMode: ReadWriteOnce
+
+ingress:
+  enabled: true
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  hosts:
+    - name: "{{ chartmuseum_fqdn }}"
+      path: /
+{% if chartmuseum_ingress_hosts_tls %}
+      tls: {{ chartmuseum_ingress_hosts_tls }}
+      tlsSecret: {{ chartmuseum_ingress_hosts_tlssecret }}
+{% endif %}

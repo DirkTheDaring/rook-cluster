@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  namespace: {{ chartmuseum_namespace }}
+  name:      chartmuseum-tls
+spec:
+  dnsNames:
+    - {{ chartmuseum_fqdn }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: {{ chartmuseum_cluster_issuer_name }}
+  secretName: chartmuseum-tls

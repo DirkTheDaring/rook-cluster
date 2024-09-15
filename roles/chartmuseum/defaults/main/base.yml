@@ -1,0 +1,44 @@
+# DNS
+chartmuseum_domain:       "example.com"
+chartmuseum_subdomain:    ""
+chartmuseum_hostname:     "chartmuseum"
+
+# Deployment Method: argocd, helm
+chartmuseum_deployment:    "helm"
+
+# Kubernetes
+chartmuseum_namespace:    "chartmuseum"
+
+# Argocd
+chartmuseum_argocd_project:            "default"
+chartmuseum_argocd_namespace:          "argo-cd"
+chartmuseum_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+chartmuseum_helm_release_name:  chartmuseum
+
+chartmuseum_helm_repo_name:     chartmuseum
+chartmuseum_helm_repo_url:      https://chartmuseum.github.io/charts
+chartmuseum_helm_chart_name:    chartmuseum
+chartmuseum_helm_chart_version: ''        # empty strings means pick latest
+# chartmuseum_helm_chart_version: '~^1\.12\.'    # pick by regular expression
+# chartmuseum_helm_chart_version: "1.12.0" # set absolute version
+
+# Github Repository
+chartmuseum_releases_jmespath: "[].tag_name"
+chartmuseum_github_project_url:     "https://github.com/helm/chartmuseum"
+chartmuseum_github_project_version: ''
+# chartmuseum_github_project_version: 'v0.15.0'
+# chartmuseum_github_project_version: '~^v0\.15\.' # pick first match of regular expression
+
+# Configuration Database
+chartmuseum_root_credentials_dir: "{{ playbook_dir }}/credentials"
+chartmuseum_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['
+chartmuseum_ingress_hosts_tls: false
+chartmuseum_ingress_hosts_tlssecret: ""
+chartmuseum_cluster_issuer_name: ""

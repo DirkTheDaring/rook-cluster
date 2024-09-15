@@ -1,0 +1,4 @@
+chartmuseum_credentials_dir: "{{ chartmuseum_root_credentials_dir }}/chartmuseum"
+
+# yamllint disable-line
+chartmuseum_fqdn:                  "{{ chartmuseum_hostname }}{{ '' if chartmuseum_subdomain == '' else '.' + chartmuseum_subdomain }}.{{ chartmuseum_domain }}"
