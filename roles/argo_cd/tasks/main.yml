@@ -2,10 +2,10 @@
   ansible.builtin.import_tasks: helm-chart-version.yml
 - name: Get github version
   ansible.builtin.import_tasks: github-version.yml
-- name: Deploy certificate
-  ansible.builtin.import_tasks: deploy-certificate.yml
 - name: Helm
   ansible.builtin.import_tasks: helm.yml
+- name: Deploy certificate
+  ansible.builtin.import_tasks: deploy-certificate.yml
 - name: Deploy
   ansible.builtin.import_tasks: deploy.yml
 - name: Credentials
