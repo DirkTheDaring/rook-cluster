@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  namespace: {{ woodpecker_namespace }}
+  name:      woodpecker-server-tls
+spec:
+  dnsNames:
+    - {{ woodpecker_fqdn }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: {{ woodpecker_cluster_issuer_name }}
+  secretName: woodpecker-server-tls

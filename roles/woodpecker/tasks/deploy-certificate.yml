@@ -1,0 +1,14 @@
+- name: Deploy certificate
+  when:
+    - woodpecker_tls
+  block:
+    - name: Create /tmp/woodpecker-certificate.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "certificate.yaml.jinja2"
+        dest: "/tmp/woodpecker-certificate.yaml"
+        mode: '0644'
+      when: ansible_verbosity > 2
+
+    - name: Create woodpecker certificate
+      kubernetes.core.k8s:
+        template: certificate.yaml.jinja2

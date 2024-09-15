@@ -1,0 +1,19 @@
+- name: Github version
+  ansible.builtin.import_tasks: github-version.yml
+- name: Chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Prepare deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
+- name: Deploy argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml
+- name: Deploy secrets
+  ansible.builtin.import_tasks: secrets.yml
+- name: Deploy certificate
+  ansible.builtin.import_tasks: deploy-certificate.yml
+- name: Deploy helm
+  ansible.builtin.import_tasks: deploy-helm.yml
+- name: Wait for namespace
+  ansible.builtin.import_tasks: wait-for-namespace.yml
+
+#- name: Create secrets
+#  ansible.builtin.import_tasks: create-secrets.yml

@@ -1,0 +1,6 @@
+woodpecker_credentials_dir: "{{ woodpecker_root_credentials_dir }}/woodpecker"
+
+# yamllint disable-line
+woodpecker_fqdn:                  "{{ woodpecker_hostname }}{{ '' if woodpecker_subdomain == '' else '.' + woodpecker_subdomain }}.{{ woodpecker_domain }}"
+# yamllint disable-line
+woodpecker_server_host: "https://{{ woodpecker_hostname }}{{ '' if woodpecker_subdomain == '' else '.' + woodpecker_subdomain }}.{{ woodpecker_domain }}"

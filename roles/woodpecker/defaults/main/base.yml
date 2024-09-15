@@ -1,0 +1,73 @@
+# DNS
+woodpecker_domain:       "example.com"
+woodpecker_subdomain:    ""
+woodpecker_hostname:     "woodpecker"
+
+# Deployment Method: argocd, helm
+woodpecker_deployment:    "helm"
+
+# Kubernetes
+woodpecker_namespace:    "woodpecker"
+
+# Argocd
+woodpecker_argocd_project:            "default"
+woodpecker_argocd_namespace:          "argo-cd"
+woodpecker_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+woodpecker_helm_release_name:  woodpecker
+
+woodpecker_helm_repo_name:     woodpecker
+woodpecker_helm_repo_url:      https://woodpecker-ci.org
+woodpecker_helm_chart_name:    woodpecker
+woodpecker_helm_chart_version: ''        # empty strings means pick latest
+# woodpecker_helm_chart_version: '~^1\.5\.'    # pick by regular expression
+# woodpecker_helm_chart_version: "1.5.1" # set absolute version
+
+# Github Repository
+woodpecker_releases_jmespath: "[].tag_name"
+woodpecker_github_project_url:     "https://api.github.com/repos/woodpecker-ci/woodpecker/releases"
+woodpecker_github_project_version: ''
+# woodpecker_github_project_version: 'v2.7.0'
+# woodpecker_github_project_version: '~^v2\.7\.' # pick first match of regular expression
+
+# Configuration Database
+woodpecker_root_credentials_dir: "{{ playbook_dir }}/credentials"
+woodpecker_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['
+
+
+woodpecker_agent_log_level: info
+woodpecker_agent_persistence_storage_class: ""
+woodpecker_agent_persistence_size: "1Gi"
+
+woodpecker_server_log_level: info
+
+woodpecker_server_open: true
+
+woodpecker_server_gitlab: false
+woodpecker_server_gitlab_url: https://gitlab.example.com
+woodpecker_server_github: false
+woodpecker_server_github_url: https://gitlab.example.com
+
+woodpecker_server_persistentvolume_size: "10Gi"
+#woodpecker_persistent_volume_storage_class: nfs-static
+woodpecker_server_persistentvolume_storageclass: ""
+woodpecker_server_serviceaccount_create: true
+
+woodpecker_server_ingress_enabled: false
+# traefik
+woodpecker_server_ingress_ingressclassname: ""
+
+woodpecker_tls: false
+
+woodpecker_secret_github_client: ""
+woodpecker_secret_github_secret: ""
+woodpecker_secret_gitlab_client: ""
+woodpecker_secret_gitlab_secret: ""
+
+woodpecker_cluster_issuer_name: ""

@@ -1,0 +1,58 @@
+agent:
+  env:
+    WOODPECKER_LOG_LEVEL: {{ woodpecker_agent_log_level }}
+  extraSecretNamesForEnvFrom:
+    - woodpecker-secret
+    - woodpecker-agent-secret
+  persistence:
+    size: {{ woodpecker_agent_persistence_size }}
+    storageClass: {{ woodpecker_agent_persistence_storage_class }}
+server:
+  env:
+    WOODPECKER_LOG_LEVEL: {{ woodpecker_server_log_level }}
+    WOODPECKER_OPEN: {{ woodpecker_server_open }}
+    WOODPECKER_HOST: {{ woodpecker_server_host }}
+{% if woodpecker_server_gitlab %}
+    WOODPECKER_GITLAB: true
+    WOODPECKER_GITLAB_URL: {{ woodpecker_server_gitlab_url }}
+{% endif %}
+{% if woodpecker_server_github %}
+    WOODPECKER_GITHUB: true
+    WOODPECKER_GITHUB_URL: {{ woodpecker_server_github_url }}
+{% endif %}
+  extraSecretNamesForEnvFrom:
+    - woodpecker-secret
+    - woodpecker-agent-secret
+{% if woodpecker_server_gitlab %}
+    - woodpecker-gitlab-client
+    - woodpecker-gitlab-secret
+{% endif %}
+{% if woodpecker_server_github %}
+    - woodpecker-github-client
+    - woodpecker-github-secret
+{% endif %}
+  persistentVolume:
+    size: {{ woodpecker_server_persistentvolume_size }}
+    storageClass: {{ woodpecker_server_persistentvolume_storageclass }}
+  serviceAccount:
+    create: {{ woodpecker_server_serviceaccount_create }}
+  service:
+    port: &servicePort 80
+  ingress:
+    enabled: {{ woodpecker_server_ingress_enabled }}
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      traefik.ingress.kubernetes.io/router.tls: "true"
+    ingressClassName: {{ woodpecker_server_ingress_ingressclassname }}
+    hosts:
+      - host: {{ woodpecker_fqdn }}
+        paths:
+          - path: /
+            backend:
+              serviceName: chart-example.local
+              servicePort: *servicePort
+{% if woodpecker_tls %}
+    tls:
+      - host: {{ woodpecker_fqdn }}
+        secretName: woodpecker-server-tls
+{% endif %}

@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ woodpecker_argocd_namespace }}
+  name:      {{ woodpecker_helm_release_name }}
+spec:
+  destination:
+    server:    {{ woodpecker_argocd_destination_server }}
+    namespace: {{ woodpecker_namespace }}
+  project: {{ woodpecker_argocd_project }}
+  source:
+    repoURL:        {{ woodpecker_helm_repo_url }}
+    chart:          {{ woodpecker_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+{{ woodpecker_application_params }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true
