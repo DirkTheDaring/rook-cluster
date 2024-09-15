@@ -1,0 +1,14 @@
+- name: Deploy certificate
+  when:
+    - vault_server_ingress_tls
+  block:
+    - name: Create /tmp/vault-certificate.yaml if verbosity > 2
+      ansible.builtin.template:
+        src:  "certificate.yaml.jinja2"
+        dest: "/tmp/vault-certificate.yaml"
+        mode: '0644'
+      when: ansible_verbosity > 2
+
+    - name: Create vault certificate
+      kubernetes.core.k8s:
+        template: certificate.yaml.jinja2

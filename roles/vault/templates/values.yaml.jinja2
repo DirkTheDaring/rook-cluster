@@ -16,6 +16,7 @@ server:
       traefik.ingress.kubernetes.io/router.tls: "true"
     hosts:
     - host: "{{ vault_fqdn }}"
+    tls: {{ vault_server_ingress_tls }}
 
   service:
     enabled: true

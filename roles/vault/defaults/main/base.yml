@@ -47,7 +47,10 @@ vault_force_string_dict:
 # LDAP
 vault_ldap_binddn:       "cn=binduser,dc=dot,dc=com"
 vault_ldap_bindpass:     ""
-vault_ldap_insecure_tls: "false"
+vault_ldap_insecure_tls: []
+#  - secretName: chart-example-tls
+#    hosts:
+#      - {{ vault_fqdn }}
 
 vault_ldap_url: ldap://ldap.server.com
 
@@ -66,3 +69,6 @@ vault_audit_storage_storage_class: rook-cephfs-retain
 vault_nfs_enabled: false
 vault_nfs_server:  127.0.0.1
 vault_nfs_path:    /volume1/container/static/vault
+
+vault_server_ingress_tls: false
+vault_cluster_issuer_name: ""
