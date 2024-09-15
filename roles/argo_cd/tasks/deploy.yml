@@ -32,13 +32,13 @@
       - bash
       - -c
       - |
-        while true; do 
-          RESULT="$(kubectl -n {{ argocd_namespace }} get pods -l {{ item }} --no-headers -o 'custom-columns=NAME:status.conditions[0].type')"; 
-          if [ "$RESULT" = "Initialized" ] || [ "$RESULT" = "PodReadyToStartContainers" ]; then 
-            break; 
-          else 
-            sleep 3; 
-          fi; 
+        while true; do
+          RESULT="$(kubectl -n {{ argocd_namespace }} get pods -l {{ item }} --no-headers -o 'custom-columns=NAME:status.conditions[0].type')";
+          if [ "$RESULT" = "Initialized" ] || [ "$RESULT" = "PodReadyToStartContainers" ]; then
+            break;
+          else
+            sleep 3;
+          fi;
         done
   loop: "{{ argocd_label_list }}"
 
