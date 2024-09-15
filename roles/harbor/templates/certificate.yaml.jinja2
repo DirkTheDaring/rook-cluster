@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  namespace: {{ harbor_namespace }}
+  name:      harbor-ingress-tls
+spec:
+  dnsNames:
+    - {{ harbor_core_fqdn }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: {{ harbor_cluster_issuer_name }}
+  secretName: harbor-ingress-tls

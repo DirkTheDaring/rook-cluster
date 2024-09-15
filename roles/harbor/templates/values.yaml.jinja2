@@ -43,7 +43,10 @@ persistence:
 
 expose:
   tls:
-    enabled: False
+    enabled: {{ harbor_expose_tls_enabled }}
+    certSource: secret
+    secret:
+      secretName: "harbor-ingress-tls"
   ingress:
     hosts:
       core: {{ harbor_core_fqdn }}
