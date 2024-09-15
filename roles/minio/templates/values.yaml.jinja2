@@ -3,9 +3,15 @@
 # https://github.com/bitnami/charts/tree/master/bitnami/minio
 #
 image:
-  repository: {{ minio_image_name | default('')  }}
-  tag: {{ minio_image_tag | default('') }}
-  debug: {{ minio_debug | default('') }}
+{% if minio_image_repository | length != 0 %}
+  repository: {{ minio_image_repository }}
+{% endif %}
+{% if minio_image_tag | length != 0 %}
+  tag: {{ minio_image_tag }}
+{% endif %}
+  debug: {{ minio_debug }}
+
+#fullnameOverride: minio.{{ minio_namespace }}.svc
 
 {% if 'aws_access_key_id' in minio_credentials %}
 auth:
@@ -14,15 +20,19 @@ auth:
 {% endif %}
 ingress:
   enabled: true
+  ingressClassName: "{{ minio_ingress_ingressclassname }}"
   hostname: "{{ minio_gui_fqdn }}"
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.tls: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-issuer-ispone
+  tls: {{ minio_ingress_tls | lower }}
 
 extraEnvVars: {{ minio_extra_env_vars }}
 
 apiIngress:
   enabled: true
+  ingressClassName: "{{ minio_apiingress_ingressclassname }}"
   hostname: "{{ minio_api_fqdn }}"
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
@@ -30,9 +40,28 @@ apiIngress:
     traefik.ingress.kubernetes.io/router.tls.certresolver: letsencrypt
     traefik.ingress.kubernetes.io/router.tls.domains.0.main: "{{ minio_api_fqdn }}"
     traefik.ingress.kubernetes.io/router.tls.domains.0.sans: "*.{{ minio_api_fqdn }}"
+    cert-manager.io/cluster-issuer: letsencrypt-issuer-ispone
   extraHosts:
   - name: "*.{{ minio_api_fqdn }}"
     path: "/"
+{% if minio_apiingress_tls_quirk %}
+  # this works, as extraTls triggers the creation of the tls
+  # section in the helm chart
+  tls: {{ minio_apiingress_tls | lower }}
+  extraTls:
+  - hosts:
+    - '{{ minio_api_fqdn }}'
+    - '*.{{ minio_api_fqdn }}'
+    secretName: minio-api-tls
+{% else %}
+  tls: {{ minio_apiingress_tls | lower }}
+{% if minio_apiingress_tls %}
+  extraTls:
+  - hosts:
+    - '*.{{ minio_api_fqdn }}'
+    secretName: {{ minio_api_fqdn }}-api-tls
+{% endif %}
+{% endif %}
 
 persistence:
   storageClass: "{{ minio_persistence_storage_class }}"

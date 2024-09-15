@@ -53,3 +53,15 @@ minio_nfs_mount_options: []
   # - noac
 
 minio_bucket_names: []
+minio_ingress_tls: false
+
+minio_image_tag: ""
+minio_image_repository: ""
+
+minio_ingress_tls: false
+minio_ingress_tls_quirk: false
+
+minio_apiingress_tls: false
+minio_apiingress_tls_quirk: false
+minio_ingress_ingressclassname: ""
+minio_apiingress_ingressclassname: ""
