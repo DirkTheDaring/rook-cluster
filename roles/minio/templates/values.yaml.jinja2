@@ -26,6 +26,10 @@ ingress:
     traefik.ingress.kubernetes.io/router.entrypoints: "websecure"
     traefik.ingress.kubernetes.io/router.tls: "true"
     cert-manager.io/cluster-issuer: letsencrypt-issuer-ispone
+    # Added by https://github.com/cert-manager/cert-manager/pull/6839
+    # But needs still a release of helm 1.17:
+    # https://github.com/helm/helm/pull/10893#event-14223265122
+    cert-manager.io/secret-template: '{"annotations": {"helm.sh/resource-policy": "keep"}}'
   tls: {{ minio_ingress_tls | lower }}
 
 extraEnvVars: {{ minio_extra_env_vars }}
