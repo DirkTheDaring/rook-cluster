@@ -42,9 +42,7 @@
   # - linkerd
   # - keptn
   # - tetragon
-  # - woodpecker_server
-  # - woodpecker_agent
-  # - woodpecker_client
+  # - woodpecker
   # - velero_client
   # - kustomize
   # - tetragon_client
@@ -56,6 +54,9 @@
   # - cockroachdb
   # - zitadel
   # - k9s
+  # - woodpecker_server
+  # - woodpecker_agent
+  # - woodpecker_client
 
 #  - helm-info
 # All storage layers are not deployed by argo, as argo + argo-workflows depend on int
