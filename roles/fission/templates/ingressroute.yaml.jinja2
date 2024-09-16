@@ -11,7 +11,7 @@ spec:
     - websecure
   routes:
     - kind: Rule
-      match: HostRegexp(`{{ fission_ingress_router_domain }}`,`{subhost:[a-zA-Z0-9-]+}.{{ fission_ingress_router_domain }}`)
+      match: Host(`{{ fission_ingress_router_domain }}`) || HostRegexp(`{subhost:[a-zA-Z0-9-]+}.{{ fission_ingress_router_domain }}`)
       services:
         - name: router
           port: 80
