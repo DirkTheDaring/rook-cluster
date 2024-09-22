@@ -52,3 +52,4 @@ harbor_force_string_dict:
     # - '^env\['
 harbor_expose_tls_enabled: false
 harbor_cluster_issuer_name: ""
+harbor_expose_ingress_classname: ""

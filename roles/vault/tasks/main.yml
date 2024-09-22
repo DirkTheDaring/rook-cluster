@@ -8,12 +8,12 @@
   ansible.builtin.import_tasks: deploy-prepare.yml
 - name: Deploy with argocd
   ansible.builtin.import_tasks: deploy-argocd.yml
-- name: Deploy certificate
-  ansible.builtin.import_tasks: deploy-certificate.yml
 - name: Deploy with helm
   ansible.builtin.import_tasks: deploy-helm.yml
 - name: Wait for namespace
   ansible.builtin.import_tasks: wait-for-namespace.yml
+- name: Deploy certificate
+  ansible.builtin.import_tasks: deploy-certificate.yml
 - name: Init
   ansible.builtin.import_tasks: init.yml
 - name: Ldap

@@ -42,3 +42,4 @@ chartmuseum_force_string_dict:
 chartmuseum_ingress_hosts_tls: false
 chartmuseum_ingress_hosts_tlssecret: ""
 chartmuseum_cluster_issuer_name: ""
+chartmuseum_ingress_ingressclassname: ""

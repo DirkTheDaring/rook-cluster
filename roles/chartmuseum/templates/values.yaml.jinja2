@@ -22,3 +22,4 @@ ingress:
       tls: {{ chartmuseum_ingress_hosts_tls }}
       tlsSecret: {{ chartmuseum_ingress_hosts_tlssecret }}
 {% endif %}
+  ingressClassName: "{{ chartmuseum_ingress_ingressclassname }}"

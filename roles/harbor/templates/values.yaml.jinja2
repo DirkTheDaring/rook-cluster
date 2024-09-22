@@ -52,6 +52,7 @@ expose:
       core: {{ harbor_core_fqdn }}
       notary: {{ harbor_notary_fqdn }}
     controller:  default
+    className: {{ harbor_expose_ingress_classname }}
     annotations:
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
       traefik.ingress.kubernetes.io/router.tls: "true"
