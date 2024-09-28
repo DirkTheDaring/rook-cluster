@@ -23,6 +23,6 @@
 
     - name: Write helm deployment output to file
       ansible.builtin.copy:
-        content: "{{ vault_output.stdout }}"
+        content: "{{ vault_helm_output.stdout }}"
         mode: '0600'
         dest: "/tmp/result_{{ helm_chart_name }}.txt"

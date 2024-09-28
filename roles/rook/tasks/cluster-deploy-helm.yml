@@ -24,6 +24,6 @@
 
     - name: Write helm deployment output to file
       ansible.builtin.copy:
-        content: "{{ rook_output.stdout }}"
+        content: "{{ rook_helm_output.stdout }}"
         mode: '0600'
         dest: "/tmp/result_{{ helm_cluster_chart_name }}.txt"
