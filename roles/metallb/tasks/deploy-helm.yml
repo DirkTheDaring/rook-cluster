@@ -25,4 +25,4 @@
       ansible.builtin.copy:
         content: "{{ metallb_helm_output.stdout }}"
         mode: '0600'
-        dest: "/tmp/result_{{ helm_chart_name }}.txt"
+        dest: "/tmp/result_{{ metallb_helm_chart_name }}.txt"
