@@ -20,3 +20,9 @@
         create_namespace:  true
         release_values:    "{{ rook_helm_cluster_release_values }}"
         update_repo_cache: true
+      register: rook_helm_output
+
+    - name: Write helm deployment output to file
+      copy:
+        content: "{{ rook_output.stdout }}"
+        dest: "/tmp/result_{{ helm_cluster_chart_name }}.txt"

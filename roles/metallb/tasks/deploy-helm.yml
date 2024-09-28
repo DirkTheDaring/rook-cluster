@@ -19,3 +19,9 @@
         create_namespace:  true
         release_values:    "{{ metallb_helm_release_values }}"
         update_repo_cache: true
+      register: metallb_helm_output
+
+    - name: Write helm deployment output to file
+      copy:
+        content: "{{ metallb_output.stdout }}"
+        dest: "/tmp/result_{{ helm_chart_name }}.txt"

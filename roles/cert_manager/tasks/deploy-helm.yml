@@ -19,3 +19,9 @@
         create_namespace:  true
         release_values:    "{{ cert_manager_helm_release_values }}"
         update_repo_cache: true
+      register: cert_manager_helm_output
+
+    - name: Write helm deployment output to file
+      copy:
+        content: "{{ cert_manager_output.stdout }}"
+        dest: "/tmp/result_{{ helm_chart_name }}.txt"
