@@ -39,8 +39,6 @@ woodpecker_force_string_dict:
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
-
-
 woodpecker_agent_log_level: info
 woodpecker_agent_persistence_storage_class: ""
 woodpecker_agent_persistence_size: "1Gi"

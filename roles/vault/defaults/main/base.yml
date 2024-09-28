@@ -43,6 +43,10 @@ vault_force_string_dict:
 # S3 Credentials
 # vault_aws_access_key_id:     vmnlz3dWjY
 # vault_aws_secret_access_key: QBpFGKS7y0FpyFiN7SZ8gw08oiPVKlWhJfNMV5mZ
+# Ingress
+
+vault_server_ingress_tls: false
+vault_cluster_issuer_name: ""
 
 # LDAP
 vault_ldap_binddn:       "cn=binduser,dc=dot,dc=com"
@@ -69,6 +73,3 @@ vault_audit_storage_storage_class: rook-cephfs-retain
 vault_nfs_enabled: false
 vault_nfs_server:  127.0.0.1
 vault_nfs_path:    /volume1/container/static/vault
-
-vault_server_ingress_tls: false
-vault_cluster_issuer_name: ""

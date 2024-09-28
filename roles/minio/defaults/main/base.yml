@@ -53,6 +53,7 @@ minio_nfs_mount_options: []
   # - noac
 
 minio_bucket_names: []
+
 minio_ingress_tls: false
 
 minio_image_tag: ""

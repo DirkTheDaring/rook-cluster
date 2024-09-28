@@ -1,16 +1,16 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: cert-manager-eb-raptor-com
+  name: cert-manager-example-com
 spec:
-  commonName: cert-manager.eb-raptor.com
+  commonName: cert-manager.example.com
   dnsNames:
-    - cert-manager.eb-raptor.com
-    - '*.cert-manager.eb-raptor.com'
+    - cert-manager.example.com
+    - '*.cert-manager.example.com'
   issuerRef:
     # https://github.com/cert-manager/cert-manager/discussions/3066
     # You MUST specify kind
     # kind: <ClusterIssuer | Issuer >
     kind: ClusterIssuer
     name: letsencrypt-issuer-gandi
-  secretName: cert-manager-eb-raptor-com
+  secretName: cert-manager-example-com

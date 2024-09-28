@@ -26,7 +26,7 @@ cert_manager_helm_chart_version: ''        # empty strings means pick latest
 
 # Github Repository
 cert_manager_releases_jmespath: "[].tag_name"
-cert_manager_github_project_url: "https://github.com/cert-manager/cert-manager/releases"
+cert_manager_github_project_url:     "https://github.com/cert-manager/cert-manager/releases"
 cert_manager_github_project_version: ''
 # cert_manager_github_project_version: 'v1.7.1'
 # cert_manager_github_project_version: '~^v1\.7\.' # pick first match of regular expression

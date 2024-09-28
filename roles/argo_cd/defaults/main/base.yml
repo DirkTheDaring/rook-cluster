@@ -18,6 +18,10 @@ argocd_sso_list: []
   #   secretEnv: ARGO_WORKFLOWS_SSO_CLIENT_SECRET
 
 # argocd_node_selector_hostname: ""
+argocd_server_ingress_tls: false
+
+# The cluster issuer
+argocd_cluster_issuer_name: ""
 # Ldap
 argocd_ldap_profile: "activedirectory"
 
@@ -66,7 +70,3 @@ argocd_github_project_version: ''
 
 # Configuration Database
 argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"
-argocd_server_ingress_tls: false
-
-# The cluster issuer
-argocd_cluster_issuer_name: "" 

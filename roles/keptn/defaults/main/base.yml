@@ -1,3 +1,8 @@
+# DNS
+keptn_domain:       "example.com"
+keptn_subdomain:    ""
+keptn_hostname:     "keptn"
+
 # Deployment Method: argocd, helm
 keptn_deployment:    "helm"
 
@@ -19,11 +24,22 @@ keptn_helm_chart_version: ''        # empty strings means pick latest
 # keptn_helm_chart_version: '~^1\.3\.'    # pick by regular expression
 # keptn_helm_chart_version: "1.3.0" # set absolute version
 
-#############################################################################
 # Github Repository
+keptn_releases_jmespath: "[].tag_name"
 keptn_github_project_url:     "https://github.com/keptn/keptn"
 keptn_github_project_version: ''
+# keptn_github_project_version: 'v1.3.0'
+# keptn_github_project_version: '~^v1\.3\.' # pick first match of regular expression
 
+# Configuration Database
+keptn_root_credentials_dir: "{{ playbook_dir }}/credentials"
+keptn_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['
+#keptn_storage_class: local-path
 keptn_certmanager_enabled: true
 keptn_lifecycleoperator_enabled: true
 keptn_metricsoperator_enabled: true
@@ -33,3 +49,4 @@ keptn_global_imagepullsecrets: []
 
 keptn_global_commonlabels: {}
 keptn_global_annotations: {}
+
