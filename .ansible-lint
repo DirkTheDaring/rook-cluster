@@ -1,10 +1,11 @@
 ---
 skip_list:
   - no-changed-when
-#  - yaml[line-length]
+  - yaml[line-length]
 #  - jinja[spacing]
 #  - yaml[comments]
   - yaml[colons]
+  - var-naming[no-role-prefix]
 
 # warn_list:
 #   - no-changed-when

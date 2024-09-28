@@ -1,6 +1,6 @@
 gitlabrunner_deployment: "helm"
 gitlabrunner_runnertoken: ""  # must be set
-gitlabrunner_gitlaburl: "https://gitlab.example.com" # must be set 
+gitlabrunner_gitlaburl: "https://gitlab.example.com" # must be set
 gitlabrunner_namespace: gitlab-runner
 
 gitlabrunner_auths:
@@ -13,5 +13,5 @@ gitlabrunner_storageclassname: ""
 
 gitlabrunner_helm_repo_name:      gitlab
 gitlabrunner_helm_repo_url:       "https://charts.gitlab.io"
-gitlabrunner_helm_chart_name:     gitlab-runner 
-gitlabrunner_helm_release_name:   gitlab-runner 
+gitlabrunner_helm_chart_name:     gitlab-runner
+gitlabrunner_helm_release_name:   gitlab-runner

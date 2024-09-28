@@ -4,8 +4,8 @@
   connection: local   # without ssh
   gather_facts: false
   roles:
+    - nfs
     # - argo-cd
-    # - nfs
     # - metallb # deprecated do not use anymore
     # - cilium_config
     # - traefik

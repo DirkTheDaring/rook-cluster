@@ -1,3 +1,5 @@
+# https://docs.ansible.com/ansible/latest/dev_guide/collections_galaxy_meta.html
+
 namespace: helm
 name: chart
 version: 1.0.0
@@ -6,3 +8,7 @@ authors:
 readme: README.md
 dependencies:
   ansible.builtin: ">=1.0.0"
+tags:
+  - tools
+description: "FIXME"
+repository: "https://fixme.com"

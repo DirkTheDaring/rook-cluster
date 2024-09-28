@@ -53,7 +53,7 @@ woodpecker_server_github: false
 woodpecker_server_github_url: https://gitlab.example.com
 
 woodpecker_server_persistentvolume_size: "10Gi"
-#woodpecker_persistent_volume_storage_class: nfs-static
+# woodpecker_persistent_volume_storage_class: nfs-static
 woodpecker_server_persistentvolume_storageclass: ""
 woodpecker_server_serviceaccount_create: true
 

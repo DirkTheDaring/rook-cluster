@@ -22,6 +22,7 @@
       register: metallb_helm_output
 
     - name: Write helm deployment output to file
-      copy:
+      ansible.builtin.copy:
         content: "{{ metallb_output.stdout }}"
+        mode: '0600'
         dest: "/tmp/result_{{ helm_chart_name }}.txt"

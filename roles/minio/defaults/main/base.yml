@@ -54,8 +54,6 @@ minio_nfs_mount_options: []
 
 minio_bucket_names: []
 
-minio_ingress_tls: false
-
 minio_image_tag: ""
 minio_image_repository: ""
 

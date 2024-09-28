@@ -39,7 +39,7 @@ keptn_force_string_dict:
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
-#keptn_storage_class: local-path
+# keptn_storage_class: local-path
 keptn_certmanager_enabled: true
 keptn_lifecycleoperator_enabled: true
 keptn_metricsoperator_enabled: true
@@ -49,4 +49,3 @@ keptn_global_imagepullsecrets: []
 
 keptn_global_commonlabels: {}
 keptn_global_annotations: {}
-
