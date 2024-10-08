@@ -7,18 +7,24 @@
   gather_facts: True
   #any_errors_fatal: True
   roles:
-  - nfs
+  # - cilium_config
+  # - nfs
+  # - cert_manager
+  # - traefik # requires nfs
+  # - argo_cd
+  # - harbor
+  # - chartmuseum
   # - rabbitmq
-  # - gitlabrunner
+  # - kyverno
+  # - grafana
   # - prometheus
+  # - keycloak
+  # - openfga
+  # - gitlabrunner
   # - kibana
   # - storage1
   # - rook
   # - metallb # deprecated, do not use
-  # - cilium_config
-  # - traefik # requires nfs
-  # - argo_cd
-  # - harbor
   # - postgresql
   # - rook-csi # FIXME
   # - minio         # deployment requires argo-cd, runtime requires nfs
@@ -34,9 +40,7 @@
   # - whoami
   # - kwhoami
   # - traefik-forward-auth 
-  # - keycloak
   # - fluxcd
-  # - cert_manager
   # - cert_manager_webhook_gandi
   # - fission
   # - fission_client
@@ -50,7 +54,6 @@
   # - cilium_client
   # - argo_cd_client
   # - keptn_client
-  # - chartmuseum
   # - gpu_operator
   # - cockroachdb
   # - zitadel
