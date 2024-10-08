@@ -1,0 +1,36 @@
+global:
+  storageClass: {{ rabbitmq_global_storageclass }}
+
+auth:
+  username: "{{ rabbitmq_auth_username }}"
+  password: "{{ rabbitmq_auth_password }}"
+  erlangCookie: "{{ rabbitmq_auth_erlangcookie }}"
+
+ingress:
+  enabled: {{ rabbitmq_ingress_enabled | lower}}
+  hostname: {{ rabbitmq_fqdn }}
+{% if rabbitmq_ingress_annotations %}
+  annotations:
+    {{ rabbitmq_ingress_annotations | to_nice_yaml(indent=2, width=4096)| indent( width=4) }}
+{% endif  %}
+  tls: {{ rabbitmq_ingress_tls | lower}}
+  ingressClassName: {{ rabbitmq_ingress_ingressclassname }}
+
+
+extraPlugins: "{{ rabbitmq_extraplugins }}"
+
+featureFlags: "{{ rabbitmq_featureflags }}"
+
+{% if rabbitmq_ldap_enabled %}
+ldap:
+  enabled: {{ rabbitmq_ldap_enabled | lower }}
+  servers: {{ rabbitmq_ldap_servers }}
+  port: {{ rabbitmq_ldap_port }}
+  binddn: {{ rabbitmq_ldap_binddn }}
+  bindpw: {{ rabbitmq_ldap_bindpw }}
+  basedn: {{ rabbitmq_ldap_basedn }}
+  uidField: {{ rabbitmq_ldap_uidfield }}
+  tls:
+    enabled: {{ rabbitmq_ldap_enabled | lower}}
+{% endif %}
+

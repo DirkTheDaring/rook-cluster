@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: {{ rabbitmq_argocd_namespace }}
+  name:      {{ rabbitmq_helm_release_name }}
+spec:
+  destination:
+    server:    {{ rabbitmq_argocd_destination_server }}
+    namespace: {{ rabbitmq_namespace }}
+  project: {{ rabbitmq_argocd_project }}
+  source:
+    repoURL:        {{ rabbitmq_helm_repo_url }}
+    chart:          {{ rabbitmq_helm_chart_name }}
+    targetRevision: {{ helm_chart_version }}
+    helm:
+      parameters:
+{{ rabbitmq_application_params }}
+  syncPolicy:
+    automated: {}
+    syncOptions:
+    - CreateNamespace=true

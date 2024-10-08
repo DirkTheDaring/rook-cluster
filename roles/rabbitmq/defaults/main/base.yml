@@ -1,0 +1,63 @@
+# DNS
+rabbitmq_domain:       "example.com"
+rabbitmq_subdomain:    ""
+rabbitmq_hostname:     "rabbitmq"
+
+# Deployment Method: argocd, helm
+rabbitmq_deployment:    "helm"
+
+# Kubernetes
+rabbitmq_namespace:    "rabbitmq"
+
+# Argocd
+rabbitmq_argocd_project:            "default"
+rabbitmq_argocd_namespace:          "argo-cd"
+rabbitmq_argocd_destination_server: "https://kubernetes.default.svc"
+
+# Helm Chart
+rabbitmq_helm_release_name:  rabbitmq
+
+rabbitmq_helm_repo_name:     bitnami
+rabbitmq_helm_repo_url:      https://charts.bitnami.com/bitnami
+rabbitmq_helm_chart_name:    rabbitmq
+rabbitmq_helm_chart_version: ''        # empty strings means pick latest
+# rabbitmq_helm_chart_version: '~^14\.7\.'    # pick by regular expression
+# rabbitmq_helm_chart_version: "14.7.0" # set absolute version
+
+# Github Repository
+rabbitmq_releases_jmespath: "[].tag_name"
+rabbitmq_github_project_url:     "https://github.com/elastic/kibana/releases"
+rabbitmq_github_project_version: ''
+# rabbitmq_github_project_version: 'v3.13.7'
+# rabbitmq_github_project_version: '~^v3\.13\.' # pick first match of regular expression
+
+# Configuration Database
+rabbitmq_root_credentials_dir: "{{ playbook_dir }}/credentials"
+rabbitmq_force_string_dict:
+  # path_list:
+  #   - 'ingress.annotations.traefik\.ingress\.kubernetes\.io\/router\.tls'
+  path_regex_list:
+    - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
+    # - '^env\['
+rabbitmq_global_storageclass: ""
+rabbitmq_ingress_enabled: false
+rabbitmq_ingress_hostname: ""
+rabbitmq_ingress_annotations: {}
+ # kubernetes.io/ingress.class: traefik
+ # cert-manager.io/cluster-issuer: letsencrypt-issuer-ispone
+rabbitmq_ingress_tls: false
+rabbitmq_ingress_ingressclassname: ""
+rabbitmq_extraplugins: ""
+rabbitmq_featureflags: ""
+rabbitmq_ldap_enabled: false
+rabbitmq_ldap_servers: []
+rabbitmq_ldap_port: ""
+rabbitmq_ldap_binddn: ""
+rabbitmq_ldap_bindpw: ""
+rabbitmq_ldap_basedn: ""
+rabbitmq_ldap_uidfield: ""
+rabbitmq_ldap_tls_enabled: false
+
+rabbitmq_auth_username: "user"
+rabbitmq_auth_password: ""
+rabbitmq_auth_erlangcookie: ""

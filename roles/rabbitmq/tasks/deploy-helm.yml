@@ -1,0 +1,28 @@
+- name: Deploy with helm
+  when:
+    - rabbitmq_deployment == "helm"
+  block:
+    - name: Add chart repo
+      kubernetes.core.helm_repository:
+        name:     "{{ rabbitmq_helm_repo_name }}"
+        repo_url: "{{ rabbitmq_helm_repo_url }}"
+      ignore_errors: true
+      tags:
+        - skip_ansible_lint
+
+    - name: Deploy helm chart
+      kubernetes.core.helm:
+        chart_ref:         "{{ rabbitmq_helm_repo_name }}/{{ rabbitmq_helm_chart_name }}"
+        chart_version:     "{{ helm_chart_version }}"
+        release_namespace: "{{ rabbitmq_namespace }}"
+        release_name:      "{{ rabbitmq_helm_release_name }}"
+        create_namespace:  true
+        release_values:    "{{ rabbitmq_helm_release_values }}"
+        update_repo_cache: true
+      register: rabbitmq_helm_output
+
+    - name: Write helm deployment output to file
+      ansible.builtin.copy:
+        content: "{{ rabbitmq_helm_output.stdout }}"
+        mode: '0600'
+        dest: "/tmp/result_{{ rabbitmq_helm_chart_name }}.txt"

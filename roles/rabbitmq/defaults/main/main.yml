@@ -1,0 +1,4 @@
+rabbitmq_credentials_dir: "{{ rabbitmq_root_credentials_dir }}/rabbitmq"
+
+# yamllint disable-line
+rabbitmq_fqdn:                  "{{ rabbitmq_hostname }}{{ '' if rabbitmq_subdomain == '' else '.' + rabbitmq_subdomain }}.{{ rabbitmq_domain }}"

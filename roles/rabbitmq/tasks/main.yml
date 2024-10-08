@@ -1,0 +1,19 @@
+- name: Get helm chart version
+  ansible.builtin.import_tasks: helm-chart-version.yml
+- name: Get github version
+  ansible.builtin.import_tasks: github-version.yml
+
+- name: Load credentials
+  ansible.builtin.import_tasks: load-credentials.yml
+- name: Prepare deploy
+  ansible.builtin.import_tasks: deploy-prepare.yml
+
+- name: Deploy argocd
+  ansible.builtin.import_tasks: deploy-argocd.yml
+- name: Deploy helm
+  ansible.builtin.import_tasks: deploy-helm.yml
+
+- name: Wait for namespace
+  ansible.builtin.import_tasks: wait-for-namespace.yml
+- name: Save credentials
+  ansible.builtin.import_tasks: save-credentials.yml
