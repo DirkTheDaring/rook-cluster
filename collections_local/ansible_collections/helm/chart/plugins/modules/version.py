@@ -73,12 +73,21 @@ import yaml
 import time
 import re
 
+from pathlib import Path
+from typing import Dict, List, Union, Any
+from dataclasses import dataclass
+
+
 # Just played around with the parameter names
 REPO_NAME="repo_name"
 REPO_URL="repo_url"
 CHART_NAME="name"
 CHART_VERSION="version"
 CACHE_TIME="cachetime"
+
+CACHE_DIR = Path.home() / ".cache" / "helm-releases"
+CACHE_FILE = "index.yaml"
+
 
 class HttpException(Exception):
     "Raised when response status != 200 "
@@ -87,70 +96,87 @@ class HttpException(Exception):
     def __str__(self):
         return self.msg
 
-def is_cachefile_expired_epoch(filename, maximum):
-    current_epoch = time.time()
-    epoch = os.stat(filename).st_ctime
-    diff = current_epoch - epoch
-    return (diff > maximum)
 
-def is_cachefile_expired(filename, days):
-    maximum = 24 * 3600 * days
-    return is_cachefile_expired_epoch(filename, maximum)
+@dataclass
+class Config:
+    repo_name: str
+    repo_url: str
+    name: str
+    version: str
+    cachetime: int = 1 # days
 
-def chart_version(config):
+class CacheManager:
+    def __init__(self, config: Config) -> None:
+        self.config = config
+        self.cache_dir = CACHE_DIR / self.config.repo_name / self.config.name
+        self.cache_file = self.cache_dir / CACHE_FILE
 
-    version = config[CHART_VERSION]
-    regex = ""
-    if version.startswith("~"):
-        regex = version[1:]
-    elif version != "":
-        return version
+    def is_expired(self) -> bool:
+        return not self.cache_file.exists() or time.time() - self.cache_file.stat().st_ctime > 24 * 3600 * self.config.cachetime
 
-    yaml_filename="index.yaml"
-    cache_dir = os.environ['HOME'] + "/.cache/helm-releases/" + config[REPO_NAME] + "/" + config[CHART_NAME]
-    cache_file = cache_dir + "/" + yaml_filename
+    def clear_expired_cache(self) -> None:
+        if self.is_expired():
+            self.cache_file.unlink(missing_ok=True)
 
-    if not os.path.isdir(cache_dir):
-        os.makedirs( cache_dir , 0o0755 )
+    def ensure_cache(self, data: bytes) -> None:
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.cache_file.write_bytes(data)
 
-    days = config[CACHE_TIME]
+class HelmRelease:
+    def __init__(self, config: Config) -> None:
+        self.config = config
+        self.cache_manager = CacheManager(config)
 
-    if os.path.isfile(cache_file) and is_cachefile_expired(cache_file, days):
-        os.remove(cache_file)
+    def fetch_repo_data(self) -> Dict[str, Any]:
+        self.cache_manager.clear_expired_cache()
 
-    url=config[REPO_URL] + "/" + yaml_filename
-    if not os.path.isfile(cache_file):
-        http = urllib3.PoolManager()
-        resp = http.request('GET', url)
+        if not self.cache_manager.cache_file.exists():
+            data = urllib3.PoolManager().request('GET', f"{self.config.repo_url}/{CACHE_FILE}").data
+            self.cache_manager.ensure_cache(data)
 
-        if resp.status != 200:
-            raise HttpException(f'URL {url} returned: {resp.status}')
+        with self.cache_manager.cache_file.open() as f:
+            return yaml.safe_load(f)
 
-        with open(cache_file, 'wb') as out:
-            out.write(resp.data)
+    @staticmethod
+    def natural_sort(s: str) -> List[Union[int, str]]:
+        return [int(t) if t.isdigit() else t.lower() for t in re.split(r'(\d+)', s)]
 
-    with open(cache_file, 'r') as fp:
-        repo = yaml.safe_load(fp)
+    def get_latest_version(self) -> str:
+        version = self.config.version
 
-    repos = repo['entries'][config[CHART_NAME]]
-    versions=[]
-    if regex != "":
-        regexc = re.compile(regex)
-        for repo in repos:
-            version = repo['version']
-            if regexc.match(version):
-                 versions.append(version)
-    else:
-        for repo in repos:
-            versions.append(repo['version'])
+        if version == "":
+            version = "~[0-9]+\\.[0-9]+\\.[0-9]+$"
 
-    if len(versions) == 0:
-        return ""
+        if not version.startswith("~"):
+            return version
 
-    natsort = lambda s: [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", s)]
-    result = sorted(versions,key=natsort)
+        repo_data = self.fetch_repo_data()
+        chart_data = repo_data.get('entries', {}).get(self.config.name, [])
 
-    return result[-1]
+        if not chart_data:
+            return f"Chart {self.config.name} not found in repo data"
+
+        versions = [repo['version'] for repo in chart_data if 'version' in repo]
+
+        if version.startswith("~"):
+            regex = re.compile(version[1:])
+            versions = [v for v in versions if regex.match(v)]
+        #print(sorted(versions, key=self.natural_sort))
+        return sorted(versions, key=self.natural_sort)[-1] if versions else "No valid versions found"
+
+
+def chart_version(params) -> str:
+    config = Config(
+        params['repo_name'],
+        params['repo_url'],
+        params['name'],
+        params['version'],
+    )
+
+    version = HelmRelease(config).get_latest_version()
+    return version
+
+
 def run_module():
     # define available arguments/parameters a user can pass to the module
     module_args = dict(
@@ -189,6 +215,7 @@ def run_module():
     # manipulate or modify the state as needed (this is going to be the
     # part where your module will do what it needs to do)
     try:
+
         version = chart_version(module.params)
         #result['original_message'] = module.params['url']
         result['helm_chart_version'] = version

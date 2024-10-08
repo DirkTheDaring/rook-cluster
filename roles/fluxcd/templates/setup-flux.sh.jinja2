@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -ex 
+curl -s https://fluxcd.io/install.sh | sudo bash
 {% if fluxcd_gitlab_token is defined and fluxcd_gitlab_token|length %}
 export GITLAB_TOKEN={{ fluxcd_gitlab_token }}
-{{ ansible_user_dir }}/bin/flux bootstrap gitlab\
+#{{ ansible_user_dir }}/bin/flux bootstrap gitlab\
+/usr/local/bin/flux bootstrap gitlab\
   --hostname={{ fluxcd_hostname }}\
   --owner={{ fluxcd_owner }}\
   --repository={{ fluxcd_repository }}\
