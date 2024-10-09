@@ -17,3 +17,5 @@
   ansible.builtin.import_tasks: wait-for-namespace.yml
 - name: Save credentials
   ansible.builtin.import_tasks: save-credentials.yml
+- name: Create ingressroutetcp
+  ansible.builtin.import_tasks: ingressroutetcp.yml
