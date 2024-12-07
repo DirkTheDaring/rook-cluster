@@ -7,8 +7,9 @@ operator:
 
 node-feature-discovery:
   master:
-    nodeSelector:
-      kubernetes.io/hostname: {{ gpu_operator_node_feature_discovery_master_node_selector }}
+    affinity:
+      {{ gpu_operator_node_feature_discovery_master_affinity| to_nice_yaml(indent=8) }}
+
   worker:
-    nodeSelector:
-      kubernetes.io/hostname: {{ gpu_operator_node_feature_discovery_worker_node_selector }}
+    affinity:
+      {{ gpu_operator_node_feature_discovery_worker_affinity| to_nice_yaml(indent=8) }}
