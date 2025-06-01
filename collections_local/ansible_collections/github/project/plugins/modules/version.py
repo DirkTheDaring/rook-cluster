@@ -68,7 +68,8 @@ message:
 
 from ansible.module_utils.basic import AnsibleModule
 import os
-import urllib3.request
+#import urllib3.request
+import requests
 import yaml
 import time
 import re
@@ -114,8 +115,9 @@ def is_cachefile_expired(filename, days):
     return is_cachefile_expired_epoch(filename, maximum)
 
 def download_file(url, cache_file):
-    http = urllib3.PoolManager()
-    resp = http.request('GET', url)
+#    http = urllib3.PoolManager()
+#    resp = http.request('GET', url)
+    resp = requests.get(url)
 
     if resp.status != 200:
         raise HttpException(f'URL {url} returned: {resp.status}')
