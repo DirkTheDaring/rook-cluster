@@ -2,6 +2,10 @@ dcgm:
   enabled: true
 driver:
   repository: {{ gpu_operator_driver_repository }}
+{% if gpu_operator_driver_version |length > 0 %}
+  #version: "550.127.08"
+  version: "{{ gpu_operator_driver_version }}"
+{% endif %}
 operator:
   defaultRuntime: crio
 

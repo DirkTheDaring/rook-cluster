@@ -18,7 +18,9 @@ gpu_operator_argocd_destination_server: "https://kubernetes.default.svc"
 gpu_operator_helm_release_name:  gpu-operator
 
 gpu_operator_helm_repo_name:     gpu-operator
-gpu_operator_helm_repo_url:      https://nvidia.github.io/gpu-operator
+#gpu_operator_helm_repo_url:      https://nvidia.github.io/gpu-operator
+gpu_operator_helm_repo_url:      https://helm.ngc.nvidia.com/nvidia
+
 gpu_operator_helm_chart_name:    gpu-operator
 gpu_operator_helm_chart_version: ''        # empty strings means pick latest
 # gpu_operator_helm_chart_version: '~^v23\.3\.'    # pick by regular expression
@@ -41,3 +43,5 @@ gpu_operator_force_string_dict:
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
+# Empty means not set
+gpu_operator_driver_version: ""
