@@ -1,8 +1,11 @@
-# - name: Create Template in temp dir
-#   ansible.builtin.template:
-#    src   "{{ persistentvolume.yaml.jinja2 }}"
-#    dest: "/tmp/pv-vault.yaml"
+- name: Create Template in temp dir
+  ansible.builtin.template:
+    src:  "persistentvolume.yaml.jinja2"
+    dest: "/tmp/pv-vault.yaml"
+  when: ansible_verbosity > 2
 
 - name: Create persistent volumes
   kubernetes.core.k8s:
     template: persistentvolume.yaml.jinja2
+  when:
+    - vault_nfs_enabled
