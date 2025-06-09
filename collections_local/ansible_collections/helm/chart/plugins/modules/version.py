@@ -132,8 +132,7 @@ class HelmRelease:
         self.cache_manager.clear_expired_cache()
 
         if not self.cache_manager.cache_file.exists():
-            #data = urllib3.PoolManager().request('GET', f"{self.config.repo_url}/{CACHE_FILE}").data
-            data = requests.get(f"{self.config.repo_url}/{CACHE_FILE}").data
+            data = requests.get(f"{self.config.repo_url}/{CACHE_FILE}").content
             self.cache_manager.ensure_cache(data)
 
         with self.cache_manager.cache_file.open() as f:

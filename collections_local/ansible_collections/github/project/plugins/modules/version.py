@@ -115,15 +115,18 @@ def is_cachefile_expired(filename, days):
     return is_cachefile_expired_epoch(filename, maximum)
 
 def download_file(url, cache_file):
-#    http = urllib3.PoolManager()
-#    resp = http.request('GET', url)
     resp = requests.get(url)
 
-    if resp.status != 200:
-        raise HttpException(f'URL {url} returned: {resp.status}')
+    if resp.status_code != 200:
+        raise HttpException(f'URL {url} returned: {resp.status_code}')
 
-    with open(cache_file, 'wb') as out:
-        out.write(resp.data)
+    try:
+        data = resp.json()
+    except json.JSONDecodeError:
+        raise HttpException(f"Invalid JSON returned from GitHub: {resp.text[:200]}")
+
+    with open(cache_file, 'w') as out:
+        json.dump(data, out)
 
 def load_json(cache_file):
     with open(cache_file, 'r') as fp:
