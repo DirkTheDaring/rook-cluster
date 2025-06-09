@@ -54,3 +54,5 @@ harbor_force_string_dict:
   path_regex_list:
     - '.*\.annotations\.traefik\\\.ingress\\\.kubernetes\\\.io\\\/router\\\.tls$'
     # - '^env\['
+
+harbor_metrics_enabled: false
