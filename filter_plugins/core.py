@@ -5,8 +5,8 @@ import yaml
 
 
 def escape(mystring):
-    mystring = mystring.replace(".", "\.")
-    mystring = mystring.replace("/", "\/")
+    mystring = mystring.replace(".", "\\.")
+    mystring = mystring.replace("/", "\\/")
     return mystring
 
 
