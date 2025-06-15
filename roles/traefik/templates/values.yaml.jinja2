@@ -41,12 +41,12 @@ logs:
 
 ports:
   web:
-{% if helm_chart_version_canonical is version("26.0.0", '>=' ) %}
+{% if helm_chart_version_canonical is version("26.0.0", '<' ) %}
+    redirectTo: websecure
+{% elif helm_chart_version_canonical is version("33.2.1", '<=' ) %}
     redirectTo:
       port: websecure
       priority: 10
-{% else %}
-    redirectTo: websecure
 {% endif %}
 {% if helm_chart_version_canonical is version('28.1', '>=' ) %}
   websecure:
