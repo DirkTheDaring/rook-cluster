@@ -51,7 +51,7 @@ vault_cluster_issuer_name: ""
 # LDAP
 vault_ldap_binddn:       "cn=binduser,dc=dot,dc=com"
 vault_ldap_bindpass:     ""
-vault_ldap_insecure_tls: []
+vault_ldap_insecure_tls: false
 #  - secretName: chart-example-tls
 #    hosts:
 #      - {{ vault_fqdn }}
