@@ -43,3 +43,6 @@ chartmuseum_ingress_hosts_tls: false
 chartmuseum_ingress_hosts_tlssecret: ""
 chartmuseum_cluster_issuer_name: ""
 chartmuseum_ingress_ingressclassname: ""
+
+chartmuseum_certificate_duration: 2160h # 90 days for letsencrypt
+chartmuseum_certificate_renewbefore: 240h

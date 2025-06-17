@@ -10,3 +10,5 @@ spec:
     kind: ClusterIssuer
     name: {{ argocd_cluster_issuer_name }}
   secretName: argocd-server-tls
+  duration: {{ argocd_certificate_duration }}
+  renewBefore: {{ argocd_certificate_renewbefore }}

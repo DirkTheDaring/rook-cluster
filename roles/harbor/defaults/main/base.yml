@@ -56,3 +56,6 @@ harbor_force_string_dict:
     # - '^env\['
 
 harbor_metrics_enabled: false
+
+harbor_certificate_duration: 2160h # 90 days for letsencrypt
+harbor_certificate_renewbefore: 240h

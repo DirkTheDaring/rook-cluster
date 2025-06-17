@@ -10,3 +10,5 @@ spec:
     kind: ClusterIssuer
     name: {{ chartmuseum_cluster_issuer_name }}
   secretName: chartmuseum-tls
+  duration: {{ chartmuseum_certificate_duration }}
+  renewBefore: {{ chartmuseum_certificate_renewbefore }}

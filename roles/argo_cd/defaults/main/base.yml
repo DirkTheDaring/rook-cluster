@@ -70,3 +70,6 @@ argocd_github_project_version: ''
 
 # Configuration Database
 argocd_root_credentials_dir: "{{ playbook_dir }}/credentials"
+
+argocd_certificate_duration: 2160h # 90 days for letsencrypt
+argocd_certificate_renewbefore: 240h

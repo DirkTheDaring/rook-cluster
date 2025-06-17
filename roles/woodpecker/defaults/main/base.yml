@@ -69,3 +69,6 @@ woodpecker_secret_gitlab_client: ""
 woodpecker_secret_gitlab_secret: ""
 
 woodpecker_cluster_issuer_name: ""
+
+woodpecker_certificate_duration: 2160h # 90 days for letsencrypt
+woodpecker_certificate_renewbefore: 240h

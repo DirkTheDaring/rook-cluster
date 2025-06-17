@@ -73,3 +73,6 @@ vault_audit_storage_storage_class: rook-cephfs-retain
 vault_nfs_enabled: false
 vault_nfs_server:  127.0.0.1
 vault_nfs_path:    /volume1/container/static/vault
+
+vault_certificate_duration: 2160h # 90 days for letsencrypt
+vault_certificate_renewbefore: 240h

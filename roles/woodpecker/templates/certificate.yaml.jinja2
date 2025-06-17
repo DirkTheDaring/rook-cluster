@@ -10,3 +10,5 @@ spec:
     kind: ClusterIssuer
     name: {{ woodpecker_cluster_issuer_name }}
   secretName: woodpecker-server-tls
+  duration: {{ woodpecker_certificate_duration }}
+  renewBefore: {{ woodpecker_certificate_renewbefore }}

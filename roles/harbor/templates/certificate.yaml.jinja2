@@ -10,3 +10,5 @@ spec:
     kind: ClusterIssuer
     name: {{ harbor_cluster_issuer_name }}
   secretName: harbor-ingress-tls
+  duration: {{ harbor_certificate_duration }}
+  renewBefore: {{ harbor_certificate_renewbefore }}

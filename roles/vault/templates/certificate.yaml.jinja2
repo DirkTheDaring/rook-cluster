@@ -10,3 +10,5 @@ spec:
     kind: ClusterIssuer
     name: {{ vault_cluster_issuer_name }}
   secretName: vault-tls
+  duration: {{ vault_certificate_duration }}
+  renewBefore: {{ vault_certificate_renewbefore }}
