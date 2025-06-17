@@ -10,3 +10,5 @@ spec:
     kind: ClusterIssuer
     name: {{ traefik_cluster_issuer_name }}
   secretName: traefik-dashboard-tls
+  duration: {{ traefik_certificate_duration }}
+  renewBefore: {{ traefik_certificate_renewbefore }}

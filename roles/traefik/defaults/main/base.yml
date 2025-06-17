@@ -77,3 +77,6 @@ traefik_ingressclass_enabled: false
 traefik_ingressclass_isdefaultclass: true
 traefik_ingressclass_name: "my-custom-class"
 traefik_tls_enabled: false
+
+traefik_certificate_duration: 2160h # 90 days for letsencrypt
+traefik_certificate_renewbefore: 240h
