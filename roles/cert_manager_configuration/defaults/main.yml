@@ -1,0 +1,15 @@
+---
+cluster_issuers:
+  - name: letsencrypt-issuer
+    email: example.user@example.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    secret_name: letsencrypt-issuer-account-key
+    group_name: example-user.com
+    solver_name: solver
+
+  - name: letsencrypt-issuer-test
+    email: test.user@example.com
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    secret_name: test-issuer-account-key
+    group_name: test-user.com
+    solver_name: testsolver
