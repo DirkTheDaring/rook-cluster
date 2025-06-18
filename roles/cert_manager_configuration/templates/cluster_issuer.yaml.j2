@@ -13,3 +13,7 @@ spec:
           webhook:
             groupName: {{ issuer.group_name }}
             solverName: {{ issuer.solver_name }}
+{% if 'config' in issuer and issuer.config is mapping %}
+            config:
+              {{ issuer.config | to_nice_yaml(indent=2) | indent(14) }}
+{% endif %}
